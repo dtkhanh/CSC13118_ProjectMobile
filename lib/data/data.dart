@@ -12,3 +12,17 @@ const filters = [
   'TOEFL',
   'TOEIC'
 ];
+
+const teachers = [
+  'Keegan',
+  'April Baldo',
+  'EJil Leano'
+];
+
+const testData =[
+  'English for Business',
+  'Conversational',
+  'English for kids',
+  'IELTS',
+  'TOEIC'
+];

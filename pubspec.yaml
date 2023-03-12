@@ -61,11 +61,14 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
+    - assets/images/ironman.png
     - assets/svg/facebook.svg
     - assets/svg/google.svg
     - assets/svg/zalo.svg
     - assets/svg/youtube.svg
     - assets/svg/join.svg
+    - assets/svg/icon.svg
+
     # To add assets to your application, add an assets section, like this:
 
 
