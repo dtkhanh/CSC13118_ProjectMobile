@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:csc13118_mobile/src/login.dart';
+import 'package:csc13118_mobile/src/homeView.dart';
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

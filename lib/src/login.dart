@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -89,8 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Forgot password?",
+                      children: const [
+                        Text("Forgot password?",
                             style: TextStyle(
                               color: Colors.blue,
                             ))
@@ -101,6 +101,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
+                      onPressed: () {},
                       child: const Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
@@ -108,9 +110,6 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff007CFF)),
-                      onPressed: () {},
                     ),
                   ),
                 ),
@@ -125,47 +124,47 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(
+                              side: BorderSide(
+                                  width: 1, color: Color(0xff007CFF))
+                          ),
+                        ),
                         child: SvgPicture.asset(
                           "assets/svg/facebook.svg",
                           semanticsLabel: 'Logo Facebook',
                           width: 40,
                           height: 40,
                         ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(
+                          shape: const CircleBorder(
                               side: BorderSide(
                                   width: 1, color: Color(0xff007CFF))
                           ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
                         child: SvgPicture.asset(
                           "assets/svg/google.svg",
                           semanticsLabel: 'Logo Google',
                           width: 40,
                           height: 40,
                         ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(
+                          shape: const CircleBorder(
                               side: BorderSide(
                                   width: 1, color: Color(0xff007CFF))
                           ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
                         child: SvgPicture.asset(
                           "assets/svg/zalo.svg",
                           semanticsLabel: 'Logo Zalo',
                           width: 40,
                           height: 40,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(
-                              side: BorderSide(
-                                  width: 1, color: Color(0xff007CFF))
-                          ),
                         ),
                       ),
                     ],
