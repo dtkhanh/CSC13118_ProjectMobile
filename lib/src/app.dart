@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import 'package:csc13118_mobile/src/login.dart';
 import 'package:csc13118_mobile/src/homeView.dart';
 import 'package:csc13118_mobile/src/scheduleView.dart';
-
+import 'package:csc13118_mobile/src/historyView.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -15,6 +15,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const ScheduleView());
+        home: const historyView());
   }
 }
