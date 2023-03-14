@@ -321,7 +321,7 @@ class _HomeViewStage extends State<HomeView> {
                                                   Row(
                                                     children: [
                                                       SvgPicture.asset(
-                                                        "assets/svg/facebook.svg",
+                                                        "assets/svg/icon.svg",
                                                         semanticsLabel: 'Logo Icon',
                                                         width: 25,
                                                         height: 25,
