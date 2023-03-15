@@ -30,7 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  responsive_grid: ^1.0.10
+  responsive_grid: ^2.2.0
+  flutter_responsive_grid: ^1.0.5
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -66,6 +68,7 @@ flutter:
     - assets/images/ironman.png
     - assets/images/images.png
     - assets/images/english.png
+    - assets/images/english-course.png
     - assets/images/schedule.png
     - assets/svg/facebook.svg
     - assets/svg/google.svg
@@ -73,6 +76,9 @@ flutter:
     - assets/svg/youtube.svg
     - assets/svg/join.svg
     - assets/svg/icon.svg
+    - assets/svg/alert-circle.svg
+    - assets/svg/topic.svg
+    - assets/svg/Beginner.svg
 
     # To add assets to your application, add an assets section, like this:
 

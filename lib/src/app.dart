@@ -3,7 +3,9 @@ import 'package:csc13118_mobile/src/login.dart';
 import 'package:csc13118_mobile/src/homeView.dart';
 import 'package:csc13118_mobile/src/scheduleView.dart';
 import 'package:csc13118_mobile/src/historyView.dart';
-import 'package:csc13118_mobile/src/DiscoverCoursesView.dart';
+import 'package:csc13118_mobile/src/discoverCoursesView.dart';
+import 'package:csc13118_mobile/src/InformationCourse.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -16,6 +18,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const DiscoverCourses());
+        home: const InformationCourseView());
   }
 }
