@@ -64,6 +64,8 @@ flutter:
     - assets/images/logo.png
     - assets/images/callHistory.png
     - assets/images/ironman.png
+    - assets/images/images.png
+    - assets/images/english.png
     - assets/images/schedule.png
     - assets/svg/facebook.svg
     - assets/svg/google.svg

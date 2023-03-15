@@ -13,6 +13,12 @@ const filters = [
   'TOEIC'
 ];
 
+const schedule = [
+  'Course',
+  'E-book',
+  'Interactive E-book',
+];
+
 const teachers = [
   'Keegan',
   'April Baldo',
