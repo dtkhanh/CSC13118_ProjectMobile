@@ -9,6 +9,8 @@ import 'package:csc13118_mobile/src/discoverCoursesView.dart';
 import 'package:csc13118_mobile/src/InformationCourse.dart';
 import 'package:csc13118_mobile/constants/routes.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
+import 'package:csc13118_mobile/src/topicDetail.dart';
+
 void main() => runApp(const LetTutor());
 
 

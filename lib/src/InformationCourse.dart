@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:flutter_responsive_grid/flutter_responsive_grid.dart';
+import 'package:csc13118_mobile/src/topicDetail.dart';
 
 class InformationCourseView extends StatefulWidget {
   const InformationCourseView({Key? key}) : super(key: key);
@@ -274,32 +275,40 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                           ),
                                           surfaceTintColor: Colors.white,
                                           elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '1.',
-                                                        style: TextStyle(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const TopicDetail()),
+                                              );
+                                            },
+                                            child:  Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: const [
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '1.',
+                                                          style: TextStyle(
                                                             fontSize: 15, color: Colors.black,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        'Foods You Love',
-                                                        style: TextStyle(
+                                                        Text(
+                                                          'Foods You Love',
+                                                          style: TextStyle(
                                                             fontSize: 15, color: Colors.black,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
 
-                                                  )
-                                              )
-                                            ],
+                                                    )
+                                                )
+                                              ],
+                                            ),
                                           ),
 
                                         ),
@@ -312,34 +321,41 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                           ),
                                           surfaceTintColor: Colors.white,
                                           elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '2.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const TopicDetail()),
+                                              );
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                    padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: const [
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '2.',
+                                                          style: TextStyle(
+                                                            fontSize: 15, color: Colors.black,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        'Your Job',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
+                                                        Text(
+                                                          'Your Job',
+                                                          style: TextStyle(
+                                                            fontSize: 15, color: Colors.black,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
 
-                                                  )
-                                              )
-                                            ],
+                                                    )
+                                                )
+                                              ],
+                                            ),
                                           ),
-
                                         ),
                                       ),
 
