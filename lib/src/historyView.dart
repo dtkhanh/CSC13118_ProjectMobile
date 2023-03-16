@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:csc13118_mobile/src/InformationTeacher.dart';
 
 class historyView extends StatefulWidget {
   const historyView({Key? key}) : super(key: key);
@@ -34,10 +34,9 @@ class _HistoryViewStage extends State<historyView> {
                     width: 120, // Chiều rộng của hình ảnh
                     height: 120, // Chiều cao của hình ảnh
                     fit: BoxFit
-                        .cover, // Chế độ hiển thị của hình ảnh (cover, contain, fill, ...)
+                        .cover,
                   ),
                   const SizedBox(width: 20),
-                  // Khoảng cách giữa TextField và DropdownButtonFormField
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,12 +45,11 @@ class _HistoryViewStage extends State<historyView> {
                           'History',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            // fontSize: MediaQuery.of(context).size.width // Thay đổi kích thước phù hợp với kích thước màn hình
+                            // fontSize: MediaQuery.of(context).size.width //
                             fontSize: 20,
                           ),
                         ),
                         const SizedBox(height: 10),
-                        // Khoảng cách giữa TextField và DropdownButtonFormField
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -116,19 +114,28 @@ class _HistoryViewStage extends State<historyView> {
                                           padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
                                           child: Row(
                                             children: [
-                                              const SizedBox(
-                                                width: 50,
-                                                // Set the width to 100
-                                                height: 50,
-                                                // Set the height to 100
-                                                child: CircleAvatar(
-                                                  radius: 45,
-                                                  backgroundColor:
-                                                  Colors.blue,
-                                                  backgroundImage: AssetImage(
-                                                      'assets/images/ironman.png'),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => InforTeacher()),
+                                                  );
+                                                },
+                                                child: const SizedBox(
+                                                  width: 50,
+                                                  // Set the width to 100
+                                                  height: 50,
+                                                  // Set the height to 100
+                                                  child: CircleAvatar(
+                                                    radius: 45,
+                                                    backgroundColor:
+                                                    Colors.blue,
+                                                    backgroundImage: AssetImage(
+                                                        'assets/images/ironman.png'),
+                                                  ),
                                                 ),
                                               ),
+
                                               Padding(
                                                   padding: const EdgeInsets
                                                       .symmetric(

@@ -17,10 +17,25 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
   List<String> _data = [ 'Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1',  ];
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.blue[600],
+        ),
+        title: Text(
+          'Course Details',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w700,
+            //letterSpacing: 1.0,
+            color: Colors.blue[600],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -64,7 +79,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                       const Text(
                                         'Basic conversation Topics',
                                         style: TextStyle(
-                                            fontSize: 17, color: Colors.black, fontWeight: FontWeight.bold// Giá trị cố định cho kích thước chữ
+                                            fontSize: 17, color: Colors.black, fontWeight: FontWeight.bold
                                         ),
                                       ),
                                       const SizedBox(height: 10),
@@ -73,7 +88,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 13.0, color: Colors.grey, height: 1.6// Giá trị cố định cho kích thước chữ
+                                            fontSize: 13.0, color: Colors.grey, height: 1.6
                                         ),
                                       ),
                                       const SizedBox(height: 20),

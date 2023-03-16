@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/data.dart';
-
+import 'package:csc13118_mobile/src/InformationTeacher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -19,12 +19,6 @@ class _HomeViewStage extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Image.asset('assets/images/logo.png'),
-        backgroundColor: Colors.white,
-        actions: const [
-        ],
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +48,7 @@ class _HomeViewStage extends State<HomeView> {
                         ' ( Start in 65:43:51 ) ',
                         style: TextStyle(fontStyle: FontStyle.normal, fontSize: 13, color: Colors.yellow),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 5),
                       TextButton(
                           style: TextButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -76,8 +70,8 @@ class _HomeViewStage extends State<HomeView> {
                                 width: 10,
                                 height: 10,
                               ),
-                              const SizedBox(width: 8.0),
-                              const Text('Enter Lesson room ', style: TextStyle(fontSize: 15))],),
+                              const SizedBox(width: 2.0),
+                              const Text('Join', style: TextStyle(fontSize: 15))],),
                           ),
                     ],
                   ),
@@ -112,30 +106,27 @@ class _HomeViewStage extends State<HomeView> {
                   children:  [
                     Row(
                       children: [
-                        ConstrainedBox(
-                          constraints:const BoxConstraints(maxWidth: 250),
-                          child:const Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                hintText: "enter tutor name",
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey, width: 2),
-                                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                              ),
+                        const Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                              hintText: "enter tutor name",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.all(Radius.circular(20))),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10), // Khoảng cách giữa TextField và DropdownButtonFormField
+                        const SizedBox(width: 10),
                         Expanded(
                           child:   DropdownButtonFormField(
                             decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 8),
                               hintText: 'select nationality',
-                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              hintStyle: TextStyle(color: Colors.grey[400],  ),
                               border: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 2),
+                                  borderSide: BorderSide(color: Colors.grey,),
                                   borderRadius: BorderRadius.all(Radius.circular(20))),
                             ),
                             onChanged: (value) {}, items: const [],
@@ -196,24 +187,20 @@ class _HomeViewStage extends State<HomeView> {
                 runSpacing: 6,
                 children: List<Widget>.generate(
                   filters.length,
-                      (index) => ChoiceChip(
-                    label: Text(
-                      filters[index],
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: chosenFilter == index ? Colors.blue[700] : Colors.black54,
+                      (index) => Positioned(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              chosenFilter = index;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor : chosenFilter == index ?  Colors.lightBlue[100]   :  Colors.grey[200], // set the background color of the button
+                          ),
+                          child: Text( filters[index], style: TextStyle( color: chosenFilter == index ? Colors.blue[700] : Colors.black54,
+                          ),),
+                        ),
                       ),
-                    ),
-                    backgroundColor: Colors.grey[200],
-                    selectedColor: Colors.lightBlue[100],
-                    selected: chosenFilter == index,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        chosenFilter = index;
-                      });
-                    },
-                  ),
                 ),
               ),
             ),
@@ -293,9 +280,10 @@ class _HomeViewStage extends State<HomeView> {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              if (kDebugMode) {
-                                                print('Button click avatar');
-                                              }
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => InforTeacher()),
+                                              );
                                             },
                                             child: const CircleAvatar(
                                               radius: 45,
@@ -313,7 +301,7 @@ class _HomeViewStage extends State<HomeView> {
                                                     child: Text(
                                                       'Kerran',
                                                       style: TextStyle(
-                                                        // fontSize: MediaQuery.of(context).size.width // Thay đổi kích thước phù hợp với kích thước màn hình
+                                                        // fontSize: MediaQuery.of(context).size.width //
                                                         fontSize: 20,
                                                       ),
                                                     ),
@@ -377,7 +365,7 @@ class _HomeViewStage extends State<HomeView> {
                                         maxLines: 4,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 14.0, color: Colors.grey, height: 1.6// Giá trị cố định cho kích thước chữ
+                                            fontSize: 14.0, color: Colors.grey, height: 1.6
                                         ),
                                       ),
                                       const SizedBox(height: 20),
@@ -389,7 +377,6 @@ class _HomeViewStage extends State<HomeView> {
                                           label: const Text('Book'),
                                         ),
                                       )
-
                                     ],
                                   ),
 

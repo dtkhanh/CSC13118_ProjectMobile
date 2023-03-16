@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:csc13118_mobile/src/InformationTeacher.dart';
 
 class ScheduleView extends StatefulWidget {
   const ScheduleView({Key? key}) : super(key: key);
@@ -32,10 +33,9 @@ class _ScheduleViewStage extends State<ScheduleView> {
                     width: 120, // Chiều rộng của hình ảnh
                     height: 120, // Chiều cao của hình ảnh
                     fit: BoxFit
-                        .cover, // Chế độ hiển thị của hình ảnh (cover, contain, fill, ...)
+                        .cover,
                   ),
                   const SizedBox(width: 20),
-                  // Khoảng cách giữa TextField và DropdownButtonFormField
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,12 +44,11 @@ class _ScheduleViewStage extends State<ScheduleView> {
                           'Schedule',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            // fontSize: MediaQuery.of(context).size.width // Thay đổi kích thước phù hợp với kích thước màn hình
+                            // fontSize: MediaQuery.of(context).size.width //
                             fontSize: 20,
                           ),
                         ),
                         const SizedBox(height: 10),
-                        // Khoảng cách giữa TextField và DropdownButtonFormField
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
@@ -115,17 +114,25 @@ class _ScheduleViewStage extends State<ScheduleView> {
                                               padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
                                               child: Row(
                                                   children: [
-                                                    const SizedBox(
-                                                      width: 50,
-                                                      // Set the width to 100
-                                                      height: 50,
-                                                      // Set the height to 100
-                                                      child: CircleAvatar(
-                                                        radius: 45,
-                                                        backgroundColor:
-                                                        Colors.blue,
-                                                        backgroundImage: AssetImage(
-                                                            'assets/images/ironman.png'),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => const InforTeacher()),
+                                                        );
+                                                      },
+                                                      child: const SizedBox(
+                                                        width: 50,
+                                                        // Set the width to 100
+                                                        height: 50,
+                                                        // Set the height to 100
+                                                        child: CircleAvatar(
+                                                          radius: 45,
+                                                          backgroundColor:
+                                                          Colors.blue,
+                                                          backgroundImage: AssetImage(
+                                                              'assets/images/ironman.png'),
+                                                        ),
                                                       ),
                                                     ),
                                                     Padding(
@@ -184,93 +191,97 @@ class _ScheduleViewStage extends State<ScheduleView> {
                                           ),
                                           ResponsiveGridCol(
                                             md: 6,
-                                            child: Container(
-                                              alignment: const Alignment(0, 0),
-                                              color: Colors.grey[100],
-                                              child:  Padding(
-                                                padding: const EdgeInsets.fromLTRB(12, 5, 12, 12),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        const Expanded(
-                                                          child:  Text(
-                                                            '18:30 - 18:35',
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400),
+                                            child:  Padding(
+                                              padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                                              child: Container(
+                                                alignment: const Alignment(0, 0),
+                                                color: Colors.grey[100],
+                                                child:  Padding(
+                                                  padding: const EdgeInsets.fromLTRB(12, 5, 12, 12),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          const Expanded(
+                                                            child:  Text(
+                                                              '18:30 - 18:35',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w400),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                                            child: Align(
-                                                              alignment: Alignment.topRight,
-                                                              child: OutlinedButton.icon(
-                                                                onPressed: () => {},
-                                                                icon: const Icon(Icons.cancel , color: Colors.red,),
-                                                                label: const Text('Cancel' , style: TextStyle(color:  Colors.red,),),
-                                                              ),
-                                                            ) ,
-                                                          )
-
-                                                        ),
-                                                        const SizedBox(width: 10),// Khoảng cách giữa TextField và DropdownButtonFormField
-                                                      ],
-                                                    ),
-                                                    const SizedBox( height: 10),
-                                                    Table(
-                                                      border: TableBorder.all(
-                                                        borderRadius: BorderRadius.circular(5),
-                                                        color: Colors.grey,
-                                                        width: 1,
-                                                      ),
-                                                      children: [
-                                                        TableRow(
-                                                          children: [
-                                                            TableCell(
-                                                              child: Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    child:   DropdownButtonFormField(
-                                                                      decoration: const InputDecoration(
-                                                                        contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                                                        hintText: 'Request for lesson',
-                                                                        hintStyle: TextStyle(color: Colors.black, fontSize: 14),
-                                                                      ),
-                                                                      onChanged: (value) {}, items: const [],
-                                                                    ),
-                                                                  ),
-                                                                  const Expanded(
-                                                                    child: Align(
-                                                                        alignment: Alignment.topRight,
-                                                                        child: Text('Edit Request' , style: TextStyle(color:  Colors.blue,)
-                                                                        )
-                                                                    ),
-
-                                                                  ),
-                                                                  const SizedBox(width: 10),// Khoảng cách giữa TextField và DropdownButtonFormField
-                                                                ],
-                                                              )
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        const TableRow(
-                                                          children: [
-                                                            TableCell(
+                                                          Expanded(
                                                               child: Padding(
-                                                                padding: EdgeInsets.fromLTRB(10, 20, 0, 20),
-                                                                child: Text('Current there are no requests for this class. Please write down any request for the teacher' , style: TextStyle(color:  Colors.grey, fontSize: 14)),
-                                                              ),
-                                                            ),
-                                                          ],
+                                                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                                child: Align(
+                                                                  alignment: Alignment.topRight,
+                                                                  child: OutlinedButton.icon(
+                                                                    onPressed: () => {},
+                                                                    icon: const Icon(Icons.cancel , color: Colors.red,),
+                                                                    label: const Text('Cancel' , style: TextStyle(color:  Colors.red,),),
+                                                                  ),
+                                                                ) ,
+                                                              )
+
+                                                          ),
+                                                          const SizedBox(width: 10),
+                                                        ],
+                                                      ),
+                                                      const SizedBox( height: 10),
+                                                      Table(
+                                                        border: TableBorder.all(
+                                                          borderRadius: BorderRadius.circular(5),
+                                                          color: Colors.grey,
+                                                          width: 1,
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                        children: [
+                                                          TableRow(
+                                                            children: [
+                                                              TableCell(
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child:   DropdownButtonFormField(
+                                                                          decoration: const InputDecoration(
+                                                                            contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                                            hintText: 'Request for lesson',
+                                                                            hintStyle: TextStyle(color: Colors.black, fontSize: 14),
+                                                                          ),
+                                                                          onChanged: (value) {}, items: const [],
+                                                                        ),
+                                                                      ),
+                                                                      const Expanded(
+                                                                        child: Align(
+                                                                            alignment: Alignment.topRight,
+                                                                            child: Text('Edit Request' , style: TextStyle(color:  Colors.blue,)
+                                                                            )
+                                                                        ),
+
+                                                                      ),
+                                                                      const SizedBox(width: 10),
+                                                                    ],
+                                                                  )
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const TableRow(
+                                                            children: [
+                                                              TableCell(
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.fromLTRB(10, 20, 0, 20),
+                                                                  child: Text('Current there are no requests for this class. Please write down any request for the teacher' , style: TextStyle(color:  Colors.grey, fontSize: 14)),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                            )
+
                                           ),
                                         ],
                                       ),

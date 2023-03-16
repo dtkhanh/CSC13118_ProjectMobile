@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:csc13118_mobile/page/navigationPage.dart';
+
+import '../constants/routes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -102,11 +105,17 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          Routes.main,
+                              (route) => false,
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
-                          "Sign in",
+                          "Login in",
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
