@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../data/data.dart';
 import 'package:csc13118_mobile/src/InformationTeacher.dart';
+import 'package:csc13118_mobile/src/teamView.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -60,7 +61,10 @@ class _HomeViewStage extends State<HomeView> {
                                 fontSize: 16.0,
                               ),
                             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),),
-                          onPressed: () { },
+                          onPressed: () {  Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const TeamView()),
+                          ); },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:video_player/video_player.dart';
@@ -26,6 +27,13 @@ class _InforTeacherState extends State<InforTeacher> {
       videoPlayerController: VideoPlayerController.network('https://api.app.lettutor.com/video/4d54d3d7-d2a9-42e5-97a2-5ed38af5789avideo1627913015871.mp4'),
       autoPlay: true,
       looping: true,
+      deviceOrientationsOnEnterFullScreen: [
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.portraitUp,
+      ]
     );
   }
 
@@ -182,7 +190,6 @@ class _InforTeacherState extends State<InforTeacher> {
                           child:  Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               SizedBox(
                                 height: 250, // set the height of the container
                                 child: Chewie(
@@ -191,9 +198,7 @@ class _InforTeacherState extends State<InforTeacher> {
                               ),
                             ],
                           ),
-
-                        )
-
+                        ),
                         ),
                       ],
                     ),

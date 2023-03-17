@@ -80,6 +80,13 @@ flutter:
     - assets/svg/icon.svg
     - assets/svg/alert-circle.svg
     - assets/svg/topic.svg
+    - assets/svg/ic_call.svg
+    - assets/svg/ic_chat.svg
+    - assets/svg/ic_frame.svg
+    - assets/svg/ic_hand.svg
+    - assets/svg/ic_micro.svg
+    - assets/svg/ic_shareDesk.svg
+    - assets/svg/icon_camera.svg
     - assets/svg/Beginner.svg
 
     # To add assets to your application, add an assets section, like this:
