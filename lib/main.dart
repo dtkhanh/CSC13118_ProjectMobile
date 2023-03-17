@@ -28,7 +28,7 @@ class LetTutor extends StatelessWidget {
           primaryColor: Colors.blue,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: const NavigationPage(),
+        home: const LoginPage(),
         routes: {
           Routes.login: (context) => const LoginPage(),
           Routes.main: (context) => const NavigationPage(),

@@ -184,21 +184,14 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: const <Widget>[
-                            Text("Not a member yet? "),
-                            Text("Sign up",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                ))
-                          ],
-                        ),
+                      children: const <Widget>[
+                        Text("Not a member yet? "),
+                        Text("Sign up",
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ))
                       ],
                     )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                )
               ],
             ),
           ),
