@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../data/data.dart';
+import '../../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:csc13118_mobile/src/homeView.dart';
-import 'package:csc13118_mobile/src/scheduleView.dart';
-import 'package:csc13118_mobile/src/historyView.dart';
+import 'package:csc13118_mobile/features/homepage/homeView.dart';
+import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
+import 'package:csc13118_mobile/features/history/historyView.dart';
 import 'InformationCourse.dart';
 
 class DiscoverCourses extends StatefulWidget {

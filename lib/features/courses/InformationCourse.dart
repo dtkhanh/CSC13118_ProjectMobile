@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../data/data.dart';
+import '../../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:flutter_responsive_grid/flutter_responsive_grid.dart';
-import 'package:csc13118_mobile/src/topicDetail.dart';
+import 'package:csc13118_mobile/features/courses/topicDetail.dart';
 
 class InformationCourseView extends StatefulWidget {
   const InformationCourseView({Key? key}) : super(key: key);

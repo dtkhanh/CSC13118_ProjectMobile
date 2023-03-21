@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:csc13118_mobile/src/login.dart';
-import 'package:csc13118_mobile/src/homeView.dart';
-import 'package:csc13118_mobile/src/scheduleView.dart';
-import 'package:csc13118_mobile/src/historyView.dart';
-import 'package:csc13118_mobile/src/discoverCoursesView.dart';
+import 'package:csc13118_mobile/features/login/login.dart';
+import 'package:csc13118_mobile/features/homepage/homeView.dart';
+import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
+import 'package:csc13118_mobile/features/history/historyView.dart';
+import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
 
 
 class NavigationPage extends StatefulWidget {

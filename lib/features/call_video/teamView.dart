@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
-import '../constants/routes.dart';
+import '../../routing/routes.dart';
 
 class TeamView extends StatefulWidget {
   const TeamView({Key? key}) : super(key: key);
