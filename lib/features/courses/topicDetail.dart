@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import '../data/data.dart';
+import '../../data/data.dart';
 
-import '../constants/routes.dart';
+import '../../routing/routes.dart';
 
 class TopicDetail extends StatefulWidget {
   const TopicDetail({Key? key}) : super(key: key);

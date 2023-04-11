@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../data/data.dart';
+import '../../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:csc13118_mobile/src/InformationTeacher.dart';
+import 'package:csc13118_mobile/features/view_information/teacher_info/InformationTeacher.dart';
 
 class ScheduleView extends StatefulWidget {
   const ScheduleView({Key? key}) : super(key: key);

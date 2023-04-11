@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import '../data/data.dart';
+import '../../../data/data.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class InforTeacher extends StatefulWidget {
