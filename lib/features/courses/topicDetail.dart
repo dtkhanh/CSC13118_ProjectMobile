@@ -37,7 +37,7 @@ class _TopicDetailPage extends State<TopicDetail> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(6, 12, 6, 12),
           child:  Column(
               children: [
                 Column(
@@ -45,7 +45,7 @@ class _TopicDetailPage extends State<TopicDetail> {
                     ResponsiveGridRow(
                       children: [
                         ResponsiveGridCol(md:4 ,child: Padding(
-                          padding:const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                          padding:const EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: SizedBox(
                             height: 740,
                             child: SingleChildScrollView(

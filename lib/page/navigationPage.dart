@@ -4,6 +4,7 @@ import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
 import 'package:csc13118_mobile/features/history/historyView.dart';
 import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
+import 'package:csc13118_mobile/features/setting/profileView.dart';
 
 
 class NavigationPage extends StatefulWidget {
@@ -19,8 +20,7 @@ class _NavigationPageState extends State<NavigationPage> {
     const ScheduleView(),
     const historyView(),
     const DiscoverCourses(),
-    const LoginPage(),
-    const LoginPage(),
+    const ProflileView(),
   ];
 
   List<String> pagesTitle = [ 'TUTORS', 'SCHEDULE', 'COURSES', 'MY COURSE'];
@@ -206,6 +206,8 @@ class _NavigationPageState extends State<NavigationPage> {
           BottomNavigationBarItem(icon: Icon(Icons.schedule_outlined), label: 'Schedule'),
           BottomNavigationBarItem(icon: Icon(Icons.phone_paused), label: 'History'),
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Courses'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
+
         ],
       ),
     );
