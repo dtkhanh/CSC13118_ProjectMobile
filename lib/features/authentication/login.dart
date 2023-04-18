@@ -1,3 +1,4 @@
+import 'package:csc13118_mobile/features/authentication/signUp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
@@ -184,12 +185,21 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Text("Not a member yet? "),
-                        Text("Sign up",
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ))
+                      children:  <Widget>[
+                        const Text("Not a member yet? "),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignUp()),
+                            );
+                          },
+                          child:  const Text("Sign up",
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ))
+                        ),
+
                       ],
                     )),
               ],

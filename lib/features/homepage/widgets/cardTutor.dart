@@ -98,12 +98,10 @@ class _CardTutorStage extends State<CardTutor> {
                         children: List<Widget>.generate(
                           testData.length,
                               (index) =>
-                                  Positioned(
-                                    child:   Chip(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-                                      backgroundColor: Colors.lightBlue[100],
-                                      label: Text( testData[index], style: TextStyle( color:  Colors.blue[700], fontSize: Sizes.p12),
-                                      ),
+                                  Chip(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+                                    backgroundColor: Colors.lightBlue[100],
+                                    label: Text( testData[index], style: TextStyle( color:  Colors.blue[700], fontSize: Sizes.p12),
                                     ),
                                   ),
                         ),

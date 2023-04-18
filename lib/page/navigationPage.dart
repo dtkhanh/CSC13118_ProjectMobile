@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:csc13118_mobile/features/login/login.dart';
+import 'package:csc13118_mobile/features/authentication/login.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
 import 'package:csc13118_mobile/features/history/historyView.dart';

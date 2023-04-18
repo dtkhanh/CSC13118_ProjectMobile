@@ -16,7 +16,7 @@ class _ProflileViewState extends State<ProflileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

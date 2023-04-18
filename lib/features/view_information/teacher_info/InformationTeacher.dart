@@ -60,7 +60,7 @@ class _InforTeacherState extends State<InforTeacher> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(5, 12, 5, 12),
           child:  Column(
               children: [
                 Column(
