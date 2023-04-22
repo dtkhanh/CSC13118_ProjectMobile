@@ -1,9 +1,16 @@
+
 import 'package:csc13118_mobile/features/authentication/signUp.dart';
+import 'package:csc13118_mobile/model/tokensUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import '../../model/token.dart';
+import '../../model/user.dart';
+import '../../providers/userProvider.dart';
 import '../../routing/routes.dart';
+import '../../services/authentication.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,8 +20,47 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  Map<String, dynamic>? _loginResponse;
+  void loginPage(UserProvider userProvider) async {
+    // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
+    try{
+      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      final user = User.fromJson(_loginResponse!['user']);
+      final token = TokensUser.fromJson(_loginResponse!['tokens']);
+      userProvider.addUserProvider(user, token);
+
+      print("loginPage");
+      print( userProvider.token!.refresh!.token!,);
+      print( userProvider.token!.refresh!.expires!,);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
+    }catch (e) {
+      // Fluttertoast.showToast(
+      //   msg: 'Error Login: ${e.toString()}',
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: Colors.red,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error Login: ${e.toString()}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -46,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       TextField(
+                          controller: _email,
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
                           decoration: InputDecoration(
@@ -75,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       TextField(
+                          controller: _password,
                           obscureText: true,
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
@@ -107,11 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          Routes.main,
-                              (route) => false,
-                        );
+                        loginPage(userProvider);
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),

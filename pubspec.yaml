@@ -41,6 +41,9 @@ dependencies:
   flutter_svg: ^0.22.0
   chewie: ^1.4.0
   syncfusion_flutter_calendar: ^20.4.54
+  provider: ^6.0.5
+  http: ^0.13.5
+  fluttertoast: ^8.2.1
 
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'package:csc13118_mobile/features/view_information/teacher_info/InformationTeacher.dart';
+import 'package:csc13118_mobile/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:csc13118_mobile/features/authentication/login.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
@@ -10,6 +11,7 @@ import 'package:csc13118_mobile/routing/routes.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
 import 'package:csc13118_mobile/features/courses/topicDetail.dart';
 import 'package:csc13118_mobile/features/call_video/teamView.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(const LetTutor());
 
@@ -19,19 +21,21 @@ class LetTutor extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp(
-        title: 'LetTutor',
-        theme: ThemeData(
-          useMaterial3: true,
-          primaryColor: Colors.blue,
-          scaffoldBackgroundColor: Colors.white,
-        ),
-        home: const LoginPage(),
-        routes: {
-          Routes.login: (context) => const LoginPage(),
-          Routes.main: (context) => const NavigationPage(),
-          Routes.courseDetail: (context) => const InformationCourseView(),
-        });
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child:  MaterialApp(
+          title: 'LetTutor',
+          theme: ThemeData(
+            useMaterial3: true,
+            primaryColor: Colors.blue,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          home: const LoginPage(),
+          routes: {
+            Routes.login: (context) => const LoginPage(),
+            Routes.main: (context) => const NavigationPage(),
+            Routes.courseDetail: (context) => const InformationCourseView(),
+          }),
+    );
   }
 }
