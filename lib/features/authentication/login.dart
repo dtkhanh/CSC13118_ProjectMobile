@@ -1,4 +1,5 @@
 
+import 'package:csc13118_mobile/features/authentication/forgotPassword.dart';
 import 'package:csc13118_mobile/features/authentication/signUp.dart';
 import 'package:csc13118_mobile/model/tokensUser.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,9 @@ class _LoginPageState extends State<LoginPage> {
   Map<String, dynamic>? _loginResponse;
   void loginPage(UserProvider userProvider) async {
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
+      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+
+      // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
       userProvider.addUserProvider(user, token);
@@ -147,11 +150,19 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text("Forgot password?",
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ))
+                      children:  [
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ForgotPassword()),
+                              );
+                            },
+                            child:  const Text("Forgot password?",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ))
+                        ),
                       ],
                     )),
                 Padding(
