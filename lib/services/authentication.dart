@@ -20,13 +20,36 @@ class AuthenticationService {
         'password': password
       }
     );
-
+    final jsonDecode = json.decode(response.body);
     if (response.statusCode == 200) {
-      final jsonDecode = json.decode(response.body);
       return  jsonDecode;
     } else {
+      throw Exception(jsonDecode!['message']);
       // return json.decode(response.body);
       throw Exception('Failed to Login account.');
+    }
+  }
+
+  static Future<Map<String, dynamic>> registerAccount({
+    required String email,
+    required String password,
+  }) async {
+    final response = await post(
+      Uri.parse("$url/auth/register"),
+      body: {
+        'email': email,
+        'password': password,
+        "source": 'null',
+      },
+    );
+    final jsonDecode = json.decode(response.body);
+
+    if (response.statusCode != 201 ) {
+      // throw Exception('Failed to Register account.');
+      throw Exception(jsonDecode!['message']);
+
+    }else{
+      return jsonDecode;
     }
   }
 

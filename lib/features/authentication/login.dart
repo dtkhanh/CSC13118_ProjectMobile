@@ -11,6 +11,7 @@ import '../../model/user.dart';
 import '../../providers/userProvider.dart';
 import '../../routing/routes.dart';
 import '../../services/authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,13 +25,18 @@ class _LoginPageState extends State<LoginPage> {
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
   void loginPage(UserProvider userProvider) async {
-    // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
       userProvider.addUserProvider(user, token);
 
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('accessToken', userProvider.token!.access!.token!,);
+      await prefs.setString('refreshToken', userProvider.token!.refresh!.token!,);
+
+      //
       print("loginPage");
       print( userProvider.token!.refresh!.token!,);
       print( userProvider.token!.refresh!.expires!,);

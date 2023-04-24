@@ -2,8 +2,10 @@ import 'package:csc13118_mobile/constants/appSizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../routing/routes.dart';
+import '../../services/authentication.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,6 +16,41 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _confirmPass = TextEditingController();
+  Map<String, dynamic>? _register;
+
+
+  void registerAccount() async {
+    try {
+      if(_password.text.isEmpty ||  _confirmPass.text.isEmpty ||  _email.text.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error : No empty field')),
+        );
+      }
+      else if(_password.text != _confirmPass.text){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password and ConfirmPassword no incorrect')),
+        );
+      }else {
+        _register = await AuthenticationService.registerAccount(password: _password.text, email: _email.text);
+        Future.delayed(const Duration(seconds: 1), () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Successfully')),
+          );
+          Navigator.pop(context);
+        });
+
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(' ${e.toString()}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,27 +75,6 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: Text(
-                  "Full name",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800]),
-                ),
-              ),
-              TextField(
-                  style:
-                  TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                      border: const OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10))),
-                      hintText: "Name")),
               gapH12,
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
@@ -71,6 +87,9 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               TextField(
+                  controller: _email,
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
                   style:
                   TextStyle(fontSize: 15, color: Colors.grey[700]),
                   decoration: InputDecoration(
@@ -93,7 +112,9 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               TextField(
+                  controller: _password,
                   obscureText: true,
+                  autocorrect: false,
                   style:
                   TextStyle(fontSize: 15, color: Colors.grey[700]),
                   decoration: InputDecoration(
@@ -116,7 +137,9 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               TextField(
+                  controller: _confirmPass,
                   obscureText: true,
+                  autocorrect: false,
                   style:
                   TextStyle(fontSize: 15, color: Colors.grey[700]),
                   decoration: InputDecoration(
@@ -132,7 +155,9 @@ class _SignUpState extends State<SignUp> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(),
-                  onPressed: () { },
+                  onPressed: () {
+                    registerAccount();
+                  },
                   child: const Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Text(
