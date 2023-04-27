@@ -25,6 +25,27 @@ class _LoginPageState extends State<LoginPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    if(check?.length != 0){
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
+    }
+  }
+
+
   void loginPage(UserProvider userProvider) async {
     try{
       _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
@@ -40,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('refreshToken', userProvider.token!.refresh!.token!,);
 
       //
-      print("loginPage");
-      print( userProvider.token!.refresh!.token!,);
-      print( userProvider.token!.refresh!.expires!,);
+      // print("loginPage");
+      // print( userProvider.token!.refresh!.token!,);
+      // print( userProvider.token!.refresh!.expires!,);
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushNamedAndRemoveUntil(
           context,

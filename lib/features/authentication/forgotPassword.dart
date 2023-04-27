@@ -16,6 +16,33 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  final _email= TextEditingController();
+  Map<String, dynamic>? forgot;
+
+
+  void sendForgotPassword() async {
+    try {
+      if (_email.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error : No empty field')),
+        );
+      }
+      else {
+        forgot = await AuthenticationService.forgotPassword(email: _email.text);
+        Future.delayed(const Duration(seconds: 1), () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email send success!')),
+          );
+          Navigator.pop(context);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(' ${e.toString()}')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +95,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                      controller: _email,
                       style:
                       TextStyle(fontSize: 15, color: Colors.grey[700]),
                       decoration: InputDecoration(
@@ -85,7 +113,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(),
                     onPressed: () {
-                      Navigator.pop(context);
+                      sendForgotPassword();
                     },
                     child: const Padding(
                       padding: EdgeInsets.only(top: 10, bottom: 10),

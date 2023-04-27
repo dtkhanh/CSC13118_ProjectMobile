@@ -47,7 +47,22 @@ class AuthenticationService {
     if (response.statusCode != 201 ) {
       // throw Exception('Failed to Register account.');
       throw Exception(jsonDecode!['message']);
+    }else{
+      return jsonDecode;
+    }
+  }
 
+  static Future<Map<String, dynamic>> forgotPassword( {required String email}) async {
+    final response = await post(
+      Uri.parse("$url/user/forgotPassword"),
+      body: {
+        'email': email,
+      },
+    );
+
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode!['message']);
     }else{
       return jsonDecode;
     }
