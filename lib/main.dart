@@ -1,16 +1,9 @@
-import 'package:csc13118_mobile/features/view_information/teacher_info/InformationTeacher.dart';
 import 'package:csc13118_mobile/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:csc13118_mobile/features/authentication/login.dart';
-import 'package:csc13118_mobile/features/homepage/homeView.dart';
-import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
-import 'package:csc13118_mobile/features/history/historyView.dart';
-import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
 import 'package:csc13118_mobile/features/courses/InformationCourse.dart';
 import 'package:csc13118_mobile/routing/routes.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
-import 'package:csc13118_mobile/features/courses/topicDetail.dart';
-import 'package:csc13118_mobile/features/call_video/teamView.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(const LetTutor());
@@ -33,7 +26,8 @@ class LetTutor extends StatelessWidget {
           home: const LoginPage(),
           routes: {
             Routes.login: (context) => const LoginPage(),
-            Routes.main: (context) => const NavigationPage(),
+            Routes.main: (context) => const NavigationPage(choice: 0),
+            Routes.tutors: (context) =>  const NavigationPage(choice: 2,),
             Routes.courseDetail: (context) => const InformationCourseView(),
           }),
     );

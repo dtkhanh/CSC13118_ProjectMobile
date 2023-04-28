@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:csc13118_mobile/features/authentication/login.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
-import 'package:csc13118_mobile/features/history/historyView.dart';
 import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
 import 'package:csc13118_mobile/features/setting/profileView.dart';
+import '../features/tutors/viewAllTutor.dart';
 
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({Key? key}) : super(key: key);
+  final int choice;
+  const NavigationPage({super.key, required this.choice});
+  // const NavigationPage({super.key, required: this.choice})
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
@@ -18,7 +19,7 @@ class _NavigationPageState extends State<NavigationPage> {
   List<Widget> pages = [
     const HomeView(),
     const ScheduleView(),
-    const historyView(),
+    const TuTorView(),
     const DiscoverCourses(),
     const ProflileView(),
   ];
@@ -26,6 +27,7 @@ class _NavigationPageState extends State<NavigationPage> {
   List<String> pagesTitle = [ 'TUTORS', 'SCHEDULE', 'COURSES', 'MY COURSE'];
   int chosenPageIndex = 0;
   int check =0;
+  bool click = true;
 
 
   bool _isExpnaded = false;
@@ -35,12 +37,15 @@ class _NavigationPageState extends State<NavigationPage> {
     setState(() {
       chosenPageIndex = index;
       _isExpnaded = false;
+      click = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
+    if(click){
+      chosenPageIndex = widget.choice;
+    }
     MediaQuery.of(context).size.width > 768 ? _isExpnaded=false : true;
     return Scaffold(
         appBar:AppBar(
@@ -64,7 +69,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   onPressed: () {
                     _onItemTapped(0);
                   },
-                  child: const Text('TUTORS'),
+                  child: const Text('HOMEPAGE'),
                 ),
                 TextButton(
                   style: ButtonStyle(
@@ -80,7 +85,7 @@ class _NavigationPageState extends State<NavigationPage> {
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                   ),
                   onPressed: () {_onItemTapped(2);  },
-                  child: const Text('HISTORY'),
+                  child: const Text('TUTORS'),
                 ),
                 TextButton(
                   style: ButtonStyle(
@@ -124,7 +129,7 @@ class _NavigationPageState extends State<NavigationPage> {
                 onPressed: () {
                   _onItemTapped(0);
                 },
-                child: const Text('TUTORS'),
+                child: const Text('HOMEPAGE'),
               ),
             ],
           ),
@@ -145,14 +150,14 @@ class _NavigationPageState extends State<NavigationPage> {
           ),
           Row(
             children: [
-              const Icon(Icons.phone_paused, color: Colors.yellow),
+              const Icon(Icons.people_sharp, color: Colors.yellow),
               const SizedBox(width: 5),
               TextButton(
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                 ),
                 onPressed: () {   _onItemTapped(2);},
-                child: const Text('HISTORY'),
+                child: const Text('TUTORS'),
               ),
             ],
           ),
@@ -193,6 +198,7 @@ class _NavigationPageState extends State<NavigationPage> {
         onTap: (value) {
           setState(() {
             chosenPageIndex = value;
+            click = false;
           });
         },
         elevation: 20,
@@ -204,7 +210,8 @@ class _NavigationPageState extends State<NavigationPage> {
               label: 'Home'
           ),
           BottomNavigationBarItem(icon: Icon(Icons.schedule_outlined), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.phone_paused), label: 'History'),
+          // BottomNavigationBarItem(icon: Icon(Icons.phone_paused), label: 'History'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_sharp ), label: 'Tutors'),
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Courses'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
 
