@@ -74,6 +74,7 @@ flutter:
     - assets/images/callHistory.png
     - assets/images/ironman.png
     - assets/images/images.png
+    - assets/images/noAvatar.jpg
     - assets/images/english.png
     - assets/images/english-course.png
     - assets/images/schedule.png

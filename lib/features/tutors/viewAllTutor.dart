@@ -139,19 +139,19 @@ class _TuTorViewStage extends State<TuTorView> {
               ),
             ),
             gapH4,
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
-                child:  Wrap(
-                  spacing: 8,
-                  runSpacing: -4,
-                  children: List<Widget>.generate(
-                      teachers.length,
-                          (index) => const CardTutor()
-                  ),
-                ),
-              ),
-            )
+            // Center(
+            //   child: Padding(
+            //     padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
+            //     child:  Wrap(
+            //       spacing: 8,
+            //       runSpacing: -4,
+            //       children: List<Widget>.generate(
+            //           teachers.length,
+            //               (index) => const CardTutor(listTutor: ,)
+            //       ),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

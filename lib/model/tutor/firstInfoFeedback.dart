@@ -55,4 +55,64 @@ class FirstInfo {
     this.studentGroupId,
   });
 
+  FirstInfo.fromJson(Map<String, dynamic> json) {
+    level = json['level'];
+    email = json['email'];
+    google = json['google'];
+    facebook = json['facebook'];
+    apple = json['apple'];
+    avatar = json['avatar'];
+    name = json['name'];
+    country = json['country'];
+    phone = json['phone'];
+    language = json['language'];
+    birthday = json['birthday'];
+    requestPassword = json['requestPassword'];
+    isActivated = json['isActivated'];
+    isPhoneActivated = json['isPhoneActivated'];
+    requireNote = json['requireNote'];
+    timezone = json['timezone'];
+    phoneAuth = json['phoneAuth'];
+    isPhoneAuthActivated = json['isPhoneAuthActivated'];
+    studySchedule = json['studySchedule'];
+    canSendMessage = json['canSendMessage'];
+    isPublicRecord = json['isPublicRecord'];
+    caredByStaffId = json['caredByStaffId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    deletedAt = json['deletedAt'];
+    studentGroupId = json['studentGroupId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['level'] = level;
+    data['email'] = email;
+    data['google'] = google;
+    data['facebook'] = facebook;
+    data['apple'] = apple;
+    data['avatar'] = avatar;
+    data['name'] = name;
+    data['country'] = country;
+    data['phone'] = phone;
+    data['language'] = language;
+    data['birthday'] = birthday;
+    data['requestPassword'] = requestPassword;
+    data['isActivated'] = isActivated;
+    data['isPhoneActivated'] = isPhoneActivated;
+    data['requireNote'] = requireNote;
+    data['timezone'] = timezone;
+    data['phoneAuth'] = phoneAuth;
+    data['isPhoneAuthActivated'] = isPhoneAuthActivated;
+    data['studySchedule'] = studySchedule;
+    data['canSendMessage'] = canSendMessage;
+    data['isPublicRecord'] = isPublicRecord;
+    data['caredByStaffId'] = caredByStaffId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['studentGroupId'] = studentGroupId;
+    return data;
+  }
+
 }

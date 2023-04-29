@@ -56,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       userProvider.addUserProvider(user, token);
 
       final prefs = await SharedPreferences.getInstance();
+      print( userProvider.token!.access!.token!);
 
       await prefs.setString('accessToken', userProvider.token!.access!.token!,);
       await prefs.setString('refreshToken', userProvider.token!.refresh!.token!,);
@@ -72,15 +73,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       });
     }catch (e) {
-      // Fluttertoast.showToast(
-      //   msg: 'Error Login: ${e.toString()}',
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   timeInSecForIosWeb: 1,
-      //   backgroundColor: Colors.red,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),
       );

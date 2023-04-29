@@ -2,24 +2,51 @@ import 'package:csc13118_mobile/features/homepage/widgets/cardTutor.dart';
 import 'package:csc13118_mobile/features/homepage/widgets/viewJoin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/data.dart';
 import '../../../constants/appSizes.dart';
+import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
+import '../../services/tutorService.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewStage();
-
-
 }
 
 class _HomeViewStage extends State<HomeView> {
   int chosenFilter = 0;
+  bool checkData = false;
+  List<Tutor> listTutor = [];
+  List<dynamic>? responseTutor;
+
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    getListTutor(check!);
+  }
+
+
+  void getListTutor(String tokenUser) async {
+    try{
+      listTutor = await TuTorService.getTutors(page: 1,perPage: 9,token: tokenUser);
+      if (mounted) {
+        setState(() {
+          checkData = true;
+        });
+      }
+    }catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error Login: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    _initPrefs();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -62,14 +89,14 @@ class _HomeViewStage extends State<HomeView> {
             gapH4,
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+
               child:  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Expanded(
-                    child: Text(
-                      'Recommended Tutors',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
-                    ),
+                  const Text(
+                    'Recommended Tutors',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
                   ),
                   InkWell(
                     onTap: () {
@@ -79,13 +106,10 @@ class _HomeViewStage extends State<HomeView> {
                             (route) => false,
                       );
                     },
-                    child: const Expanded(
-                      child: Text(
+                      child: const Text(
                         'See all',
-                        textAlign: TextAlign.right,
                         style: TextStyle(fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blueAccent),
                       ),
-                    ),
                   ),
                 ],
               ),
@@ -106,14 +130,22 @@ class _HomeViewStage extends State<HomeView> {
               ),
             ),
             Center(
-              child: Padding(
+              child:  !checkData
+                  ?
+              const Text(
+                'LOADING...',
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
+              )
+                  :
+              Padding(
                 padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
                 child:  Wrap(
                   spacing: 8,
                   runSpacing: -4,
                   children: List<Widget>.generate(
-                      teachers.length,
-                          (index) => CardTutor()
+                      listTutor.length,
+                          (index) => CardTutor(tutor: listTutor[index],)
                   ),
                 ),
               ),

@@ -91,4 +91,111 @@ class Tutor {
     this.isOnline,
   });
 
+  Tutor.fromJson(Map<String, dynamic> json) {
+    level = json['level'];
+    email = json['email'];
+    google = json['google'];
+    facebook = json['facebook'];
+    apple = json['apple'];
+    avatar = json['avatar'];
+    name = json['name'];
+    country = json['country'];
+    phone = json['phone'];
+    language = json['language'];
+    birthday = json['birthday'];
+    requestPassword = json['requestPassword'];
+    isActivated = json['isActivated'];
+    isPhoneActivated = json['isPhoneActivated'];
+    requireNote = json['requireNote'];
+    timezone = json['timezone'];
+    phoneAuth = json['phoneAuth'];
+    isPhoneAuthActivated = json['isPhoneAuthActivated'];
+    canSendMessage = json['canSendMessage'];
+    isPublicRecord = json['isPublicRecord'];
+    caredByStaffId = json['caredByStaffId'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    deletedAt = json['deletedAt'];
+    studentGroupId = json['studentGroupId'];
+    if (json['feedbacks'] != null) {
+      feedbacks = <FeedbacksTutor>[];
+      json['feedbacks'].forEach((feedBack) {
+        feedbacks!.add(FeedbacksTutor.fromJson(feedBack));
+      });
+    }else{
+      feedbacks = <FeedbacksTutor>[];
+    }
+    id = json['id'];
+    userId = json['userId'];
+    video = json['video'];
+    bio = json['bio'];
+    education = json['education'];
+    experience = json['experience'];
+    profession = json['profession'];
+    accent = json['accent'];
+    targetStudent = json['targetStudent'];
+    interests = json['interests'];
+    languages = json['languages'];
+    specialties = json['specialties'];
+    resume = json['resume'];
+    rating = json['rating'];
+    isNative = json['isNative'];
+    price = json['price'];
+    isOnline = json['isOnline'];
+  }
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['level'] = level;
+    data['email'] = email;
+    data['google'] = google;
+    data['facebook'] = facebook;
+    data['apple'] = apple;
+    data['avatar'] = avatar;
+    data['name'] = name;
+    data['country'] = country;
+    data['phone'] = phone;
+    data['language'] = language;
+    data['birthday'] = birthday;
+    data['requestPassword'] = requestPassword;
+    data['isActivated'] = isActivated;
+    data['isPhoneActivated'] = isPhoneActivated;
+    data['requireNote'] = requireNote;
+    data['timezone'] = timezone;
+    data['phoneAuth'] = phoneAuth;
+    data['isPhoneAuthActivated'] = isPhoneAuthActivated;
+    data['canSendMessage'] = canSendMessage;
+    data['isPublicRecord'] = isPublicRecord;
+    data['caredByStaffId'] = caredByStaffId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['studentGroupId'] = studentGroupId;
+    feedbacks != null ?
+      data['feedbacks'] = feedbacks!.map((feedBack) => feedBack.toJson()).toList()
+    :
+      data['feedbacks']=[];
+
+    data['id'] = id;
+    data['userId'] = userId;
+    data['video'] = video;
+    data['bio'] = bio;
+    data['education'] = education;
+    data['experience'] = experience;
+    data['profession'] = profession;
+    data['accent'] = accent;
+    data['targetStudent'] = targetStudent;
+    data['interests'] = interests;
+    data['languages'] = languages;
+    data['specialties'] = specialties;
+    data['resume'] = resume;
+    data['rating'] = rating;
+    data['isNative'] = isNative;
+    data['price'] = price;
+    data['isOnline'] = isOnline;
+    return data;
+  }
+
+
 }
