@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,19 +22,20 @@ class _CardTutorStage extends State<CardTutor> {
   int chosenFilter = 0;
 
   bool _checkImageExists(String uri) {
+    bool check = false;
     http.head(Uri.parse(uri)).then((response) {
       if(response.statusCode == 200) {
+        check = true;
         return true;
       }
     }).catchError((error) {
      return false;
     });
-    return false;
+    return check;
   }
   @override
   Widget build(BuildContext context) {
     final specialties = widget.tutor.specialties?.split(',').map((spec) => spec.replaceAll('-', ' ')).toList() ?? [];
-
     return SizedBox(
         width: 420,
         child: Card(
@@ -56,19 +59,11 @@ class _CardTutorStage extends State<CardTutor> {
                       child: CircleAvatar(
                         radius: 45,
                         child: ClipOval(
-                          child: _checkImageExists(widget.tutor.avatar ?? '')
-                          ?
-                          Image.network(
+                          child: Image.network(
                             widget.tutor.avatar ?? 'https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg',                                  width: 100,
                             height: 100,
                             fit: BoxFit.cover,
                           )
-                          :
-                          Image.network(
-                            'https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg',                                  width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
                         ),
                       )
                     ),
@@ -169,7 +164,6 @@ class _CardRatting extends State<Ratting> {
     if(remainder >0.5){
       myNumber = myNumber +1;
     }
-    print(myNumber);
     List<Widget> stars = [];
     for (int i = 0; i < myNumber-1; i++) {
       stars.add(

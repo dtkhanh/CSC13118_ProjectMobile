@@ -30,6 +30,71 @@ class TuTorService {
       return tutors.map((tutor) => Tutor.fromJson(tutor)).toList();
     }
   }
+  static Future<List<Tutor>> getListTutorWithSearch({
+    String search = '',
+    required int page,
+    required int perPage,
+    List<String> specialties = const [],
+    nationality =  json,
+    required String token,
+  }) async {
+    final response = await post(
+      Uri.parse('$url/tutor/search'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({
+        'page': page,
+        'perPage': perPage,
+        'search': search,
+        'filters': {
+          'specialties': specialties,
+          // 'nationality': nationality,
+        }
+      })
+    );
+    final jsonDecode = json.decode(response.body);
+
+    if (response.statusCode != 200 ) {
+      throw Exception(jsonDecode!['message']);
+    }else{
+      List<dynamic> tutors = jsonDecode['rows'];
+      return tutors.map((tutor) => Tutor.fromJson(tutor)).toList();
+    }
+  }
+  static Future<dynamic> getToTalElement({
+    String search = '',
+    required int page,
+    required int perPage,
+    List<String> specialties = const [],
+    nationality =  json,
+    required String token,
+  }) async {
+    final response = await post(
+        Uri.parse('$url/tutor/search'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'page': page,
+          'perPage': perPage,
+          'search': search,
+          'filters': {
+            'specialties': specialties,
+            // 'nationality': nationality,
+          }
+        })
+    );
+    final jsonDecode = json.decode(response.body);
+
+    if (response.statusCode != 200 ) {
+      throw Exception(jsonDecode!['message']);
+    }else{
+      return jsonDecode['count'];
+    }
+  }
 
 
 }

@@ -12,9 +12,6 @@ class AuthenticationService {
   Future<Map<String, dynamic>> loginAccount({required String email, required String password}) async {
     final response = await post(
       Uri.parse('$url/auth/login'),
-      // headers:{
-      //   'Content-Type': 'application/json; charset=UTF-8',
-      // },
       body: {
         'email': email,
         'password': password
