@@ -113,6 +113,26 @@ class TuTorService {
     }
     return InfoTutor.fromJson(jsonDecode);
   }
+  static Future<void> addFavoriteTutor({
+    required String token,
+    required String tutorId,
+  }) async {
+    final response = await post(
+      Uri.parse('$url/user/manageFavoriteTutor'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({
+          'tutorId': tutorId,
+        }),
+    );
+
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode['message']);
+    }
+  }
 
 
 }

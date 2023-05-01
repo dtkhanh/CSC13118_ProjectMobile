@@ -12,6 +12,7 @@ import '../../../model/tutor/feedback.dart';
 import '../../../services/tutorService.dart';
 import '../../tutors/widget/viewRatting.dart';
 import '../widget/cardReview.dart';
+import '../widget/viewCalander.dart';
 
 class InforTeacher extends StatefulWidget {
   final String userId;
@@ -27,6 +28,7 @@ class _InforTeacherState extends State<InforTeacher> {
   late String linkVideo ="";
   bool checkData = false;
   List<FeedbacksTutor>? listFeedBack;
+  late bool checkFavorite ;
 
   @override
   void initState() {
@@ -39,13 +41,24 @@ class _InforTeacherState extends State<InforTeacher> {
       String? check =  prefs.getString('accessToken');
       infoTutor = await TuTorService.getIdTutor(token: check!, userId: id);
       linkVideo = infoTutor.video!;
-
+      checkFavorite = infoTutor.isFavorite!;
       setState(() {
         checkData = true;
       });
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Login: ${e.toString()}')),
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+  Future<void> _fetchAddFavoriteTutor(String id) async {
+    try{
+      final prefs = await SharedPreferences.getInstance();
+      String? check =  prefs.getString('accessToken');
+      await TuTorService.addFavoriteTutor(token: check!, tutorId: id);
+    }catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
       );
     }
   }
@@ -54,10 +67,10 @@ class _InforTeacherState extends State<InforTeacher> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           backgroundColor: Colors.grey.shade200,
-          title: Text('Others review'),
-          content:  Container(
+          title: const Text('Others review'),
+          content:  SizedBox(
               width: double.maxFinite,
               child: ListView.builder(
                 itemCount: listFeedBack?.length ?? 0,
@@ -90,16 +103,14 @@ class _InforTeacherState extends State<InforTeacher> {
     }
     var specialties=[];
     var languages=[];
-    bool? checkFavorite=false;
 
     if(checkData == true){
       specialties = infoTutor.specialties?.split(',').map((spec) => spec.replaceAll('-', ' ')).toList() ?? [];
       languages = infoTutor.languages?.split(',').map((spec) => spec.replaceAll('-', ' ')).toList() ?? [];
-      checkFavorite = infoTutor.isFavorite;
     }
     _chewieController = ChewieController(
       videoPlayerController: VideoPlayerController.network(linkVideo),
-      autoPlay: true,
+      autoPlay: false,
       looping: false,
       deviceOrientationsOnEnterFullScreen: [
         DeviceOrientation.landscapeLeft,
@@ -212,11 +223,13 @@ class _InforTeacherState extends State<InforTeacher> {
                                     child:
                                     TextButton(
                                       onPressed: () {
+                                        _fetchAddFavoriteTutor(infoTutor.user!.id ?? "");
+                                        checkFavorite = !checkFavorite;
                                       },
                                       child: Column(
                                         children: [
                                           Icon(
-                                              !checkFavorite! ? Icons.favorite_border  : Icons.favorite ,
+                                              !checkFavorite? Icons.favorite_border  : Icons.favorite ,
                                               color: !checkFavorite? Colors.blue : Colors.red
                                           ),
                                           Text( 'Favorite',
@@ -436,27 +449,8 @@ class _InforTeacherState extends State<InforTeacher> {
                           ),
                         )
                         ),
-                        ResponsiveGridCol(md:7 ,child:Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0), // Set border radius
-                            ),
-                            surfaceTintColor: Colors.white,
-                            elevation: 3.0,
-                            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                            child: SizedBox(
-                              height: 500,
-                              child: SfCalendar(
-                                headerHeight: 10,
-                                view: CalendarView.week,
-                                firstDayOfWeek: 6,
-                                //initialDisplayDate: DateTime(2021, 03, 01, 08, 30),
-                                //initialSelectedDate: DateTime(2021, 03, 01, 08, 30),
-                                dataSource: MeetingDataSource(getAppointments()),
-                              ),
-                            )
-
-                        )
-
+                        ResponsiveGridCol(md:7 ,
+                            child: ViewCalender(idTutors:  infoTutor.user!.id.toString() ?? "",)
                         ),
                       ],
                     )
@@ -473,26 +467,5 @@ class _InforTeacherState extends State<InforTeacher> {
   void dispose() {
     super.dispose();
     _chewieController.dispose();
-  }
-}
-List<Appointment> getAppointments() {
-  List<Appointment> meetings = <Appointment>[];
-  final DateTime today = DateTime.now();
-  DateTime(today.year, today.month, today.day, 9, 0, 0);
-  // final DateTime endTime = startTime.add(const Duration(hours: 2));
-  // meetings.add(Appointment(
-  //     startTime: startTime,
-  //     endTime: endTime,
-  //     subject: 'Board Meeting',
-  //     color: Colors.blue,
-  //     recurrenceRule: 'FREQ=DAILY;COUNT=10',
-  //     isAllDay: false));
-
-  return meetings;
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Appointment> source) {
-    appointments = source;
   }
 }
