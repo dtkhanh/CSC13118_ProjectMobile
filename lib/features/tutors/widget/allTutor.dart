@@ -1,8 +1,6 @@
-import 'package:csc13118_mobile/features/homepage/widgets/cardTutor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '../../../constants/appSizes.dart';
 
 class AllTutorView extends StatefulWidget {
   const AllTutorView({Key? key}) : super(key: key);
@@ -14,7 +12,6 @@ class AllTutorView extends StatefulWidget {
 
 class _AllTutorViewStage extends State<AllTutorView> {
   int chosenFilter = 0;
-  final List<String> _options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'];
   static const int _pageSize = 10;
   final PagingController<int, String> _pagingController =
   PagingController(firstPageKey: 0);

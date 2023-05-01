@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:http/http.dart';
 
 import '../model/tutor/tutor.dart';
@@ -94,6 +95,23 @@ class TuTorService {
     }else{
       return jsonDecode['count'];
     }
+  }
+  static Future<InfoTutor> getIdTutor({
+    required String token,
+    required String userId,
+  }) async {
+    final response = await get(
+      Uri.parse('$url/tutor/$userId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode['message']);
+    }
+    return InfoTutor.fromJson(jsonDecode);
   }
 
 

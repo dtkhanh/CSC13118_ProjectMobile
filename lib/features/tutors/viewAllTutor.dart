@@ -1,4 +1,4 @@
-import 'package:csc13118_mobile/features/homepage/widgets/cardTutor.dart';
+import 'package:csc13118_mobile/features/tutors/widget/cardTutor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -24,6 +24,8 @@ class _TuTorViewStage extends State<TuTorView> {
   static  int _totalPage = 0;
   static String specialties = "";
   static List<String> filter = [];
+  final _searchName = TextEditingController();
+
 
   @override
   void initState() {
@@ -52,10 +54,13 @@ class _TuTorViewStage extends State<TuTorView> {
       if(specialties.length != 0 && specialties != "all"){
         filter.add(specialties);
       }
+      if(_searchName.text.length !=0){
+
+      }
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
-      final newItems = await TuTorService.getListTutorWithSearch(page: pageKey +1,perPage: 9,token: check!, specialties: filter);
-      final totalElement = await TuTorService.getToTalElement(page: pageKey +1,perPage: 9,token: check!, specialties: filter);
+      final newItems = await TuTorService.getListTutorWithSearch(page: pageKey +1,perPage: 9,token: check!, specialties: filter,search: _searchName.text);
+      final totalElement = await TuTorService.getToTalElement(page: pageKey +1,perPage: 9,token: check, specialties: filter, search: _searchName.text);
       setState(() {
         int result = totalElement.toInt() ~/ 9 + (totalElement.toInt() % 9 > 0 ? 1 : 0);
         _totalPage = result;
@@ -117,9 +122,10 @@ class _TuTorViewStage extends State<TuTorView> {
                       children:  [
                         Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: TextField(
-                                decoration: InputDecoration(
+                                controller: _searchName,
+                                decoration: const InputDecoration(
                                   prefixIcon: Icon(
                                     Icons.search,
                                     color: Colors.black12,
@@ -131,6 +137,9 @@ class _TuTorViewStage extends State<TuTorView> {
                                       borderSide: BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.all(Radius.circular(20))),
                                 ),
+                                onSubmitted: (value) {
+                                  _pagingController.refresh();
+                                },
                               ),
                             ),
                             gapW8,
@@ -191,7 +200,7 @@ class _TuTorViewStage extends State<TuTorView> {
                       setState(() {
                         chosenFilter = 0;
                         specialties = filters[0].toLowerCase().replaceAll(' ', '-');
-
+                        _searchName.clear();
                       });
                       _pagingController.refresh();
                     },

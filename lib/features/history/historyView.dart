@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:csc13118_mobile/features/view_information/teacher_info/InformationTeacher.dart';
 
 class historyView extends StatefulWidget {
   const historyView({Key? key}) : super(key: key);
@@ -116,10 +115,10 @@ class _HistoryViewStage extends State<historyView> {
                                             children: [
                                               InkWell(
                                                 onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(builder: (context) => InforTeacher()),
-                                                  );
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(builder: (context) => InforTeacher()),
+                                                  // );
                                                 },
                                                 child: const SizedBox(
                                                   width: 50,

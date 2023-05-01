@@ -1,9 +1,8 @@
-import 'package:csc13118_mobile/features/homepage/widgets/cardTutor.dart';
+import 'package:csc13118_mobile/features/tutors/widget/cardTutor.dart';
 import 'package:csc13118_mobile/features/homepage/widgets/viewJoin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../data/data.dart';
 import '../../../constants/appSizes.dart';
 import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
