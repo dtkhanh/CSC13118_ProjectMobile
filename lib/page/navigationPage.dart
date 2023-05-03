@@ -20,8 +20,8 @@ class _NavigationPageState extends State<NavigationPage> {
   List<Widget> pages = [
     const HomeView(),
     const ScheduleView(),
+    const TuTorView(),
     const historyView(),
-    // const TuTorView(),
     const DiscoverCourses(),
     const ProflileView(),
   ];
@@ -212,8 +212,8 @@ class _NavigationPageState extends State<NavigationPage> {
               label: 'Home'
           ),
           BottomNavigationBarItem(icon: Icon(Icons.schedule_outlined), label: 'Schedule'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_sharp ), label: 'Tutors'),
           BottomNavigationBarItem(icon: Icon(Icons.phone_paused), label: 'History'),
-          // BottomNavigationBarItem(icon: Icon(Icons.people_sharp ), label: 'Tutors'),
           BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Courses'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
 

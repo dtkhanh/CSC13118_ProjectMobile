@@ -3,8 +3,10 @@ import 'package:csc13118_mobile/features/homepage/widgets/viewJoin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../model/schedule/bookingInfo.dart';
 import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
 import '../../services/tutorService.dart';
@@ -25,6 +27,7 @@ class _HomeViewStage extends State<HomeView> {
   List<dynamic>? responseTutor;
   Map<String, dynamic>? _total;
   int _totalCall = 0;
+  BookingInfo? _upComing;
 
 
   Future<void> _initPrefs() async {
@@ -37,14 +40,14 @@ class _HomeViewStage extends State<HomeView> {
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
       _total = await UserService.getTotalCall(token: check!);
+      final upComing = await UserService.getUpcomingLesson(token: check);
       if (mounted) {
         setState(() {
           checkData = true;
           _totalCall = int.parse(_total!["total"].toString());
+          _upComing = upComing;
         });
       }
-      print("getTotalCall");
-      print(_totalCall);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),
@@ -101,17 +104,28 @@ class _HomeViewStage extends State<HomeView> {
                       style: TextStyle(fontSize: Sizes.p20, color: Colors.white),
                     ),
                   ),
+                  _upComing == null?
+                  const Text(
+                    '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: Sizes.p20, color: Colors.white),
+                  )
+                      :
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        '2023-03-11  20:00-00:00',
+                      Text(
+                        '${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} ',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: Sizes.p16, color: Colors.white),
+                        style: const TextStyle(fontSize: Sizes.p16, color: Colors.white),
                       ),
-                      const  Text(
-                        ' ( Start in 65:43:51 ) ',
-                        style: TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
+                      Text(
+                          '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} - ',
+                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
+                      ),
+                      Text(
+                        DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.endPeriodTimestamp ?? 0)),
+                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
                       ),
                       gapW4,
                       TextButton(
@@ -144,7 +158,7 @@ class _HomeViewStage extends State<HomeView> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 12, bottom: 24),
+                    padding: EdgeInsets.only(top: 4, bottom: 24),
                     child:
                     Text(
                       _convertTotalLessonTime(),
