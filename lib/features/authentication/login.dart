@@ -48,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginPage(UserProvider userProvider) async {
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      // _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
 
       // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
