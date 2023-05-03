@@ -28,5 +28,27 @@ class ScheduleService {
     List<dynamic> listSchedule = jsonDecode['data'] ;
 
     return listSchedule.map((schedule) => Schedule.fromJson(schedule)).toList();
+  }
+  static Future<void> booking({
+    required List<String> scheduleDetailIds,
+    required String note,
+    required String token,
+  }) async {
+    final response = await post(
+      Uri.parse('$url/booking'),
+      headers: {
+        'Content-Type': 'application/json;encoding=utf-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({
+        'scheduleDetailIds': scheduleDetailIds,
+        'note': note,
+      }),
+    );
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode['message']);
     }
+  }
+
 }
