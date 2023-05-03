@@ -19,15 +19,14 @@ class ScheduleService {
     body:{
       'tutorId': userId,
     },);
-    print("ScheduleService");
+
 
     final jsonDecode = json.decode(response.body);
     if (response.statusCode != 200) {
-      print("hehehe");
       throw Exception(jsonDecode(['message']));
     }
     List<dynamic> listSchedule = jsonDecode['data'] ;
-    print(listSchedule.map((schedule) => Schedule.fromJson(schedule)).toList());
+
     return listSchedule.map((schedule) => Schedule.fromJson(schedule)).toList();
     }
 }

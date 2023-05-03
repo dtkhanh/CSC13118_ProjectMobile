@@ -25,18 +25,21 @@ class _ViewCalenderStage extends State<ViewCalender> {
     final DateTime today = DateTime.now();
     DateTime(today.year, today.month, today.day, 9, 0, 0);
     // final DateTime endTime = startTime.add(const Duration(hours: 2));
-    final dateend = DateTime.fromMillisecondsSinceEpoch(1627988400000);
-    final datestart = DateTime.fromMillisecondsSinceEpoch(1627992000000);
     DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
     DateTime endTime = DateTime(today.year, today.month, today.day, 12, 0, 0);
+    for( int i =0 ;i< listSchedule!.length ; i++){
+      print(DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),);
+      meetings.add(
+          Appointment(
+              startTime: DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),
+              endTime: DateTime.fromMillisecondsSinceEpoch(listSchedule![i].endTimestamp ?? 0),
+              subject: listSchedule![i].id ?? "",
+              color: listSchedule![i].isBooked == true ? Colors.blue : Colors.grey,
+              recurrenceRule: null,
+              isAllDay: false)
+      );
+    }
 
-    meetings.add(Appointment(
-        startTime: startTime,
-        endTime: endTime,
-        subject: 'Board Meeting',
-        color: Colors.blue,
-        recurrenceRule: null,
-        isAllDay: false));
     return meetings;
   }
   Future<void> _fetchTutorSchedule(String id) async {
@@ -44,6 +47,13 @@ class _ViewCalenderStage extends State<ViewCalender> {
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
       listSchedule = await ScheduleService.getScheduleByTutorId( token: check!, userId: id);
+      listSchedule = listSchedule?.where((schedule) {
+        if (schedule.startTimestamp == null) return false;
+        final start = DateTime.fromMillisecondsSinceEpoch(schedule.startTimestamp!);
+        return start.isAfter(DateTime.now());
+      }).toList();
+      print("_fetchTutorSchedule");
+      print(listSchedule?.length);
       setState(() {
         checkData = true;
       });
@@ -76,12 +86,23 @@ class _ViewCalenderStage extends State<ViewCalender> {
           child: SizedBox(
             height: 500,
             child: SfCalendar(
-              headerHeight: 10,
+              // headerHeight: 5,
               view: CalendarView.week,
-              firstDayOfWeek: 6,
-              //initialDisplayDate: DateTime(2021, 03, 01, 08, 30),
+              firstDayOfWeek: 7,
+              // initialDisplayDate: DateTime.now(),
               //initialSelectedDate: DateTime(2021, 03, 01, 08, 30),
               dataSource: MeetingDataSource(getAppointments()),
+              appointmentTimeTextFormat: 'hh:mm a',
+              monthViewSettings: MonthViewSettings(showAgenda: true),
+              showDatePickerButton: true,
+              headerHeight: 60,
+              viewHeaderHeight: 70,
+              onTap: (CalendarTapDetails details) {
+                if (details.targetElement == CalendarElement.appointment) {
+                  final Appointment appointmentDetails = details.appointments![0];
+                  print(appointmentDetails.subject);
+                }
+              },
             ),
           )
 
