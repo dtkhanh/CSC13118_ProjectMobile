@@ -23,7 +23,7 @@ class _CardCourseStage extends State<CardCourse> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const InformationCourseView()),
+              MaterialPageRoute(builder: (context) => InformationCourseView(idCourse: widget.course.id ?? "",)),
             );
           },
           child: SizedBox(

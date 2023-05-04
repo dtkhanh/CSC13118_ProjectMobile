@@ -28,7 +28,7 @@ class LetTutor extends StatelessWidget {
             Routes.login: (context) => const LoginPage(),
             Routes.main: (context) => const NavigationPage(choice: 0),
             Routes.tutors: (context) =>  const NavigationPage(choice: 2,),
-            Routes.courseDetail: (context) => const InformationCourseView(),
+            // Routes.courseDetail: (context) => const InformationCourseView(),
           }),
     );
   }
