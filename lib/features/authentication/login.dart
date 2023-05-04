@@ -14,6 +14,8 @@ import '../../routing/routes.dart';
 import '../../services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/userService.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -25,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
+  late User user;
 
   @override
   void initState() {
@@ -34,22 +37,44 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? check =  prefs.getString('accessToken');
-    if(check?.length != 0){
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.main,
-              (route) => false,
-        );
+    // final userInfo = await UserService.getUserInformation(token: check!);
+    // final userProvider = UserProvider();
+    // TokensUser? tkUser = userProvider.token;
+    // userProvider.addUserProvider(userInfo, tkUser!);
+    if(check!.length != 0){
+      // Future.delayed(const Duration(seconds: 1), () {
+      //   Navigator.pushNamedAndRemoveUntil(
+      //     context,
+      //     Routes.main,
+      //         (route) => false,
+      //   );
+      // });
+    }
+  }
+
+
+  void getInfomation(String tokenUser) async {
+    try{
+      final userInfo = await UserService.getUserInformation(token: tokenUser);
+      setState(() {
+        user=userInfo;
       });
+      final userProvider = UserProvider();
+      TokensUser? tkUser = userProvider.token;
+      userProvider.addUserProvider(user, tkUser!);
+
+    }catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error Login: ${e.toString()}')),
+      );
     }
   }
 
 
   void loginPage(UserProvider userProvider) async {
     try{
-      // _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
-      _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
+      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
 
       // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);

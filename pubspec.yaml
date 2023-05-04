@@ -94,6 +94,7 @@ flutter:
     - assets/svg/ic_hand.svg
     - assets/svg/ic_micro.svg
     - assets/svg/ic_shareDesk.svg
+    - assets/svg/icons-flutter.svg
     - assets/svg/icon_camera.svg
     - assets/svg/Beginner.svg
 

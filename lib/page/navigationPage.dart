@@ -1,8 +1,9 @@
+import 'package:csc13118_mobile/features/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
 import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
-import 'package:csc13118_mobile/features/setting/profileView.dart';
+import 'package:csc13118_mobile/features/setting/widget/profileView.dart';
 import '../features/history/historyView.dart';
 import '../features/tutors/viewAllTutor.dart';
 
@@ -23,7 +24,8 @@ class _NavigationPageState extends State<NavigationPage> {
     const TuTorView(),
     const historyView(),
     const DiscoverCourses(),
-    const ProflileView(),
+    // const ProflileView(),
+    const SettingView(),
   ];
 
   List<String> pagesTitle = [ 'TUTORS', 'SCHEDULE', 'COURSES', 'MY COURSE'];

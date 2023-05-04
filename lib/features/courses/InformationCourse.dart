@@ -167,7 +167,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
@@ -198,7 +198,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
@@ -269,7 +269,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
