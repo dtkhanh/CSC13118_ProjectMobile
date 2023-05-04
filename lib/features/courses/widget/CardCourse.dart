@@ -75,7 +75,7 @@ class _CardCourseStage extends State<CardCourse> {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              '${courseLevels[widget.course.level!]} -  ${widget.course.topics!.length} lessons',
+                              '${courseLevels[widget.course.level ?? 0]} -  ${widget.course.topics == null ?  "" : '${widget.course.topics?.length} lessons' }',
                               style: const TextStyle(
                                   fontSize: 13, color: Colors.black, fontWeight: FontWeight.bold
                               ),

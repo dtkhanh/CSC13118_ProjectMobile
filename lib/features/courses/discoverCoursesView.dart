@@ -29,11 +29,20 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
     const historyView(),
   ];
 
-  void getListHistory() async {
+  void getListCourse() async {
     try{
+      // setState(() {
+      //   checkData = false;
+      // });
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
-      listCourse = await CourseService.getListCourse(token: check!);
+      if(chosenFilter == 0){
+        listCourse = await CourseService.getListCourse(token: check!);
+      }else if(chosenFilter ==1){
+        listCourse = await CourseService.getListCourseE_book(token: check!);
+      }else if(chosenFilter ==2){
+        listCourse = await CourseService.getListCourse_Interactive_Ebook(token: check!);
+      }
       setState(() {
         checkData = true;
       });
@@ -47,7 +56,7 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
 
   @override
   Widget build(BuildContext context) {
-    getListHistory();
+    getListCourse();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -180,6 +189,11 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                           onTap: () {
                             setState(() {
                               chosenFilter = index;
+                              setState(() {
+                                checkData = false;
+                                listCourse =[];
+                              });
+                              getListCourse();
                             });
                           },
                           child:  Text(
@@ -249,15 +263,27 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                             (index) => CardCourse(course: listCourse[index],)
                     ),
                   ),
-                ) : chosenFilter == 1 ? const Text(
-                  'Course',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
-                ) : const Text(
-                  'Interactive E-book',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
-                ),
+                ) : chosenFilter == 1 ? Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 6, 6, 0),
+                  child:  Wrap(
+                    spacing: 8,
+                    runSpacing: -4,
+                    children: List<Widget>.generate(
+                        listCourse.length,
+                            (index) => CardCourse(course: listCourse[index],)
+                    ),
+                  ),
+                ) : Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 6, 6, 0),
+                  child:  Wrap(
+                    spacing: 8,
+                    runSpacing: -4,
+                    children: List<Widget>.generate(
+                        listCourse.length,
+                            (index) => CardCourse(course: listCourse[index],)
+                    ),
+                  ),
+                )
               ),
             ],
           ),
