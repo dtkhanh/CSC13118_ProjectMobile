@@ -59,9 +59,9 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         user=userInfo;
       });
-      final userProvider = UserProvider();
-      TokensUser? tkUser = userProvider.token;
-      userProvider.addUserProvider(user, tkUser!);
+      // final userProvider = UserProvider();
+      // TokensUser? tkUser = userProvider.token;
+      // userProvider.addUserProvider(user, tkUser!);
 
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  void loginPage(UserProvider userProvider) async {
+  void loginPage() async {
     try{
       _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
@@ -79,13 +79,13 @@ class _LoginPageState extends State<LoginPage> {
       // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
-      userProvider.addUserProvider(user, token);
+      // userProvider.addUserProvider(user, token);
 
       final prefs = await SharedPreferences.getInstance();
-      print( userProvider.token!.access!.token!);
 
-      await prefs.setString('accessToken', userProvider.token!.access!.token!,);
-      await prefs.setString('refreshToken', userProvider.token!.refresh!.token!,);
+      await prefs.setString('accessToken', token.access!.token!,);
+      await prefs.setString('refreshToken', token.refresh!.token!,);
+      await prefs.setString('userId', user.id!,);
 
       //
       // print("loginPage");
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = context.watch<UserProvider>();
+    // final userProvider = context.watch<UserProvider>();
 
     return Scaffold(
       body: Center(
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       onPressed: () {
-                        loginPage(userProvider);
+                        loginPage();
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 10),

@@ -1,10 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
-import '../model/token.dart';
-import '../model/user.dart';
 class AuthenticationService {
 
   static const url =  'https://sandbox.api.lettutor.com';
@@ -22,8 +17,6 @@ class AuthenticationService {
       return  jsonDecode;
     } else {
       throw Exception(jsonDecode!['message']);
-      // return json.decode(response.body);
-      throw Exception('Failed to Login account.');
     }
   }
 

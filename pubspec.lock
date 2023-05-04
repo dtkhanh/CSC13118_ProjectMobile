@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  chat_gpt_sdk:
+    dependency: "direct main"
+    description:
+      name: chat_gpt_sdk
+      sha256: "64bc89a7ff086e2b814643003d37de617c777780239539b00da58810afa2337e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
   chewie:
     dependency: "direct main"
     description:
@@ -65,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "0894a098594263fe1caaba3520e3016d8a855caeb010a882273189cca10f11e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -110,6 +126,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  flutter_riverpod:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod
+      sha256: b83ac5827baadefd331ea1d85110f34645827ea234ccabf53a655f41901a9bf4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.6"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -176,6 +200,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  jitsi_meet_wrapper:
+    dependency: "direct main"
+    description:
+      name: jitsi_meet_wrapper
+      sha256: "7459a792215042e05b4e2380fb1f5467df8bccc82a254c674cd325812fbe219f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
+  jitsi_meet_wrapper_platform_interface:
+    dependency: transitive
+    description:
+      name: jitsi_meet_wrapper_platform_interface
+      sha256: "3ad496e47b6f4de81bf52847b965fe967ca94a5a08cb68c3498dfb1e6beb0d86"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   js:
     dependency: transitive
     description:
@@ -200,6 +240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.13"
+  material:
+    dependency: "direct main"
+    description:
+      name: material
+      sha256: "7f3a2edadf60e3a8771b843baff931d4b2e7205d015059c3abe315344f23dfa4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+2"
   material_color_utilities:
     dependency: transitive
     description:
@@ -320,6 +368,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  riverpod:
+    dependency: transitive
+    description:
+      name: riverpod
+      sha256: "80e48bebc83010d5e67a11c9514af6b44bbac1ec77b4333c8ea65dbc79e2d8ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.6"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -405,6 +461,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  state_notifier:
+    dependency: transitive
+    description:
+      name: state_notifier
+      sha256: "8fe42610f179b843b12371e40db58c9444f8757f8b69d181c97e50787caed289"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2+1"
   stream_channel:
     dependency: transitive
     description:
@@ -590,5 +654,5 @@ packages:
     source: hosted
     version: "5.4.1"
 sdks:
-  dart: ">=2.19.4 <3.0.0"
+  dart: ">=2.19.6 <3.0.0"
   flutter: ">=3.3.0"

@@ -47,6 +47,10 @@ dependencies:
   shared_preferences: ^2.1.0
   infinite_scroll_pagination: ^3.2.0
   intl: ^0.18.1
+  flutter_riverpod: ^2.3.6
+  chat_gpt_sdk: ^2.0.6
+  material: ^1.0.0+2
+  jitsi_meet_wrapper: ^0.0.6
 
 
 dev_dependencies:
@@ -97,6 +101,7 @@ flutter:
     - assets/svg/icons-flutter.svg
     - assets/svg/icon_camera.svg
     - assets/svg/Beginner.svg
+    - assets/svg/chatgpt-icon.svg
 
     # To add assets to your application, add an assets section, like this:
 
