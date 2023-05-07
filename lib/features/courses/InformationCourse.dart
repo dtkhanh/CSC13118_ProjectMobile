@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:flutter_responsive_grid/flutter_responsive_grid.dart';
-import 'package:csc13118_mobile/features/courses/topicDetail.dart';
+import '../../model/course/course.dart';
+import '../../services/courseService.dart';
 
 class InformationCourseView extends StatefulWidget {
-  const InformationCourseView({Key? key}) : super(key: key);
+  final String idCourse;
+  const InformationCourseView({super.key, required this.idCourse});
 
 
   @override
@@ -15,11 +17,32 @@ class InformationCourseView extends StatefulWidget {
 
 class _InformationCourseViewStage extends State<InformationCourseView> {
   int chosenFilter = 0;
-  List<String> _data = [ 'Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1','Topic1',  ];
+  late final Course courseDetail;
 
+  bool _isLoading = false;
+
+  Future<void> _fetchCourseDetail() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    final result = await CourseService.getCourseDetail(
+      token: check!,
+      id: widget.idCourse,
+    );
+    setState(() {
+      courseDetail = result;
+      _isLoading = true;
+    });
+    // try{
+    // }catch (e) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Error : ${e.toString()}')),
+    //   );
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
+    _fetchCourseDetail();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -40,7 +63,17 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-          child:  Column(
+          child:   !_isLoading
+              ?
+          const Center(
+            child: Text(
+              'NO DATA',
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
+            ),
+          )
+              :
+          Column(
             children: [
               Column(
                 children: <Widget>[
@@ -60,13 +93,13 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                             children: [
                               Container(
                                 height: 300, // set the height of the container
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10),
                                   ),// Set border radius
                                   image: DecorationImage(
-                                    image: AssetImage('assets/images/english-course.png'),
+                                    image: NetworkImage( courseDetail.imageUrl ??'assets/images/english.png'),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -77,18 +110,18 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children:  [
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        'Basic conversation Topics',
-                                        style: TextStyle(
+                                      Text(
+                                        courseDetail.name ?? "",
+                                        style: const TextStyle(
                                             fontSize: 17, color: Colors.black, fontWeight: FontWeight.bold
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        'Gain confidence speaking about familiar topics',
+                                      Text(
+                                        courseDetail.description ?? "",
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 13.0, color: Colors.grey, height: 1.6
                                         ),
                                       ),
@@ -130,11 +163,11 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 25, 0,5),
+                              padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
@@ -151,21 +184,21 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                 ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(30, 0, 0,5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 0, 0,5),
                               child:  Text(
-                                'In this article, we will discuss why interviewers ask about your course selection, how you can best answer questions about why you chose your course selection and we provide example answers to guide you.',
-                                style: TextStyle(
+                                courseDetail.reason ?? "",
+                                style: const TextStyle(
                                     fontSize: 13, color: Colors.black,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0,5),
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0,5),
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
@@ -182,11 +215,11 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                 ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(30, 0, 0,5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 0, 0,5),
                               child:  Text(
-                                'In this article, we will discuss why interviewers ask about your course selection, how you can best answer questions about why you chose your course selection and we provide example answers to guide you.',
-                                style: TextStyle(
+                                courseDetail.purpose ?? "",
+                                    style: const TextStyle(
                                   fontSize: 13, color: Colors.black,
                                 ),
                               ),
@@ -201,7 +234,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 25, 0,5),
+                              padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
@@ -213,9 +246,9 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   ),
                                   const SizedBox(
                                       width: 5),
-                                  const Text(
-                                    'Beginner',
-                                    style: TextStyle(
+                                  Text(
+                                    courseLevels[courseDetail.level ?? '0'] ?? "",
+                                    style: const TextStyle(
                                         fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
                                     ),
                                   ),
@@ -232,11 +265,11 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 25, 0,5),
+                              padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/svg/icon.svg",
+                                    "assets/svg/icons-flutter.svg",
                                     semanticsLabel:
                                     'Logo Icon',
                                     width: 20,
@@ -244,15 +277,24 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   ),
                                   const SizedBox(
                                       width: 5),
-                                  const Text(
-                                    '10 topic',
-                                    style: TextStyle(
+                                  Text(
+                                    courseDetail.topics == null ? "" : '${courseDetail.topics?.length}  Topics',
+                                    style: const TextStyle(
                                         fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                            courseDetail.topics == null
+                            ?
+                            const Text(
+                              "",
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                              ),
+                            )
+                            :
                             const Padding(
                               padding: EdgeInsets.fromLTRB(40, 25, 25,0),
                               child: Text(
@@ -264,428 +306,53 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => const TopicDetail()),
-                                              );
-                                            },
-                                            child:  Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                    padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: const [
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '1.',
-                                                          style: TextStyle(
-                                                            fontSize: 15, color: Colors.black,
+                              child: Expanded(
+                                child: Column(
+                                  children: List<Widget>.generate(
+                                    courseDetail.topics?.length ?? 0,
+                                        (index) =>SizedBox(
+                                          width: 200,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10.0), // Set border radius
+                                              ),
+                                              surfaceTintColor: Colors.white,
+                                              elevation: 3.0,
+                                              child:  Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                      padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          const SizedBox(height: 10),
+                                                          Text(
+                                                            '${index +1}',
+                                                            style: const TextStyle(
+                                                              fontSize: 15, color: Colors.black,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          'Foods You Love',
-                                                          style: TextStyle(
-                                                            fontSize: 15, color: Colors.black,
+                                                          Text(
+                                                            courseDetail.topics![index].name ?? "",
+                                                            style: const TextStyle(
+                                                              fontSize: 15, color: Colors.black,
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
 
-                                                    )
-                                                )
-                                              ],
+                                                      )
+                                                  )
+                                                ],
+                                              ),
+
                                             ),
                                           ),
-
-                                        ),
-                                      ),
-                                      const SizedBox( width: 10),
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => const TopicDetail()),
-                                              );
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                    padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: const [
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '2.',
-                                                          style: TextStyle(
-                                                            fontSize: 15, color: Colors.black,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'Your Job',
-                                                          style: TextStyle(
-                                                            fontSize: 15, color: Colors.black,
-                                                          ),
-                                                        ),
-                                                      ],
-
-                                                    )
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-
-                                    ],
+                                        )
                                   ),
-                                  const SizedBox( height: 10),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '3.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Playing and Watching Sports',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      const SizedBox( width: 10),
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '4.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'The Best Pet',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                  const SizedBox( height: 10),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '1.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Foods You Love',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      const SizedBox( width: 10),
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '2.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Your Job',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                  const SizedBox( height: 10),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '1.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Foods You Love',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      const SizedBox( width: 10),
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '2.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Your Job',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                  const SizedBox( height: 10),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '1.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Foods You Love',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-                                      const SizedBox( width: 10),
-                                      Expanded(
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                          ),
-                                          surfaceTintColor: Colors.white,
-                                          elevation: 3.0,
-                                          child:  Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: const [
-                                                      SizedBox(height: 10),
-                                                      Text(
-                                                        '2.',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Your Job',
-                                                        style: TextStyle(
-                                                          fontSize: 15, color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-
-                                                  )
-                                              )
-                                            ],
-                                          ),
-
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ],
+                                )
                               )
                             ),
 

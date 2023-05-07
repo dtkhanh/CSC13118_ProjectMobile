@@ -6,7 +6,8 @@ import '../../call_video/teamView.dart';
 
 
 class ViewJoin extends StatefulWidget {
-  const ViewJoin({Key? key}) : super(key: key);
+  final int total;
+  const ViewJoin({super.key, required this.total});
   @override
   State<ViewJoin> createState() => _ViewJoinStage();
 
