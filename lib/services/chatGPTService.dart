@@ -1,5 +1,4 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'package:flutter/material.dart';
 
 class AIHandler {
   final _openAI = OpenAI.instance.build(

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../model/schedule/schedule.dart';
-import '../../../model/tutor/feedback.dart';
 import '../../../services/scheduleService.dart';
-import '../../tutors/widget/viewRatting.dart';
 
 class ViewCalender extends StatefulWidget {
   final String idTutors;
@@ -72,7 +70,7 @@ class _ViewCalenderStage extends State<ViewCalender> {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(0),
           backgroundColor: Colors.grey.shade200,
-          title: const Text('Booking details' ,  style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text('Booking details' ,  style: TextStyle(fontWeight: FontWeight.bold)),
           content: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
             child: Column(
@@ -151,7 +149,6 @@ class _ViewCalenderStage extends State<ViewCalender> {
   }
   Future<void> BookCalender(String schedule) async {
       final list = schedule.split('|').toList();
-      print(schedule);
       if(list[0] == "false"){
         _dialogBuilder(list[2],list[3],list[1], );
       }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
 import 'package:csc13118_mobile/features/courses/discoverCoursesView.dart';
-import 'package:csc13118_mobile/features/setting/widget/profileView.dart';
 import '../features/history/historyView.dart';
 import '../features/tutors/viewAllTutor.dart';
 
@@ -11,8 +10,6 @@ import '../features/tutors/viewAllTutor.dart';
 class NavigationPage extends StatefulWidget {
   final int choice;
   const NavigationPage({super.key, required this.choice});
-  // const NavigationPage({super.key, required: this.choice})
-
   @override
   State<NavigationPage> createState() => _NavigationPageState();
 }
@@ -24,7 +21,6 @@ class _NavigationPageState extends State<NavigationPage> {
     const TuTorView(),
     const historyView(),
     const DiscoverCourses(),
-    // const ProflileView(),
     const SettingView(),
   ];
 

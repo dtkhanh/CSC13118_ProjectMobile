@@ -1,5 +1,4 @@
 import 'package:csc13118_mobile/features/tutors/widget/cardTutor.dart';
-import 'package:csc13118_mobile/features/homepage/widgets/viewJoin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,7 +11,6 @@ import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
 import '../../services/tutorService.dart';
 import '../../services/userService.dart';
-import '../call_video/teamView.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -37,22 +35,16 @@ class _HomeViewStage extends State<HomeView> {
     getListTutor(check!);
   }
   void getTotalCall() async {
-    try{
-      final prefs = await SharedPreferences.getInstance();
-      String? check =  prefs.getString('accessToken');
-      _total = await UserService.getTotalCall(token: check!);
-      final upComing = await UserService.getUpcomingLesson(token: check);
-      if (mounted) {
-        setState(() {
-          checkData = true;
-          _totalCall = int.parse(_total!["total"].toString());
-          _upComing = upComing;
-        });
-      }
-    }catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Login: ${e.toString()}')),
-      );
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    _total = await UserService.getTotalCall(token: check!);
+    final upComing = await UserService.getUpcomingLesson(token: check);
+    if (mounted) {
+      setState(() {
+        checkData = true;
+        _totalCall = int.parse(_total!["total"].toString());
+        _upComing = upComing;
+      });
     }
   }
 
@@ -163,12 +155,12 @@ class _HomeViewStage extends State<HomeView> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4, bottom: 24),
+                    padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child:
                     Text(
                       _convertTotalLessonTime(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: Sizes.p12, color: Colors.white),
+                      style: const TextStyle(fontSize: Sizes.p12, color: Colors.white),
                     ),
                   ),
                 ],

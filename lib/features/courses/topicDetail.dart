@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:csc13118_mobile/page/navigationPage.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import '../../data/data.dart';
-
-import '../../routing/routes.dart';
 
 class TopicDetail extends StatefulWidget {
   const TopicDetail({Key? key}) : super(key: key);
@@ -86,8 +82,8 @@ class _TopicDetailPage extends State<TopicDetail> {
                                                 ),
                                               ),
                                               const SizedBox(height: 10),
-                                              const Padding( padding:const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: const Text(
+                                              const Padding( padding:EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                child: Text(
                                                   'Gain confidence speaking about familiar topics',
                                                   maxLines: 2,
                                                   overflow: TextOverflow.ellipsis,
@@ -109,7 +105,7 @@ class _TopicDetailPage extends State<TopicDetail> {
                                                   topic.length,
                                                       (index) => Positioned(
                                                     child: Padding(
-                                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                                       child:  SizedBox(
                                                         width: double.infinity,
                                                         height: 40,

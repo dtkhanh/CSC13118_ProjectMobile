@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/appSizes.dart';
 import '../../../model/user.dart';
-import '../../../providers/userProvider.dart';
-import '../../../routing/routes.dart';
 import '../../../services/userService.dart';
 
 class ProflileView extends StatefulWidget {
@@ -59,8 +56,6 @@ class _ProflileViewState extends State<ProflileView> {
         user=userInfo;
         _isLoading = true;
       });
-      print("updateInformation");
-      print(userInfo);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),

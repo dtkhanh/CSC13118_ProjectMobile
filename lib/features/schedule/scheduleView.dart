@@ -27,7 +27,6 @@ class _ScheduleViewStage extends State<ScheduleView> {
       setState(() {
         checkData = true;
       });
-      print(listBookClass);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error : ${e.toString()}')),

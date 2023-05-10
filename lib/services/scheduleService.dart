@@ -1,12 +1,9 @@
 
 import 'dart:convert';
-
-import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:http/http.dart';
-
 import '../model/schedule/bookingInfo.dart';
 import '../model/schedule/schedule.dart';
-import '../model/tutor/tutor.dart';
+
 class ScheduleService {
   static const url = 'https://sandbox.api.lettutor.com';
   static Future<List<Schedule>> getScheduleByTutorId({

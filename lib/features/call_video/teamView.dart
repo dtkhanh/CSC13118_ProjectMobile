@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:csc13118_mobile/page/navigationPage.dart';
-import '../../routing/routes.dart';
 
 class TeamView extends StatefulWidget {
   const TeamView({Key? key}) : super(key: key);
@@ -27,12 +24,12 @@ class _TeamViewPage extends State<TeamView> {
   }
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_secondsLeft > 0) {
           _secondsLeft--;
@@ -43,7 +40,7 @@ class _TeamViewPage extends State<TeamView> {
     });
   }
   void CoundTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (countsecond >= 0) {
           countsecond++;
@@ -90,7 +87,7 @@ class _TeamViewPage extends State<TeamView> {
                     color: Colors.grey[300],
                     child: Stack(
                       children: [
-                        Text(getFormattedTimeCount(), style: TextStyle( color: Colors.red, fontSize: 25),),
+                        Text(getFormattedTimeCount(), style: const TextStyle( color: Colors.red, fontSize: 25),),
                         Align(
                           alignment: Alignment.center,
                           child: SizedBox(

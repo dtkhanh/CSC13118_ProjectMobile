@@ -1,12 +1,7 @@
 
 import 'dart:convert';
-
-import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:http/http.dart';
-
 import '../model/schedule/bookingInfo.dart';
-import '../model/schedule/schedule.dart';
-import '../model/tutor/tutor.dart';
 import '../model/user.dart';
 class UserService {
   static const url = 'https://sandbox.api.lettutor.com';
@@ -108,12 +103,12 @@ class UserService {
       if (element.scheduleDetailInfo == null || element.scheduleDetailInfo!.startPeriodTimestamp == null) return false;
       return element.scheduleDetailInfo!.startPeriodTimestamp! > now;
     }).toList();
-
-    if (lessons.isNotEmpty) {
-      return lessons.first;
-    } else {
-      throw Exception('Error: Cannot get lesson Upcoming');
-    }
+    return lessons.first;
+    // if (lessons.isNotEmpty) {
+    //   return lessons.first;
+    // } else {
+    //   throw Exception('Error: Cannot get lesson Upcoming');
+    // }
   }
 
 

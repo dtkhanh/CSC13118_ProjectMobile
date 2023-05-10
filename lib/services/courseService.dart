@@ -1,7 +1,6 @@
 
 import 'dart:convert';
 import 'package:http/http.dart';
-
 import '../model/course/course.dart';
 class CourseService {
   static const url = 'https://sandbox.api.lettutor.com';

@@ -6,7 +6,6 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../model/tutor/feedback.dart';
 import '../../../services/tutorService.dart';

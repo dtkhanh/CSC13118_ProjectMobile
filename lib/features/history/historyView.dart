@@ -1,8 +1,5 @@
-import 'package:csc13118_mobile/data/data.dart';
 import 'package:csc13118_mobile/features/history/widget/cardHistory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/schedule/bookingInfo.dart';
@@ -30,7 +27,6 @@ class _HistoryViewStage extends State<historyView> {
       setState(() {
         checkData = true;
       });
-      print(listBookClass.length);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error : ${e.toString()}')),

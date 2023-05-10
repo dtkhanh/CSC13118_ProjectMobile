@@ -1,14 +1,11 @@
 import 'package:csc13118_mobile/chatGPT/ChatGPT.dart';
 import 'package:csc13118_mobile/features/setting/widget/profileView.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/appSizes.dart';
 import '../../../routing/routes.dart';
 import '../../model/user.dart';
-import '../../providers/userProvider.dart';
 import '../../services/userService.dart';
 
 class SettingView extends StatefulWidget {
@@ -56,7 +53,7 @@ class _SettingViewState extends State<SettingView> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ProflileView()),
+                            MaterialPageRoute(builder: (context) => const ProflileView()),
                           );
                         },
                         child: CircleAvatar(

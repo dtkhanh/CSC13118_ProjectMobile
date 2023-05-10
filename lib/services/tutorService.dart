@@ -1,9 +1,7 @@
 
 import 'dart:convert';
-
 import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:http/http.dart';
-
 import '../model/tutor/tutor.dart';
 
 class TuTorService {

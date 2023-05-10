@@ -502,7 +502,7 @@ class _CardHistoryStage extends State<CardHistory> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, // set the background color of the button
                         ),
-                        child: Text('Go to meeting', style: TextStyle( color: Colors.white,
+                        child: const Text('Go to meeting', style: TextStyle( color: Colors.white,
                         ),),
                       ),
                     ),

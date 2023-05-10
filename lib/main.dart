@@ -1,11 +1,8 @@
-import 'package:csc13118_mobile/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:csc13118_mobile/features/authentication/login.dart';
-import 'package:csc13118_mobile/features/courses/InformationCourse.dart';
 import 'package:csc13118_mobile/routing/routes.dart';
 import 'package:csc13118_mobile/page/navigationPage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 void main() => runApp(const ProviderScope(child: LetTutor()));
 

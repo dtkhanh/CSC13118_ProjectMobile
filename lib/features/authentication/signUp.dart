@@ -1,10 +1,6 @@
 import 'package:csc13118_mobile/constants/appSizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../routing/routes.dart';
 import '../../services/authentication.dart';
 import 'login.dart';
 
