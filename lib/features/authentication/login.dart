@@ -23,7 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
   late User user;
-
+  String _ErrorInputEmail ="";
+  String _ErrorInputPass ="";
   @override
   void initState() {
     super.initState();
@@ -46,6 +47,34 @@ class _LoginPageState extends State<LoginPage> {
       // });
     }
   }
+  void _handleValidation() {
+    final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (_email.text.isEmpty) {
+      _ErrorInputEmail ="Please input your Email!";
+    } else if (!_emailRegex.hasMatch(_email.text)) {
+      _ErrorInputEmail ="The input is not valid E-mail!";
+    } else {
+      _ErrorInputEmail ="";
+    }
+
+
+    if (_password.text.isEmpty) {
+      _ErrorInputPass ="Please input your Password!";
+    } else {
+      _ErrorInputPass ="";
+    }
+    setState(() {});
+  }
+  void _handleValidationPass() {
+    if (_password.text.isEmpty) {
+      _ErrorInputPass ="Please input your Password!";
+    } else {
+      _ErrorInputPass ="";
+    }
+    setState(() {});
+  }
+
+
 
 
   void getInfomation(String tokenUser) async {
@@ -68,9 +97,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginPage() async {
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
-      // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
-
+      print("hehe");
+      // _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
@@ -81,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('accessToken', token.access!.token!,);
       await prefs.setString('refreshToken', token.refresh!.token!,);
       await prefs.setString('userId', user.id!,);
+      print("hehee");
 
       //
       // print("loginPage");
@@ -136,16 +166,25 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       TextField(
                           controller: _email,
+                          onChanged: (value) {
+                            _handleValidation();
+                          },
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
                           decoration: InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey.shade100,
+                              fillColor: _ErrorInputEmail.isEmpty ? Colors.grey.shade100 : Colors.red.shade100,
                               border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                               hintText: "abc@gmail.com")),
+                      Text(
+                        _ErrorInputEmail,
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.red),
+                      ),
                     ],
                   ),
                 ),
@@ -167,16 +206,25 @@ class _LoginPageState extends State<LoginPage> {
                       TextField(
                           controller: _password,
                           obscureText: true,
+                          onChanged: (value) {
+                            _handleValidationPass();
+                          },
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
                           decoration: InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey.shade100,
+                              fillColor: _ErrorInputPass.isEmpty ? Colors.grey.shade100 : Colors.red.shade100,
                               border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                               hintText: "****************")),
+                      Text(
+                        _ErrorInputPass,
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.red),
+                      ),
                     ],
                   ),
                 ),

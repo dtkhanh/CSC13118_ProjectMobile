@@ -95,14 +95,21 @@ class UserService {
     List<BookingInfo> lessons = data.map((schedule) => BookingInfo.fromJson(schedule)).toList();
 
     lessons.sort((a, b) {
-      if (a.scheduleDetailInfo == null || b.scheduleDetailInfo == null || a.scheduleDetailInfo!.startPeriodTimestamp == null || b.scheduleDetailInfo!.startPeriodTimestamp == null) return 0;
-      return a.scheduleDetailInfo!.startPeriodTimestamp!.compareTo(b.scheduleDetailInfo!.startPeriodTimestamp!);
+      if (a.scheduleDetailInfo == null || b.scheduleDetailInfo == null) return 0;
+      if (a.scheduleDetailInfo!.startPeriodTimestamp == null ||
+          b.scheduleDetailInfo!.startPeriodTimestamp == null) return 0;
+      final int timestamp1 = a.scheduleDetailInfo!.startPeriodTimestamp!;
+      final int timestamp2 = b.scheduleDetailInfo!.startPeriodTimestamp!;
+      return timestamp1.compareTo(timestamp2);
     });
 
     lessons = lessons.where((element) {
-      if (element.scheduleDetailInfo == null || element.scheduleDetailInfo!.startPeriodTimestamp == null) return false;
-      return element.scheduleDetailInfo!.startPeriodTimestamp! > now;
+      if (element.scheduleDetailInfo == null) return false;
+      if (element.scheduleDetailInfo!.startPeriodTimestamp == null) return false;
+      final int startTimestamp = element.scheduleDetailInfo!.startPeriodTimestamp!;
+      return startTimestamp > now;
     }).toList();
+
     return lessons.first;
     // if (lessons.isNotEmpty) {
     //   return lessons.first;
