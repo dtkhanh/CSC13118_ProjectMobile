@@ -1,17 +1,18 @@
 import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-
 import '../../../model/tutor/feedback.dart';
 import '../../../services/tutorService.dart';
 import '../../tutors/widget/viewRatting.dart';
 import '../widget/cardReview.dart';
 import '../widget/viewCalander.dart';
+final iconProvider = StateProvider((ref) => Icons.favorite);
 
 class InforTeacher extends StatefulWidget {
   final String userId;
@@ -26,21 +27,26 @@ class _InforTeacherState extends State<InforTeacher> {
   late InfoTutor infoTutor;
   late String linkVideo ="";
   bool checkData = false;
+  bool checkLoad = false;
+
   List<FeedbacksTutor>? listFeedBack;
-  late bool checkFavorite ;
+  // late bool checkFavorite ;
+  final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
+
 
   @override
   void initState() {
     super.initState();
     listFeedBack = widget.feedBacks;
   }
+
   Future<void> _fetchTutorInfo( String id) async {
     try{
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
       infoTutor = await TuTorService.getIdTutor(token: check!, userId: id);
       linkVideo = infoTutor.video!;
-      checkFavorite = infoTutor.isFavorite!;
+      checkFavorite.value = infoTutor.isFavorite!;
       setState(() {
         checkData = true;
       });
@@ -93,6 +99,7 @@ class _InforTeacherState extends State<InforTeacher> {
       },
     );
   }
+
 
 
   @override
@@ -219,25 +226,30 @@ class _InforTeacherState extends State<InforTeacher> {
                               Row(
                                 children: [
                                   Expanded(
-                                    child:
-                                    TextButton(
-                                      onPressed: () {
-                                        _fetchAddFavoriteTutor(infoTutor.user!.id ?? "");
-                                        checkFavorite = !checkFavorite;
-                                      },
-                                      child: Column(
+                                    child:ValueListenableBuilder<bool>(
+                                    valueListenable: checkFavorite,
+                                    builder: (BuildContext context, bool value, Widget? child) {
+                                      return  Column(
                                         children: [
-                                          Icon(
-                                              !checkFavorite? Icons.favorite_border  : Icons.favorite ,
-                                              color: !checkFavorite? Colors.blue : Colors.red
+                                          IconButton(
+                                            onPressed: () {
+                                              _fetchAddFavoriteTutor(infoTutor.user!.id ?? "");
+                                              checkFavorite.value = !checkFavorite.value;
+                                            },
+                                            icon:  Icon(
+                                                !checkFavorite.value? Icons.favorite_border  : Icons.favorite ,
+                                                color: !checkFavorite.value? Colors.blue : Colors.red
+                                            ),
                                           ),
                                           Text( 'Favorite',
-                                            style: TextStyle(color: !checkFavorite? Colors.blue : Colors.red  ),
+                                            style: TextStyle(color: !checkFavorite.value? Colors.blue : Colors.red  ),
                                           )
                                         ],
-                                      ),
-                                    ),
+                                      );
+                                    },
+                                    )
                                   ),
+
                                   Expanded(
                                     child: TextButton(
                                       onPressed: () {
@@ -449,7 +461,7 @@ class _InforTeacherState extends State<InforTeacher> {
                         )
                         ),
                         ResponsiveGridCol(md:7 ,
-                            child: ViewCalender(idTutors:  infoTutor.user!.id.toString() ?? "",)
+                            child: !checkLoad ? ViewCalender(idTutors:  infoTutor.user!.id.toString() ?? "",) : const Text("")
                         ),
                       ],
                     )

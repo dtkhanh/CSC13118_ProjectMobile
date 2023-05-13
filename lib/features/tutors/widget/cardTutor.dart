@@ -1,8 +1,11 @@
 import 'package:csc13118_mobile/features/tutors/widget/viewRatting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../../model/tutor/infoTutor.dart';
 import '../../../model/tutor/tutor.dart';
+import '../../../services/tutorService.dart';
 import '../../view_information/teacher_info/InformationTeacher.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +20,33 @@ class CardTutor extends StatefulWidget {
 
 class _CardTutorStage extends State<CardTutor> {
   int chosenFilter = 0;
+  final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
+  late InfoTutor infoTutor;
+
+  @override
+  void initState() {
+    super.initState();
+    checkFavoriteTutor();
+  }
+
+  Future<void> checkFavoriteTutor() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    infoTutor = await TuTorService.getIdTutor(token: check!, userId: widget.tutor.userId ?? "");
+    checkFavorite.value = infoTutor.isFavorite!;
+  }
+  Future<void> _fetchAddFavoriteTutor(String id) async {
+    try{
+      final prefs = await SharedPreferences.getInstance();
+      String? check =  prefs.getString('accessToken');
+      await TuTorService.addFavoriteTutor(token: check!, tutorId: id);
+    }catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
+
 
   bool _checkImageExists(String uri) {
     bool check = false;
@@ -96,12 +126,21 @@ class _CardTutorStage extends State<CardTutor> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        // Xử lý khi người dùng bấm vào nút IconButton
+                    ValueListenableBuilder<bool>(
+                      valueListenable: checkFavorite,
+                      builder: (BuildContext context, bool value, Widget? child) {
+                        return  IconButton(
+                          onPressed: () {
+                            _fetchAddFavoriteTutor(widget.tutor.userId ?? "");
+                            checkFavorite.value = !checkFavorite.value;
+                          },
+                          icon:  Icon(
+                              !checkFavorite.value? Icons.favorite_border  : Icons.favorite ,
+                              color: !checkFavorite.value? Colors.blue : Colors.red
+                          ),
+                        );
                       },
-                      icon: const Icon( Icons.favorite , color: Colors.blue, size:25),
-                    )
+                    ),
                   ],
                 ),
                 gapH12,
@@ -132,7 +171,12 @@ class _CardTutorStage extends State<CardTutor> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: OutlinedButton.icon(
-                    onPressed: () => {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => InforTeacher(userId: widget.tutor.userId ?? '',feedBacks: widget.tutor.feedbacks ?? [],)),
+                      );
+                    },
                     icon: const Icon(Icons.edit_calendar),
                     label: const Text('Book'),
                   ),
