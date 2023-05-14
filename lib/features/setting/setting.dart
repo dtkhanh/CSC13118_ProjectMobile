@@ -1,6 +1,7 @@
 import 'package:csc13118_mobile/chatGPT/ChatGPT.dart';
 import 'package:csc13118_mobile/features/setting/widget/profileView.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/appSizes.dart';
@@ -18,6 +19,9 @@ class SettingView extends StatefulWidget {
 class _SettingViewState extends State<SettingView> {
   late User user;
   bool _isLoading = false;
+  final _googleSignIn = GoogleSignIn();
+
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   void getInfomation() async {
     try{
@@ -188,6 +192,7 @@ class _SettingViewState extends State<SettingView> {
                       backgroundColor: Colors.blue
                   ),
                   onPressed: () {
+                    _handleSignOut();
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       Routes.login,

@@ -229,27 +229,26 @@ class _InforTeacherState extends State<InforTeacher> {
                                     child:ValueListenableBuilder<bool>(
                                     valueListenable: checkFavorite,
                                     builder: (BuildContext context, bool value, Widget? child) {
-                                      return  Column(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              _fetchAddFavoriteTutor(infoTutor.user!.id ?? "");
-                                              checkFavorite.value = !checkFavorite.value;
-                                            },
-                                            icon:  Icon(
+                                      return  TextButton(
+                                        onPressed: () {
+                                          _fetchAddFavoriteTutor(infoTutor.user!.id ?? "");
+                                          checkFavorite.value = !checkFavorite.value;
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Icon(
                                                 !checkFavorite.value? Icons.favorite_border  : Icons.favorite ,
                                                 color: !checkFavorite.value? Colors.blue : Colors.red
                                             ),
-                                          ),
-                                          Text( 'Favorite',
-                                            style: TextStyle(color: !checkFavorite.value? Colors.blue : Colors.red  ),
-                                          )
-                                        ],
+                                            Text( 'Favorite',
+                                              style: TextStyle(color: !checkFavorite.value? Colors.blue : Colors.red  ),
+                                            )
+                                          ],
+                                        ),
                                       );
                                     },
                                     )
                                   ),
-
                                   Expanded(
                                     child: TextButton(
                                       onPressed: () {

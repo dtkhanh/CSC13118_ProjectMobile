@@ -8,8 +8,9 @@ import '../../model/user.dart';
 import '../../routing/routes.dart';
 import '../../services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../services/userService.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,6 +20,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _googleSignIn = GoogleSignIn();
+
   final _email = TextEditingController();
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
@@ -48,10 +51,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
   void _handleValidation() {
-    final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (_email.text.isEmpty) {
       _ErrorInputEmail ="Please input your Email!";
-    } else if (!_emailRegex.hasMatch(_email.text)) {
+    } else if (!emailRegex.hasMatch(_email.text)) {
       _ErrorInputEmail ="The input is not valid E-mail!";
     } else {
       _ErrorInputEmail ="";
@@ -72,6 +75,39 @@ class _LoginPageState extends State<LoginPage> {
       _ErrorInputPass ="";
     }
     setState(() {});
+  }
+
+
+  Future<void> _handleAuthorizeGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final String? accessToken = googleAuth?.accessToken;
+      _loginResponse = await AuthenticationService().loginWithGoogle(accessToken: accessToken ?? "");
+      final user = User.fromJson(_loginResponse!['user']);
+      final token = TokensUser.fromJson(_loginResponse!['tokens']);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('accessToken', token.access!.token!,);
+      await prefs.setString('refreshToken', token.refresh!.token!,);
+      await prefs.setString('userId', user.id!,);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error Login')),
+      );
+    }
+
+  }
+  void _handleAuthorizeFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    print(result);
   }
 
 
@@ -97,7 +133,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginPage() async {
     try{
-      print("hehe");
       _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
@@ -110,8 +145,6 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('accessToken', token.access!.token!,);
       await prefs.setString('refreshToken', token.refresh!.token!,);
       await prefs.setString('userId', user.id!,);
-      print("hehee");
-
       //
       // print("loginPage");
       // print( userProvider.token!.refresh!.token!,);
@@ -276,7 +309,9 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleAuthorizeFacebook();
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(
                               side: BorderSide(
@@ -291,7 +326,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleAuthorizeGoogle();
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(
                               side: BorderSide(
