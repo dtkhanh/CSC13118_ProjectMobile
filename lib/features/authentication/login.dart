@@ -60,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
       _ErrorInputEmail ="";
     }
 
-
     if (_password.text.isEmpty) {
       _ErrorInputPass ="Please input your Password!";
     } else {
