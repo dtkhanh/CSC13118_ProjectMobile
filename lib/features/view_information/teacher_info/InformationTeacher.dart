@@ -11,6 +11,7 @@ import '../../../model/tutor/feedback.dart';
 import '../../../services/tutorService.dart';
 import '../../tutors/widget/viewRatting.dart';
 import '../widget/cardReview.dart';
+import '../widget/tutorReport.dart';
 import '../widget/viewCalander.dart';
 final iconProvider = StateProvider((ref) => Icons.favorite);
 
@@ -96,6 +97,14 @@ class _InforTeacherState extends State<InforTeacher> {
             ),
           ],
         );
+      },
+    );
+  }
+  Future<void> _dialogBuilderReport(String name, String tutorId) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return TutorReport(Name: name,tutorId: tutorId,);
       },
     );
   }
@@ -265,6 +274,10 @@ class _InforTeacherState extends State<InforTeacher> {
                                   Expanded(
                                     child: TextButton(
                                       onPressed: () async {
+                                        _dialogBuilderReport(infoTutor.user?.name ?? "", infoTutor.user?.id ?? "");
+                                        // final result = await showDialog(
+                                        //     context: context,
+                                        //     builder: (context) => TutorReport(),);
                                       },
                                       child: Column(
                                         children: const [
@@ -320,19 +333,17 @@ class _InforTeacherState extends State<InforTeacher> {
                                 runSpacing: 6,
                                 children: List<Widget>.generate(
                                   languages.length,
-                                      (index) => Positioned(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor :  Colors.lightBlue[100]  // set the background color of the button
+                                      (index) => ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor :  Colors.lightBlue[100]  // set the background color of the button
+                                        ),
+                                        child: Text( languages[index], style: TextStyle( color: Colors.blue[700],
+                                        ),),
                                       ),
-                                      child: Text( languages[index], style: TextStyle( color: Colors.blue[700],
-                                      ),),
-                                    ),
-                                  ),
                                 ),
                               ),
                               // Padding(
@@ -359,19 +370,17 @@ class _InforTeacherState extends State<InforTeacher> {
                                 runSpacing: -4,
                                 children: List<Widget>.generate(
                                   specialties.length,
-                                      (index) => Positioned(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor :  Colors.lightBlue[100]  // set the background color of the button
+                                      (index) => ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor :  Colors.lightBlue[100]  // set the background color of the button
+                                        ),
+                                        child: Text( specialties[index], style: TextStyle( color: Colors.blue[700],
+                                        ),),
                                       ),
-                                      child: Text( specialties[index], style: TextStyle( color: Colors.blue[700],
-                                      ),),
-                                    ),
-                                  ),
                                 ),
                               ),
                               const SizedBox(height: 15,),

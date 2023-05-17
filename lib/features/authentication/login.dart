@@ -41,13 +41,13 @@ class _LoginPageState extends State<LoginPage> {
     // TokensUser? tkUser = userProvider.token;
     // userProvider.addUserProvider(userInfo, tkUser!);
     if(check!.length != 0){
-      // Future.delayed(const Duration(seconds: 1), () {
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     Routes.main,
-      //         (route) => false,
-      //   );
-      // });
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
     }
   }
   void _handleValidation() {
