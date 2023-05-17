@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../constants/appSizes.dart';
 import '../../../model/schedule/bookingInfo.dart';
+import '../../../services/scheduleService.dart';
 
 
 class CardSchedule extends StatefulWidget {
-  final BookingInfo booking;
-  const CardSchedule({super.key, required this.booking});
+  final List<BookingInfo> bookings;
+  final VoidCallback onPressed;
+  const CardSchedule({super.key, required this.bookings, required this.onPressed});
 
 
   @override
@@ -16,9 +20,36 @@ class CardSchedule extends StatefulWidget {
 }
 
 class _CardScheduleStage extends State<CardSchedule> {
-  final _noteText = TextEditingController();
+  late final _noteText = TextEditingController();
+  String reasonCancel = "";
 
-  Future<void> _dialogBuilder(String time , String Day) {
+  void cancelBooking( String scheduleDetail) async {
+    try{
+      int value =0;
+      if(reasonCancel == 'Reschedule at another time'){
+        value =1;
+      } else if(reasonCancel == 'Busy at that time'){
+        value =2;
+      } else if(reasonCancel == 'Asked by the tutor'){
+        value =3;
+      } else{
+        value =4;
+      }
+      final prefs = await SharedPreferences.getInstance();
+      String? check =  prefs.getString('accessToken');
+      await ScheduleService.cancelBookedClass(token: check!, cancelReasonId: value , note: _noteText.text, scheduleDetailIds: scheduleDetail );
+      setState(() {
+
+      });
+    }catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error : ${e.toString()}')),
+      );
+    }
+  }
+
+
+  Future<void> _dialogBuilder(String time , String Day, String id,  VoidCallback onButtonPressed) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -34,30 +65,78 @@ class _CardScheduleStage extends State<CardSchedule> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(
+                    width: 70,
+                    height: 70,
+                    child:  CircleAvatar(
+                      radius: 45,
+                      child: ClipOval(
+                          child: Image.network(
+                            widget.bookings[0].scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar  ?? 'https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg',                                  width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          )
+                      ),
+                    )
+                ),
+                Text(
+                  widget.bookings[0].scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name ?? " ",
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 15,),
                 const Text(
-                  'Booking Day',
-                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 20 ),
+                  'Lesson Time',
+                  style: TextStyle(fontSize: 16 ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   Day,
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
-                const Text(
-                  'Booking time',
-                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 20 ),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5,),
                 Text(
                   time,
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Note',
-                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 20 ),
+                const SizedBox(height: 15),
+                Text(
+                  "What was the reason you cancel this booking?",
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800]),
                 ),
-                const SizedBox(height: 4),
+                gapH8,
+                DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    hintText: reasonCancel.length > 0 ? reasonCancel : '',
+                    hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
+                    border: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      reasonCancel = value!;
+                    });
+                  }, items: <String>['Reschedule at another time',
+                  'Busy at that time',
+                  'Asked by the tutor',
+                  'Other',].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    ),
+                  );
+                }).toList(),
+                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: TextField(
@@ -65,12 +144,12 @@ class _CardScheduleStage extends State<CardSchedule> {
                     minLines: 3,
                     maxLines: 4,
                     decoration: const InputDecoration(
-                      hintText: '',
-                      hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
+                      hintText: 'Additional Notes',
+                      hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
                       contentPadding: EdgeInsets.all(12),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
                     ),
                   ),
                 ),
@@ -80,17 +159,33 @@ class _CardScheduleStage extends State<CardSchedule> {
           actions: [
             TextButton(
                 onPressed: () {
+                  onButtonPressed();
+                  setState(() {
+                    reasonCancel = "";
+                    _noteText.text = "";
+                  });
                   Navigator.pop(context);
                 },
                 child: const Text(
-                  'CANCEL',
+                  'Later',
                   style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 )),
+            reasonCancel.length > 0 ?
             TextButton(
                 onPressed: () async {
+                  cancelBooking(id);
+                  onButtonPressed();
+                  Navigator.pop(context);
                 },
-                child: const Text('SUBMIT', style: TextStyle(color: Colors.blue , fontWeight: FontWeight.bold),)),
-          ],
+                child: const Text('Submit', style: TextStyle(color: Colors.blue , fontWeight: FontWeight.bold),))
+            :
+            TextButton(
+            onPressed: () async {
+              widget.onPressed;
+            },
+            child: const Text('Submit', style: TextStyle(color: Colors.grey , fontWeight: FontWeight.bold),)),
+
+            ],
         );
       },
     );
@@ -118,14 +213,18 @@ class _CardScheduleStage extends State<CardSchedule> {
                       children: [
                         Text(
                             DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(
-                        widget.booking.scheduleDetailInfo!.startPeriodTimestamp ?? 0)),
+                        widget.bookings[0].scheduleDetailInfo!.startPeriodTimestamp ?? 0)),
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
-                        const Text(
-                          '1 lesson',
-                          style: TextStyle(
+                        Text(
+                          widget.bookings.length > 1
+                            ?
+                          '${widget.bookings.length} consecutive lessons'
+                              :
+                          '${widget.bookings.length} lesson',
+                          style: const TextStyle(
                             fontSize: 10,
                           ),
                         ),
@@ -149,7 +248,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                               radius: 45,
                               child: ClipOval(
                                   child: Image.network(
-                                    widget.booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar  ?? 'https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg',                                  width: 100,
+                                    widget.bookings[0].scheduleDetailInfo!.scheduleInfo!.tutorInfo!.avatar  ?? 'https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg',                                  width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
                                   )
@@ -167,7 +266,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                   .start,
                               children: [
                                 Text(
-                                  widget.booking.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name ?? " ",
+                                  widget.bookings[0].scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name ?? " ",
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -220,40 +319,50 @@ class _CardScheduleStage extends State<CardSchedule> {
                           padding: const EdgeInsets.fromLTRB(12, 5, 12, 12),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child:  Text(
-                                      '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
-                                          widget.booking.scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
-                                          widget.booking.scheduleDetailInfo!.endPeriodTimestamp ?? 0))}',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                        child: Align(
-                                          alignment: Alignment.topRight,
-                                          child: OutlinedButton.icon(
-                                            onPressed: () => {
-                                              _dialogBuilder("${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
-                                            widget.booking.scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
-                                          widget.booking.scheduleDetailInfo!.endPeriodTimestamp ?? 0))}",DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(
-                                                  widget.booking.scheduleDetailInfo!.startPeriodTimestamp ?? 0)) )
-                                            },
-                                            icon: const Icon(Icons.cancel , color: Colors.red,),
-                                            label: const Text('Cancel' , style: TextStyle(color:  Colors.red,),),
-                                          ),
-                                        ) ,
-                                      )
+                              Wrap(
+                                  spacing: 6,
+                                  runSpacing: 8,
+                                  children: List<Widget>.generate(
+                                      widget.bookings.length,
+                                          (index) =>  SizedBox(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child:  Text(
+                                                  '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                      widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                      widget.bookings[index].scheduleDetailInfo!.endPeriodTimestamp ?? 0))}',
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w400),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                    child: Align(
+                                                      alignment: Alignment.topRight,
+                                                      child: OutlinedButton.icon(
+                                                        onPressed: () => {
+                                                          _dialogBuilder("${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                              widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+                                                              widget.bookings[index].scheduleDetailInfo!.endPeriodTimestamp ?? 0))}",DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(
+                                                              widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0)) ,widget.bookings[index].id ?? "" , widget.onPressed)
+                                                        },
+                                                        icon: const Icon(Icons.cancel , color: Colors.red,),
+                                                        label: const Text('Cancel' , style: TextStyle(color:  Colors.red,),),
+                                                      ),
+                                                    ) ,
+                                                  )
 
-                                  ),
-                                  const SizedBox(width: 10),
-                                ],
+                                              ),
+                                              const SizedBox(width: 10),
+                                            ],
+                                          ),
+                                      )
+                                  )
                               ),
+
                               const SizedBox( height: 10),
                               Table(
                                 border: TableBorder.all(
@@ -296,7 +405,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                       TableCell(
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-                                          child: Text( widget.booking.studentRequest ?? 'Current there are no requests for this class. Please write down any request for the teacher' , style: const TextStyle(color:  Colors.grey, fontSize: 14)),
+                                          child: Text( widget.bookings[0].studentRequest ?? 'Current there are no requests for this class. Please write down any request for the teacher' , style: const TextStyle(color:  Colors.grey, fontSize: 14)),
                                         ),
                                       ),
                                     ],

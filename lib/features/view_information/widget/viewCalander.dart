@@ -28,7 +28,6 @@ class _ViewCalenderStage extends State<ViewCalender> {
     DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
     DateTime endTime = DateTime(today.year, today.month, today.day, 12, 0, 0);
     for( int i =0 ;i< listSchedule!.length ; i++){
-      print(DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),);
       meetings.add(
           Appointment(
               startTime: DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),

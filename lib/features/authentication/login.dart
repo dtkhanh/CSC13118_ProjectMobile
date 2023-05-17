@@ -106,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
   }
   void _handleAuthorizeFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
-    print(result);
   }
 
 

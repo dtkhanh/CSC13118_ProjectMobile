@@ -91,4 +91,32 @@ class ScheduleService {
     return classes.map((schedule) => BookingInfo.fromJson(schedule)).toList();
   }
 
+  static Future<void> cancelBookedClass({
+    required String scheduleDetailIds,
+    required int cancelReasonId,
+    required String note,
+    required String token,
+  }) async {
+    final response = await delete(
+      Uri.parse('$url/booking/schedule-detail'),
+      headers: {
+        'Content-Type': 'application/json;encoding=utf-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(
+        {
+          'scheduleDetailId': scheduleDetailIds,
+           "cancelInfo":{
+            'cancelReasonId': cancelReasonId,
+             'note': note
+           }
+        },
+      ),
+    );
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode['message']);
+    }
+  }
+
 }

@@ -75,8 +75,6 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
     });
     addToList(message, true, DateTime.now().toString());
     final aiResponse = await _openAi.getResponse(message);
-    print("sendTextMessage");
-    print(aiResponse);
     addToList(aiResponse!, false, DateTime.now().toString());
     setState(() {
       reply= false;
