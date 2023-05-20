@@ -7,6 +7,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import '../../../data/language.dart';
 import '../../../model/tutor/feedback.dart';
 import '../../../services/tutorService.dart';
 import '../../tutors/widget/viewRatting.dart';
@@ -34,11 +35,21 @@ class _InforTeacherState extends State<InforTeacher> {
   // late bool checkFavorite ;
   final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
 
+  Language lag = Language(id: "vi-Vn");
 
   @override
   void initState() {
     super.initState();
     listFeedBack = widget.feedBacks;
+    _initPrefs();
+  }
+
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
   }
 
   Future<void> _fetchTutorInfo( String id) async {
@@ -75,7 +86,7 @@ class _InforTeacherState extends State<InforTeacher> {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(0),
           backgroundColor: Colors.grey.shade200,
-          title: const Text('Others review'),
+          title: Text(lag.otherReview),
           content:  SizedBox(
               width: double.maxFinite,
               child: ListView.builder(
@@ -90,7 +101,7 @@ class _InforTeacherState extends State<InforTeacher> {
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('Cancel'),
+              child: Text(lag.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -147,7 +158,7 @@ class _InforTeacherState extends State<InforTeacher> {
           color: Colors.blue[600],
         ),
         title: Text(
-          'Information Teacher',
+          lag.InforTeacher,
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.w700,
@@ -249,7 +260,7 @@ class _InforTeacherState extends State<InforTeacher> {
                                                 !checkFavorite.value? Icons.favorite_border  : Icons.favorite ,
                                                 color: !checkFavorite.value? Colors.blue : Colors.red
                                             ),
-                                            Text( 'Favorite',
+                                            Text( lag.favorite,
                                               style: TextStyle(color: !checkFavorite.value? Colors.blue : Colors.red  ),
                                             )
                                           ],
@@ -264,9 +275,9 @@ class _InforTeacherState extends State<InforTeacher> {
                                         _dialogBuilder();
                                       },
                                       child: Column(
-                                        children: const [
-                                          Icon(Icons.reviews_outlined, color: Colors.blue),
-                                          Text('Review', style: TextStyle(color: Colors.blue))
+                                        children: [
+                                          const Icon(Icons.reviews_outlined, color: Colors.blue),
+                                          Text(lag.review, style: const TextStyle(color: Colors.blue))
                                         ],
                                       ),
                                     ),
@@ -280,9 +291,9 @@ class _InforTeacherState extends State<InforTeacher> {
                                         //     builder: (context) => TutorReport(),);
                                       },
                                       child: Column(
-                                        children: const [
-                                          Icon(Icons.report_outlined, color: Colors.blue),
-                                          Text('Report', style: TextStyle(color: Colors.blue))
+                                        children: [
+                                          const Icon(Icons.report_outlined, color: Colors.blue),
+                                          Text(lag.report, style: const TextStyle(color: Colors.blue))
                                         ],
                                       ),
                                     ),
@@ -322,7 +333,7 @@ class _InforTeacherState extends State<InforTeacher> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Languages',  style: TextStyle(
+                              Text(lag.languages,  style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -359,7 +370,7 @@ class _InforTeacherState extends State<InforTeacher> {
                               //   ),
                               // ),
                               const SizedBox(height: 15,),
-                              const Text('Specialties',  style: TextStyle(
+                              Text(lag.specialties,  style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -384,11 +395,11 @@ class _InforTeacherState extends State<InforTeacher> {
                                 ),
                               ),
                               const SizedBox(height: 15,),
-                              // const Text('Suggested Courses',  style: TextStyle(
-                              //   fontSize: 16,
-                              //   fontWeight: FontWeight.bold,
-                              //   color: Colors.black,
-                              // ),),
+                              Text(lag.Suggested,  style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),),
                               // Padding(
                               //   padding:const EdgeInsets.fromLTRB(5, 20, 0, 0),
                               //   child: Row(
@@ -426,7 +437,7 @@ class _InforTeacherState extends State<InforTeacher> {
                                 ),
                               ),
                               const SizedBox(height: 15,),
-                              const Text('interests:',  style: TextStyle(
+                              Text(lag.interests,  style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -445,7 +456,7 @@ class _InforTeacherState extends State<InforTeacher> {
                                 ),
                               ),
                               const SizedBox(height: 15,),
-                              const Text('Teaching experience',  style: TextStyle(
+                              Text(lag.experience,  style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
@@ -469,7 +480,7 @@ class _InforTeacherState extends State<InforTeacher> {
                         )
                         ),
                         ResponsiveGridCol(md:7 ,
-                            child: !checkLoad ? ViewCalender(idTutors:  infoTutor.user!.id.toString() ?? "",) : const Text("")
+                            child: !checkLoad ? ViewCalender(idTutors:  infoTutor.user!.id.toString(),) : const Text("")
                         ),
                       ],
                     )

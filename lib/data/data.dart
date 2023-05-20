@@ -13,6 +13,20 @@ const filters = [
   'TOEIC'
 ];
 
+const filters_VN = [
+  'Tất cả',
+  'Tiếng anh cho trẻ em',
+  'Tiếng anh cho công việc',
+  'Giao tiếp',
+  'STARTERS',
+  'MOVERS',
+  'FLYERS',
+  'KET',
+  'PET',
+  'IELTS',
+  'TOEFL',
+  'TOEIC'
+];
 const topic = [
   '1. The Internet',
   '2. Artificial Intelligence (AI)',
@@ -32,7 +46,11 @@ const schedule = [
   'E-book',
   'Interactive E-book',
 ];
-
+const schedule_vn = [
+  'Khóa học',
+  'E-book',
+  'Interactive E-book',
+];
 const teachers = [
   'Keegan',
   'April Baldo',

@@ -7,6 +7,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:csc13118_mobile/features/homepage/homeView.dart';
 import 'package:csc13118_mobile/features/schedule/scheduleView.dart';
 import 'package:csc13118_mobile/features/history/historyView.dart';
+import '../../data/language.dart';
 import '../../model/course/course.dart';
 import '../../model/course/courseCategory.dart';
 import '../../services/courseService.dart';
@@ -33,6 +34,7 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
   static  int _totalPage = 0;
   int listLevel =100;
   List<String> levels = ['Any level', 'Beginner', 'Upper-Beginner', 'Pre-Intermediate','Upper-Intermediate','Pre-advanced','Advanced'];
+  Language lag = Language(id: "vi-Vn");
 
   @override
   void initState() {
@@ -50,9 +52,11 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
     for(int i=0;i<categorys.length;i++){
       listCategory.add(CourseCategory.fromJson(categorys[i]));
     }
+    final language = prefs.getString('setLanguage')?? "en-US";
     setState(() {
       int result = totalElement.toInt() ~/ 10 + (totalElement.toInt() % 10 > 0 ? 1 : 0);
       _totalPage = result;
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
     });
   }
   Future<void> _fetchPage(int pageKey) async {
@@ -158,9 +162,9 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Discover Courses',
-                                style: TextStyle(
+                              Text(
+                                lag.course,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   // fontSize: MediaQuery.of(context).size.width //
                                   fontSize: 20,
@@ -203,11 +207,11 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                         ),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                       child: Text(
-                          "Live Tutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.",
-                          style: TextStyle( fontSize: 14)
+                          lag.contentCourse1,
+                          style: const TextStyle( fontSize: 14)
                       ),
                     ),
                     Column(
@@ -220,15 +224,15 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                                 child:  SizedBox(
                                   height:40,
                                   child: DropdownButtonFormField(
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(
                                           borderSide: BorderSide(color: Colors.grey),
                                           borderRadius: BorderRadius.all(Radius.circular(5))),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                       isDense: true,
                                       alignLabelWithHint: true,
-                                      hintText: 'Select level',
-                                      hintStyle: TextStyle(color: Colors.grey, fontSize: 13, ),
+                                      hintText: lag.level,
+                                      hintStyle: const TextStyle(color: Colors.grey, fontSize: 13, ),
                                     ),
                                     onChanged: (value) {
                                       setState(() {
@@ -254,15 +258,15 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                               child:  SizedBox(
                                 height:40,
                                 child:  DropdownButtonFormField(
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
                                         borderSide: BorderSide(color: Colors.grey),
                                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                     isDense: true,
                                     alignLabelWithHint: true,
-                                    hintText: 'Select Category',
-                                    hintStyle: TextStyle(color: Colors.grey, fontSize: 13,),
+                                    hintText: lag.category,
+                                    hintStyle: const TextStyle(color: Colors.grey, fontSize: 13,),
 
                                   ),
                                   onChanged: (value) {
@@ -287,15 +291,15 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                               child:  SizedBox(
                                 height:40,
                                 child:  DropdownButtonFormField(
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
                                         borderSide: BorderSide(color: Colors.grey),
                                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                     isDense: true,
                                     alignLabelWithHint: true,
-                                    hintText: 'Sort by level',
-                                    hintStyle: TextStyle(color: Colors.grey, fontSize: 13, ),
+                                    hintText: lag.sort,
+                                    hintStyle: const TextStyle(color: Colors.grey, fontSize: 13, ),
                                   ),
                                   onChanged: (value) {
                                     setState(() {
@@ -338,6 +342,7 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                               });
                             },
                             child:  Text(
+                              lag.id =="vi-Vn"? schedule_vn[index]  :
                               schedule[index],
                               style: TextStyle(
                                 fontSize: 14,

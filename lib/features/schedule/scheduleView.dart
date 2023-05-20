@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/language.dart';
 import '../../model/schedule/bookingInfo.dart';
 import '../../services/scheduleService.dart';
 
@@ -22,6 +23,7 @@ class _ScheduleViewStage extends State<ScheduleView> {
   bool render = false;
   static  int _totalPage = 0;
   List<List<BookingInfo>> groupedItems = [];
+  Language lag = Language(id: "vi-Vn");
 
 
   @override
@@ -32,13 +34,17 @@ class _ScheduleViewStage extends State<ScheduleView> {
     _initPrefs();
     super.initState();
   }
+
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? check =  prefs.getString('accessToken');
     final totalElement = await ScheduleService.getToTalElementSchedule(token: check!, page: 1, perPage: 20);
+    final language = prefs.getString('setLanguage')?? "en-US";
     setState(() {
       int result = totalElement.toInt() ~/ 20 + (totalElement.toInt() % 20 > 0 ? 1 : 0);
       _totalPage = result;
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+
     });
   }
   final PagingController<int, List<BookingInfo> > _pagingController =
@@ -179,9 +185,9 @@ class _ScheduleViewStage extends State<ScheduleView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Schedule',
-                              style: TextStyle(
+                            Text(
+                              lag.schedule,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 // fontSize: MediaQuery.of(context).size.width //
                                 fontSize: 20,
@@ -190,13 +196,13 @@ class _ScheduleViewStage extends State<ScheduleView> {
                             const SizedBox(height: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                    "Here is a list of the sessions you have booked ",
-                                    style: TextStyle(fontSize: 13, height: 1.3)),
+                                    lag.content1,
+                                    style: const TextStyle(fontSize: 13, height: 1.3)),
                                 Text(
-                                    "You can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours",
-                                    style: TextStyle(fontSize: 13, height: 1.3)),
+                                    lag.content2,
+                                    style: const TextStyle(fontSize: 13, height: 1.3)),
                               ],
                             ),
                           ],

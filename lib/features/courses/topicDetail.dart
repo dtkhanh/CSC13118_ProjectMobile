@@ -19,8 +19,6 @@ class _TopicDetailPage extends State<TopicDetail> {
   bool checkLoad = false;
   UniqueKey _pdfViewerKey = UniqueKey();
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

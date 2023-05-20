@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/data.dart';
 import '../../../constants/appSizes.dart';
+import '../../data/language.dart';
 import '../../model/tutor/tutor.dart';
 import '../../services/tutorService.dart';
 
@@ -25,6 +26,7 @@ class _TuTorViewStage extends State<TuTorView> {
   static List<String> filter = [];
   final _searchName = TextEditingController();
 
+  Language lag = Language(id: "vi-Vn");
 
   @override
   void initState() {
@@ -38,9 +40,11 @@ class _TuTorViewStage extends State<TuTorView> {
     final prefs = await SharedPreferences.getInstance();
     String? check =  prefs.getString('accessToken');
     final totalElement = await TuTorService.getToTalElement(page: 1,perPage: 9,token: check!);
+    final language = prefs.getString('setLanguage')?? "en-US";
     setState(() {
       int result = totalElement.toInt() ~/ 9 + (totalElement.toInt() % 9 > 0 ? 1 : 0);
       _totalPage = result;
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
     });
   }
 
@@ -124,15 +128,15 @@ class _TuTorViewStage extends State<TuTorView> {
                             Expanded(
                               child: TextField(
                                 controller: _searchName,
-                                decoration: const InputDecoration(
-                                  prefixIcon: Icon(
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(
                                     Icons.search,
                                     color: Colors.black12,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                                  hintText: "enter tutor name",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                                  hintText: lag.enterTutorName,
+                                  hintStyle: const TextStyle(color: Colors.grey),
+                                  border: const OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.all(Radius.circular(20))),
                                 ),
@@ -146,7 +150,7 @@ class _TuTorViewStage extends State<TuTorView> {
                               child:   DropdownButtonFormField(
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                                  hintText: 'select nationality',
+                                  hintText: lag.selectNatio,
                                   hintStyle: TextStyle(color: Colors.grey[400],  ),
                                   border: const OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey,),
@@ -183,7 +187,7 @@ class _TuTorViewStage extends State<TuTorView> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor : chosenFilter == index ?  Colors.lightBlue[100]   :  Colors.grey[200], // set the background color of the button
                             ),
-                            child: Text( filters[index], style: TextStyle( color: chosenFilter == index ? Colors.blue[700] : Colors.black54,
+                            child: Text( lag.id =="vi-Vn" ?filters_VN[index] : filters[index], style: TextStyle( color: chosenFilter == index ? Colors.blue[700] : Colors.black54,
                             ),),
                           ),
                         ),
@@ -218,7 +222,7 @@ class _TuTorViewStage extends State<TuTorView> {
                         ),
                       ),
                     ),
-                    child: const Text('Reset Filters', style: TextStyle(fontSize: 16)),
+                    child: Text(lag.ResetFilters, style: const TextStyle(fontSize: 16)),
                   ),
                 ),
                 gapH4,

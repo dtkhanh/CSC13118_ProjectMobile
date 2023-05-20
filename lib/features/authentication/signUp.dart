@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/language.dart';
 import '../../model/tokensUser.dart';
 import '../../model/user.dart';
 import '../../routing/routes.dart';
@@ -26,6 +27,20 @@ class _SignUpState extends State<SignUp> {
   String _ErrorInputEmail ="";
   String _ErrorInputPass ="";
   String _ErrorInputPassConfirm ="";
+  Language lag = Language(id: "vi-Vn");
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
   void _handleValidation() {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -115,6 +130,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    _initPrefs();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -123,7 +139,7 @@ class _SignUpState extends State<SignUp> {
           color: Colors.blue[600],
         ),
         title: Text(
-          'Sign Up',
+          lag.register,
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.w700,
@@ -141,7 +157,7 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Text(
-                  "Email",
+                  lag.email,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -175,7 +191,7 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Text(
-                  "Password",
+                  lag.password,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -209,7 +225,7 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Text(
-                  "Confirm Password",
+                  lag.confirmPassword,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -247,11 +263,11 @@ class _SignUpState extends State<SignUp> {
                   onPressed: () {
                     registerAccount();
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: Text(
-                      "Register",
-                      style: TextStyle(fontSize: 20),
+                      lag.buttonRegister,
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                 ),
@@ -260,7 +276,7 @@ class _SignUpState extends State<SignUp> {
               Center(
                   child: Column(
                     children: [
-                      const Text("Or continue with"),
+                      Text(lag.orContinue),
                       gapH16,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -318,7 +334,7 @@ class _SignUpState extends State<SignUp> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:  <Widget>[
-                          const Text("Already have an account? "),
+                          Text(lag.alreadyAccount),
                           InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -326,8 +342,8 @@ class _SignUpState extends State<SignUp> {
                                   MaterialPageRoute(builder: (context) => const LoginPage()),
                                 );
                               },
-                              child:  const Text("Login",
-                                  style: TextStyle(
+                              child:  Text(lag.login,
+                                  style: const TextStyle(
                                     color: Colors.blue,
                                   ))
                           ),

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../data/language.dart';
 import '../../model/schedule/bookingInfo.dart';
 import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
@@ -28,11 +29,21 @@ class _HomeViewStage extends State<HomeView> {
   Map<String, dynamic>? _total;
   int _totalCall = 0;
   BookingInfo? _upComing;
+  Language lag = Language(id: "vi-Vn");
 
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
 
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? check =  prefs.getString('accessToken');
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
     getListTutor(check!);
   }
   void getTotalCall() async {
@@ -66,9 +77,9 @@ class _HomeViewStage extends State<HomeView> {
   }
   String _convertTotalLessonTime() {
     if (_totalCall == 0) {
-      return 'You have not attended any class';
+      return lag.youHaveNotAttended;
     }
-    String result = 'Total Lesson Time:';
+    String result = lag.Totallessontime;
     final int hour = _totalCall ~/ 60;
     final int minute = _totalCall - hour * 60;
     result += hour > 0 ? ' $hour ${hour > 1 ? 'hours' : 'hour'}' : '';
@@ -100,12 +111,12 @@ class _HomeViewStage extends State<HomeView> {
                     ),
                   )
                   :
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      'Upcoming Lesson',
+                      lag.Upcoming,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: Sizes.p20, color: Colors.white),
+                      style: const TextStyle(fontSize: Sizes.p20, color: Colors.white),
                     ),
                   ),
 
@@ -114,23 +125,28 @@ class _HomeViewStage extends State<HomeView> {
                     '',
                   )
                       :
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      Text(
-                        '${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} ',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: Sizes.p16, color: Colors.white),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} ',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: Sizes.p16, color: Colors.white),
+                          ),
+                          Text(
+                            '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} - ',
+                            style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
+                          ),
+                          Text(
+                            DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.endPeriodTimestamp ?? 0)),
+                            style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
+                          ),
+                          gapW4,
+
+                        ],
                       ),
-                      Text(
-                          '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} - ',
-                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
-                      ),
-                      Text(
-                        DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.endPeriodTimestamp ?? 0)),
-                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
-                      ),
-                      gapW4,
                       TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -152,13 +168,13 @@ class _HomeViewStage extends State<HomeView> {
                           };
 
                           JitsiMeetingOptions options = JitsiMeetingOptions(
-                              roomNameOrUrl:jwtDecoded['room'],
-                              serverUrl: "https://meet.lettutor.com/",
-                              token: _upComing?.studentMeetingLink?.split('token=')[1],
-                              isAudioMuted: true,
-                              isVideoMuted: true,
-                              isAudioOnly: true,
-                              // featureFlags: featureFlags
+                            roomNameOrUrl:jwtDecoded['room'],
+                            serverUrl: "https://meet.lettutor.com/",
+                            token: _upComing?.studentMeetingLink?.split('token=')[1],
+                            isAudioMuted: true,
+                            isVideoMuted: true,
+                            isAudioOnly: true,
+                            // featureFlags: featureFlags
                           );
                           await JitsiMeetWrapper.joinMeeting( options: options);
                         },
@@ -168,11 +184,11 @@ class _HomeViewStage extends State<HomeView> {
                             SvgPicture.asset(
                               "assets/svg/join.svg",
                               semanticsLabel: 'Logo join',
-                              width: 10,
-                              height: 10,
+                              width: 20,
+                              height: 20,
                             ),
-                            gapW2,
-                            const Text('Join', style: TextStyle(fontSize: Sizes.p16))],),
+                            gapW8,
+                            Text(lag.join, style: const TextStyle(fontSize: Sizes.p16))],),
                       ),
                     ],
                   ),
@@ -229,9 +245,9 @@ class _HomeViewStage extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Recommended Tutors',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
+                  Text(
+                    lag.recommendedTutors,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
                   ),
                   InkWell(
                     onTap: () {
@@ -241,9 +257,9 @@ class _HomeViewStage extends State<HomeView> {
                             (route) => false,
                       );
                     },
-                      child: const Text(
-                        'See all',
-                        style: TextStyle(fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blueAccent),
+                      child: Text(
+                        lag.seeAll,
+                        style: const TextStyle(fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blueAccent),
                       ),
                   ),
                 ],
@@ -267,10 +283,10 @@ class _HomeViewStage extends State<HomeView> {
             Center(
               child:  !checkData
                   ?
-              const Text(
-                'LOADING...',
+              Text(
+                lag.loading,
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
               )
                   :
               Padding(

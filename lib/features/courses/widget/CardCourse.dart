@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/data.dart';
+import '../../../data/language.dart';
 import '../../../model/course/course.dart';
 import '../InformationCourse.dart';
 
@@ -15,6 +17,20 @@ class CardCourse extends StatefulWidget {
 
 class _CardCourseStage extends State<CardCourse> {
   int rate = 5;
+  Language lag = Language(id: "vi-Vn");
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

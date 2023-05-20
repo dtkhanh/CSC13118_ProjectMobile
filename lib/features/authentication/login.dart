@@ -4,6 +4,7 @@ import 'package:csc13118_mobile/features/authentication/signUp.dart';
 import 'package:csc13118_mobile/model/tokensUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../data/language.dart';
 import '../../model/user.dart';
 import '../../routing/routes.dart';
 import '../../services/authentication.dart';
@@ -21,11 +22,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _googleSignIn = GoogleSignIn();
-
+  String language = "";
   final _email = TextEditingController();
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
   late User user;
+  Language lag = Language(id: "vi-Vn");
   String _ErrorInputEmail ="";
   String _ErrorInputPass ="";
   @override
@@ -35,23 +37,27 @@ class _LoginPageState extends State<LoginPage> {
   }
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
+    language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
     String? check =  prefs.getString('accessToken');
     // final userInfo = await UserService.getUserInformation(token: check!);
     // final userProvider = UserProvider();
     // TokensUser? tkUser = userProvider.token;
     // userProvider.addUserProvider(userInfo, tkUser!);
     if(check!.length != 0){
-      // Future.delayed(const Duration(seconds: 1), () {
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     Routes.main,
-      //         (route) => false,
-      //   );
-      // });
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
     }
   }
   void _handleValidation() {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final emailRegex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (_email.text.isEmpty) {
       _ErrorInputEmail ="Please input your Email!";
     } else if (!emailRegex.hasMatch(_email.text)) {
@@ -213,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: Text(
-                          "Email",
+                          lag.email ?? "",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -252,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: Text(
-                          "Password",
+                          lag.password?? "",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -296,8 +302,8 @@ class _LoginPageState extends State<LoginPage> {
                                 MaterialPageRoute(builder: (context) => const ForgotPassword()),
                               );
                             },
-                            child:  const Text("Forgot password?",
-                                style: TextStyle(
+                            child:  Text(lag.forgotPassword ?? "",
+                                style: const TextStyle(
                                   color: Colors.blue,
                                 ))
                         ),
@@ -312,10 +318,10 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         loginPage();
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
-                          "Login in",
+                          lag.buttonLogin,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -324,7 +330,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Text("Or continue with")],
+                  children:  [Text(lag.orContinue)],
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 15),
@@ -389,7 +395,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:  <Widget>[
-                        const Text("Not a member yet? "),
+                        Text(lag.registerQuestion),
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -397,8 +403,8 @@ class _LoginPageState extends State<LoginPage> {
                               MaterialPageRoute(builder: (context) => const SignUp()),
                             );
                           },
-                          child:  const Text("Sign up",
-                              style: TextStyle(
+                          child: Text(lag.register,
+                              style: const TextStyle(
                                 color: Colors.blue,
                               ))
                         ),

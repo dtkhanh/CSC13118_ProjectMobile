@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../../data/language.dart';
 import '../../../model/tutor/infoTutor.dart';
 import '../../../model/tutor/tutor.dart';
 import '../../../services/tutorService.dart';
@@ -22,12 +23,23 @@ class _CardTutorStage extends State<CardTutor> {
   int chosenFilter = 0;
   final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
   late InfoTutor infoTutor;
+  Language lag = Language(id: "vi-Vn");
 
   @override
   void initState() {
     super.initState();
     checkFavoriteTutor();
+    _initPrefs();
   }
+
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
+
 
   Future<void> checkFavoriteTutor() async {
     final prefs = await SharedPreferences.getInstance();
@@ -178,7 +190,7 @@ class _CardTutorStage extends State<CardTutor> {
                       );
                     },
                     icon: const Icon(Icons.edit_calendar),
-                    label: const Text('Book'),
+                    label: Text(lag.book),
                   ),
                 )
               ],

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../model/tutor/feedback.dart';
+import '../../../data/language.dart';
 import '../../../services/tutorService.dart';
-import '../../tutors/widget/viewRatting.dart';
 
 class TutorReport extends StatefulWidget {
   final String tutorId;
@@ -19,10 +18,27 @@ class _TutorReportDialogStage extends State<TutorReport> {
     'This profile is pretending be someone or is fake\n',
     'Inappropriate profile photo\n',
   ];
+  final List<String> _contents_vi = [
+    'Gia sư này làm phiền tôi\n',
+    'Hồ sơ này là giả mạo\n',
+    'Ảnh hồ sơ không phù hợp\n',
+  ];
   final _content = TextEditingController();
   final List<bool> _choices = [false, false, false];
+  Language lag = Language(id: "vi-Vn");
 
-
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
 
   @override
@@ -55,12 +71,12 @@ class _TutorReportDialogStage extends State<TutorReport> {
               ),
               const SizedBox(height: 15,),
               Row(
-                children: const [
-                  Icon(Icons.error, color: Colors.blue, size: 20,),
-                  SizedBox(width: 3,),
+                children: [
+                  const Icon(Icons.error, color: Colors.blue, size: 20,),
+                  const SizedBox(width: 3,),
                   Text(
-                    "Help us understand what's happening",
-                    style: TextStyle(
+                    lag.helpUs,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -79,7 +95,7 @@ class _TutorReportDialogStage extends State<TutorReport> {
                         });
                       },
                     ),
-                    Expanded(child: Text(_contents[index],  style:  TextStyle(
+                    Expanded(child: Text( lag.id == "vi-Vn" ?_contents_vi[index] :_contents[index],  style:  TextStyle(
                       fontSize: 15,
                       color: Colors.grey.shade700
                     ),)),
@@ -94,11 +110,11 @@ class _TutorReportDialogStage extends State<TutorReport> {
                   onChanged: (value) {
                     setState(() {});
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Please let us know details about your problems',
-                    hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
-                    contentPadding: EdgeInsets.all(12),
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    hintText: lag.tutorContent,
+                    hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
+                    contentPadding: const EdgeInsets.all(12),
+                    border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                   ),
@@ -113,7 +129,7 @@ class _TutorReportDialogStage extends State<TutorReport> {
           style: TextButton.styleFrom(
             textStyle: Theme.of(context).textTheme.labelLarge,
           ),
-          child: const Text('Cancel', style: TextStyle(fontSize: 18),),
+          child: Text(lag.cancel, style: const TextStyle(fontSize: 18),),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -141,9 +157,9 @@ class _TutorReportDialogStage extends State<TutorReport> {
               );
             }
           },
-          child: const Text(
-            'Submit',
-            style: TextStyle(fontSize: 18),
+          child: Text(
+            lag.Submit,
+            style: const TextStyle(fontSize: 18),
           ),
         )
 
@@ -152,9 +168,9 @@ class _TutorReportDialogStage extends State<TutorReport> {
           onPressed: () {
 
           },
-          child: const Text(
-            'Submit',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
+          child: Text(
+            lag.Submit,
+            style: const TextStyle(fontSize: 18, color: Colors.grey),
           ),
         )
       ],

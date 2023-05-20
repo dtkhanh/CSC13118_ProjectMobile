@@ -4,6 +4,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../../data/language.dart';
 import '../../../model/schedule/bookingInfo.dart';
 import '../../../services/scheduleService.dart';
 
@@ -22,6 +23,20 @@ class CardSchedule extends StatefulWidget {
 class _CardScheduleStage extends State<CardSchedule> {
   late final _noteText = TextEditingController();
   String reasonCancel = "";
+  Language lag = Language(id: "vi-Vn");
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
   void cancelBooking( String scheduleDetail) async {
     try{
@@ -224,9 +239,9 @@ class _CardScheduleStage extends State<CardSchedule> {
                         Text(
                           widget.bookings.length > 1
                             ?
-                          '${widget.bookings.length} consecutive lessons'
+                          '${widget.bookings.length} ${lag.consecutiveLessons}'
                               :
-                          '${widget.bookings.length} lesson',
+                          '${widget.bookings.length} ${lag.lessons}',
                           style: const TextStyle(
                             fontSize: 10,
                           ),
@@ -295,16 +310,23 @@ class _CardScheduleStage extends State<CardSchedule> {
                                 ),
                                 const SizedBox(
                                     height: 3),
-                                const Text(
-                                  'Direct Message',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight:
-                                      FontWeight
-                                          .bold,
-                                      color: Colors
-                                          .blue),
-                                ),
+                                Row(
+                                  children: [
+                                    const Icon( Icons.chat, color: Colors.blue, size:20 ),
+                                    const SizedBox(width: 5,),
+                                    Text(
+                                      lag.DirectMess,
+                                      style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight:
+                                          FontWeight
+                                              .bold,
+                                          color: Colors
+                                              .blue),
+                                    ),
+                                  ],
+                                )
+
                               ],
                             )),
                       ],
@@ -353,7 +375,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                                               widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0)) ,widget.bookings[index].id ?? "" , widget.onPressed)
                                                         },
                                                         icon: const Icon(Icons.cancel , color: Colors.red,),
-                                                        label: const Text('Cancel' , style: TextStyle(color:  Colors.red,),),
+                                                        label: Text(lag.cancel , style: const TextStyle(color:  Colors.red,),),
                                                       ),
                                                     ) ,
                                                   )
@@ -378,26 +400,25 @@ class _CardScheduleStage extends State<CardSchedule> {
                                     children: [
                                       TableCell(
                                           child: Row(
-                                            children: const [
-                                              Icon( Icons.arrow_drop_down , color: Colors.black, size:25),
-
+                                            children: [
+                                              const Icon( Icons.arrow_drop_down , color: Colors.black, size:25),
                                               Expanded(
                                                   child: Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                                   child: Text(
-                                                    'Request for lesson', style: TextStyle(color: Colors.black, fontSize: 14),
+                                                    lag.RequestForLesson, style: const TextStyle(color: Colors.black, fontSize: 14),
                                                   ),
                                                 )
                                               ),
                                               Expanded(
                                                 child: Align(
                                                     alignment: Alignment.topRight,
-                                                    child: Text('Edit Request' , style: TextStyle(color:  Colors.blue,)
+                                                    child: Text(lag.EditRequest , style: const TextStyle(color:  Colors.blue,)
                                                     )
                                                 ),
 
                                               ),
-                                              SizedBox(width: 10),
+                                              const SizedBox(width: 10),
                                             ],
                                           )
                                       ),
@@ -408,7 +429,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                       TableCell(
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-                                          child: Text( widget.bookings[0].studentRequest ?? 'Current there are no requests for this class. Please write down any request for the teacher' , style: const TextStyle(color:  Colors.grey, fontSize: 14)),
+                                          child: Text( widget.bookings[0].studentRequest ?? lag.contentCardSchedule , style: const TextStyle(color:  Colors.grey, fontSize: 14)),
                                         ),
                                       ),
                                     ],
@@ -432,7 +453,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[100], // set the background color of the button
                 ),
-                child: Text('Go to meeting', style: TextStyle( color: Colors.grey[500],
+                child: Text(lag.goToMeet, style: TextStyle( color: Colors.grey[500],
                 ),),
               ),
             ),
