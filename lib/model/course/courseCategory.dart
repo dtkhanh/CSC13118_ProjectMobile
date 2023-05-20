@@ -4,6 +4,7 @@ class CourseCategory {
   String? title;
   String? description;
   String? key;
+  String? displayOrder;
   String? createdAt;
   String? updatedAt;
 
@@ -21,6 +22,7 @@ class CourseCategory {
     title = json['title'];
     description = json['description'];
     key = json['key'];
+    displayOrder = json['displayOrder'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -31,6 +33,7 @@ class CourseCategory {
     data['title'] = title;
     data['description'] = description;
     data['key'] = key;
+    data['displayOrder'] = displayOrder;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

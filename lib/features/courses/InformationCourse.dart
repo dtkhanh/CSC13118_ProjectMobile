@@ -1,5 +1,5 @@
+import 'package:csc13118_mobile/features/courses/topicDetail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/data.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -130,7 +130,12 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                         width: double.infinity,
                                         height: 40,
                                         child: ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) =>   TopicDetail(topic: 0,courseDetail: courseDetail,)),
+                                            );
+                                          },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blue.shade700, // set the background color of the button
                                           ),
@@ -165,17 +170,11 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/svg/icons-flutter.svg",
-                                    semanticsLabel:
-                                    'Logo Icon',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  const SizedBox(
+                                children: const [
+                                  Icon(Icons.help_outline, color: Colors.red),
+                                  SizedBox(
                                       width: 5),
-                                  const Text(
+                                  Text(
                                     'Why take this course',
                                     style: TextStyle(
                                       fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
@@ -196,17 +195,11 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0,5),
                               child:   Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/svg/icons-flutter.svg",
-                                    semanticsLabel:
-                                    'Logo Icon',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  const SizedBox(
+                                children: const [
+                                  Icon(Icons.help_outline, color: Colors.red),
+                                  SizedBox(
                                       width: 5),
-                                  const Text(
+                                  Text(
                                     'What will you be able to do',
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
@@ -237,13 +230,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    "assets/svg/Beginner.svg",
-                                    semanticsLabel:
-                                    'Logo Icon',
-                                    width: 20,
-                                    height: 20,
-                                  ),
+                                  const Icon(Icons.auto_fix_normal, color: Colors.blue),
                                   const SizedBox(
                                       width: 5),
                                   Text(
@@ -268,13 +255,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               padding: const EdgeInsets.fromLTRB(0, 25, 0,5),
                               child:   Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    "assets/svg/icons-flutter.svg",
-                                    semanticsLabel:
-                                    'Logo Icon',
-                                    width: 20,
-                                    height: 20,
-                                  ),
+                                  const Icon(Icons.topic_outlined, color: Colors.blue),
                                   const SizedBox(
                                       width: 5),
                                   Text(
@@ -314,40 +295,49 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                           width: 200,
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10.0), // Set border radius
-                                              ),
-                                              surfaceTintColor: Colors.white,
-                                              elevation: 3.0,
-                                              child:  Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                      padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          const SizedBox(height: 10),
-                                                          Text(
-                                                            '${index +1}',
-                                                            style: const TextStyle(
-                                                              fontSize: 15, color: Colors.black,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            courseDetail.topics![index].name ?? "",
-                                                            style: const TextStyle(
-                                                              fontSize: 15, color: Colors.black,
-                                                            ),
-                                                          ),
-                                                        ],
+                                            child:
+                                            InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) =>   TopicDetail(topic: index,courseDetail: courseDetail,)),
+                                                  );
+                                                },
+                                                child:  Card(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10.0), // Set border radius
+                                                  ),
+                                                  surfaceTintColor: Colors.white,
+                                                  elevation: 3.0,
+                                                  child:  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                          padding: const EdgeInsets.fromLTRB(12, 20, 0, 20),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              const SizedBox(height: 10),
+                                                              Text(
+                                                                '${index +1}',
+                                                                style: const TextStyle(
+                                                                  fontSize: 15, color: Colors.black,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                courseDetail.topics![index].name ?? "",
+                                                                style: const TextStyle(
+                                                                  fontSize: 15, color: Colors.black,
+                                                                ),
+                                                              ),
+                                                            ],
 
+                                                          )
                                                       )
-                                                  )
-                                                ],
-                                              ),
+                                                    ],
+                                                  ),
 
+                                                ),
                                             ),
                                           ),
                                         )
