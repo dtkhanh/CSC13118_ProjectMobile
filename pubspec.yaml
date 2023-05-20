@@ -51,6 +51,9 @@ dependencies:
   chat_gpt_sdk: ^2.0.6
   material: ^1.0.0+2
   jitsi_meet_wrapper: ^0.0.6
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.11
+  jwt_decoder: ^2.0.1
 
 
 dev_dependencies:

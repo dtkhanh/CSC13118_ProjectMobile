@@ -68,8 +68,8 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                 children: [
                   Image.asset(
                     'assets/images/images.png',
-                    width: 120, // Chiều rộng của hình ảnh
-                    height: 120, // Chiều cao của hình ảnh
+                    width: 120,
+                    height: 120,
                     fit: BoxFit
                         .cover,
                   ),
@@ -126,16 +126,29 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                             padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
                             child:  SizedBox(
                               height: 30,
-                              child:  DropdownButtonFormField(
+                              child: DropdownButtonFormField(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                                  isDense: true,
+                                  alignLabelWithHint: true,
                                   hintText: 'Select level',
                                   hintStyle: TextStyle(color: Colors.grey, fontSize: 13, ),
                                 ),
-                                onChanged: (value) {}, items: const [],
+                                onChanged: (value) {
+                                  setState(() {
+                                  });
+                                }, items: <String>['Any level', 'Beginner', 'Upper-Beginner', 'Pre-Intermediate','Upper-Intermediate','Pre-advanced','Advanced'].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: const TextStyle(color: Colors.black, fontSize: 13, ),
+                                  ),
+                                );
+                              }).toList(),
                               ),
                             ),
                           ),
@@ -149,11 +162,25 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
                                   borderRadius: BorderRadius.all(Radius.circular(5))),
-                              contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                              isDense: true,
+                              alignLabelWithHint: true,
                               hintText: 'Select Category',
-                              hintStyle: TextStyle(color: Colors.grey, fontSize: 13, ),
+                              hintStyle: TextStyle(color: Colors.grey, fontSize: 13,),
+
                             ),
-                            onChanged: (value) {}, items: const [],
+                            onChanged: (value) {
+                              setState(() {
+                              });
+                            }, items: <String>['For Studying Abroad', 'English For Traveling', 'Conversational English', 'English For Beginners','Business English','STARTERS','English For Kid','PET'].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(color: Colors.black, fontSize: 13, ),
+                              ),
+                            );
+                          }).toList(),
                           ),
                         ),
                       ),),
@@ -166,12 +193,26 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
                                   borderRadius: BorderRadius.all(Radius.circular(5))),
-                              contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                              isDense: true,
+                              alignLabelWithHint: true,
                               hintText: 'Sort by level',
                               hintStyle: TextStyle(color: Colors.grey, fontSize: 13, ),
                             ),
-                            onChanged: (value) {}, items: const [],
+                            onChanged: (value) {
+                              setState(() {
+                              });
+                            }, items: <String>['Level ascending','Level decreasing'].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(color: Colors.black, fontSize: 13, ),
+                              ),
+                            );
+                          }).toList(),
                           ),
+
                         ),
                       ),),
                     ],

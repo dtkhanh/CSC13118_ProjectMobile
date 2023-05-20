@@ -41,13 +41,13 @@ class _LoginPageState extends State<LoginPage> {
     // TokensUser? tkUser = userProvider.token;
     // userProvider.addUserProvider(userInfo, tkUser!);
     if(check!.length != 0){
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.main,
-              (route) => false,
-        );
-      });
+      // Future.delayed(const Duration(seconds: 1), () {
+      //   Navigator.pushNamedAndRemoveUntil(
+      //     context,
+      //     Routes.main,
+      //         (route) => false,
+      //   );
+      // });
     }
   }
   void _handleValidation() {
@@ -106,6 +106,31 @@ class _LoginPageState extends State<LoginPage> {
   }
   void _handleAuthorizeFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      try {
+        final accessToken = result.accessToken!.token;
+        _loginResponse = await AuthenticationService().loginWithFaceBook(accessToken: accessToken ?? "");
+        final user = User.fromJson(_loginResponse!['user']);
+        final token = TokensUser.fromJson(_loginResponse!['tokens']);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('accessToken', token.access!.token!,);
+        await prefs.setString('refreshToken', token.refresh!.token!,);
+        await prefs.setString('userId', user.id!,);
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.main,
+                (route) => false,
+          );
+        });
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error Login')),
+        );
+      }
+    } else {
+
+    }
   }
 
 

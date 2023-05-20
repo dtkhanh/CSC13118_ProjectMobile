@@ -118,5 +118,26 @@ class ScheduleService {
       throw Exception(jsonDecode['message']);
     }
   }
+  static Future<dynamic> getToTalElementSchedule({
+    required String token,
+    required int page,
+    required int perPage,
+  }) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final response = await get(
+      Uri.parse('$url/booking/list/student?page=$page&perPage=$perPage&dateTimeGte=$now&orderBy=meeting&sortBy=asc'),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    final jsonDecode = json.decode(response.body);
+
+    if (response.statusCode != 200 ) {
+      throw Exception(jsonDecode!['message']);
+    }else{
+      return jsonDecode['data']['count'];
+    }
+  }
 
 }

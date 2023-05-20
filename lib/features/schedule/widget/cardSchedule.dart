@@ -113,7 +113,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.grey.shade100,
-                    hintText: reasonCancel.length > 0 ? reasonCancel : '',
+                    hintText: reasonCancel.isNotEmpty ? reasonCancel : '',
                     hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
                     border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
@@ -159,7 +159,6 @@ class _CardScheduleStage extends State<CardSchedule> {
           actions: [
             TextButton(
                 onPressed: () {
-                  onButtonPressed();
                   setState(() {
                     reasonCancel = "";
                     _noteText.text = "";
@@ -170,17 +169,21 @@ class _CardScheduleStage extends State<CardSchedule> {
                   'Later',
                   style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 )),
-            reasonCancel.length > 0 ?
+            reasonCancel.isNotEmpty ?
             TextButton(
                 onPressed: () async {
                   cancelBooking(id);
                   onButtonPressed();
+                  reasonCancel = "";
+                  _noteText.text = "";
                   Navigator.pop(context);
                 },
                 child: const Text('Submit', style: TextStyle(color: Colors.blue , fontWeight: FontWeight.bold),))
             :
             TextButton(
             onPressed: () async {
+              reasonCancel = "";
+              _noteText.text = "";
               widget.onPressed;
             },
             child: const Text('Submit', style: TextStyle(color: Colors.grey , fontWeight: FontWeight.bold),)),
