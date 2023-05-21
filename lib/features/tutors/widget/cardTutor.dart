@@ -6,6 +6,7 @@ import '../../../constants/appSizes.dart';
 import '../../../data/language.dart';
 import '../../../model/tutor/infoTutor.dart';
 import '../../../model/tutor/tutor.dart';
+import '../../../providers/activateTheme.dart';
 import '../../../services/tutorService.dart';
 import '../../view_information/teacher_info/InformationTeacher.dart';
 import 'package:http/http.dart' as http;
@@ -191,6 +192,7 @@ class _CardTutorStage extends State<CardTutor> {
                     },
                     icon: const Icon(Icons.edit_calendar),
                     label: Text(lag.book),
+                    // label: Text(lag.book , style: TextStyle(color: Theme.of(context).colorScheme)),
                   ),
                 )
               ],

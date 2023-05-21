@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:csc13118_mobile/chatGPT/ChatGPT.dart';
 import 'package:csc13118_mobile/features/setting/widget/profileView.dart';
+import 'package:csc13118_mobile/features/setting/widget/themeSwitch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
 import '../../../routing/routes.dart';
 import '../../model/user.dart';
+import '../../providers/activateTheme.dart';
 import '../../services/userService.dart';
 
 const listLanguage = [
@@ -28,11 +30,14 @@ class _SettingViewState extends State<SettingView> {
   final _googleSignIn = GoogleSignIn();
   bool _isExpanded = false;
   String language ="";
+  bool check = true;
+  final theme = activeTheme.state;
 
 
   @override
   void initState() {
     super.initState();
+    print(theme);
     _initPrefs();
   }
   Future<void> _initPrefs() async {
@@ -235,7 +240,7 @@ class _SettingViewState extends State<SettingView> {
                                     Text(
                                       language.toString() == "en-US" ?  'English' : 'Vietnamese',
                                       style: const TextStyle(
-                                        color: Colors.black, fontSize: 16,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ],
@@ -252,8 +257,9 @@ class _SettingViewState extends State<SettingView> {
                                             _isExpanded = !_isExpanded;
                                           });
                                         },
-                                        child: Icon( Icons.arrow_forward_ios, color:Colors.grey.shade800,)
+                                        child: Icon( Icons.arrow_forward_ios, color: activeTheme.state == Themes.light ? Colors.black: Colors.white),
                                     ),
+
                                   ],
                                 )
                             ),
@@ -313,6 +319,37 @@ class _SettingViewState extends State<SettingView> {
                           ),
                       ],
                     ),
+                  ),
+                ),
+                gapH12,
+                Card(
+                  surfaceTintColor: Colors.white,
+                  elevation: 2,
+                  child: Container(
+                      padding: const EdgeInsets.all(10),
+                      constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width),
+                      decoration: BoxDecoration(
+                        // color: Colors.blue.shade300,
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child:Row(
+                        children: [
+                          const Text(
+                            'Change theme',
+                            style: TextStyle(
+                               fontSize: 16,
+                            ),
+                          ),
+                          Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children:  const [
+                                  ThemeSwitch()
+                                ],
+                              )
+                          ),
+                        ],
+                      )
                   ),
                 ),
                 gapH24,

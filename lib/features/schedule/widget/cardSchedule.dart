@@ -23,6 +23,7 @@ class CardSchedule extends StatefulWidget {
 class _CardScheduleStage extends State<CardSchedule> {
   late final _noteText = TextEditingController();
   String reasonCancel = "";
+  String checkTheme ="";
   Language lag = Language(id: "vi-Vn");
 
   @override
@@ -32,9 +33,11 @@ class _CardScheduleStage extends State<CardSchedule> {
   }
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
+    final _theme = prefs.getString('theme');
     final language = prefs.getString('setLanguage')?? "en-US";
     setState(() {
       language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+      checkTheme = _theme!;
     });
   }
 
@@ -234,6 +237,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                         widget.bookings[0].scheduleDetailInfo!.startPeriodTimestamp ?? 0)),
                           style: const TextStyle(
                               fontSize: 16,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
@@ -243,7 +247,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                               :
                           '${widget.bookings.length} ${lag.lessons}',
                           style: const TextStyle(
-                            fontSize: 10,
+                            fontSize: 10,color: Colors.black,
                           ),
                         ),
                       ],
@@ -286,7 +290,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                 Text(
                                   widget.bookings[0].scheduleDetailInfo!.scheduleInfo!.tutorInfo!.name ?? " ",
                                   style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 18,color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(
@@ -305,7 +309,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                     const Text("France",
                                         style: TextStyle(
                                             fontSize:
-                                            14)),
+                                            14,color: Colors.black,)),
                                   ],
                                 ),
                                 const SizedBox(
@@ -358,7 +362,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                                                       widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
                                                       widget.bookings[index].scheduleDetailInfo!.endPeriodTimestamp ?? 0))}',
                                                   style: const TextStyle(
-                                                      fontSize: 16,
+                                                      fontSize: 16,color: Colors.black,
                                                       fontWeight: FontWeight.w400),
                                                 ),
                                               ),
@@ -368,6 +372,12 @@ class _CardScheduleStage extends State<CardSchedule> {
                                                     child: Align(
                                                       alignment: Alignment.topRight,
                                                       child: OutlinedButton.icon(
+                                                        style: ButtonStyle(
+                                                          side: MaterialStateProperty.all(const BorderSide(
+                                                            color: Colors.red,
+                                                            width: 2,
+                                                          )),
+                                                        ),
                                                         onPressed: () => {
                                                           _dialogBuilder("${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
                                                               widget.bookings[index].scheduleDetailInfo!.startPeriodTimestamp ?? 0))}-${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(

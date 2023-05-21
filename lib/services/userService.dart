@@ -45,9 +45,11 @@ class UserService {
     required String phone,
     required String birthday,
     required String level,
+    required String studySchedule,
   }) async {
     final response = await put(Uri.parse('$url/user/info'),
       headers: {
+        'Content-Type': 'application/json;encoding=utf-8',
         'Authorization': 'Bearer $token',
       },
       body: json.encode({
@@ -55,11 +57,21 @@ class UserService {
         'country': country,
         'phone': phone,
         'birthday': birthday,
-         'level': level
+        'level': level,
+        'studySchedule': studySchedule,
       }),
     );
 
     final jsonDecode = json.decode(response.body);
+    print("update");
+    print( json.encode({
+      'name': name,
+      'country': country,
+      'phone': phone,
+      'birthday': birthday,
+      'level': level
+    }),);
+    print(jsonDecode["user"]);
     if (response.statusCode != 200) {
       throw Exception(jsonDecode(['message']));
     }

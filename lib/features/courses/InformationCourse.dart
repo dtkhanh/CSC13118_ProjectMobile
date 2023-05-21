@@ -113,7 +113,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                       Text(
                                         courseDetail.name ?? "",
                                         style: const TextStyle(
-                                            fontSize: 17, color: Colors.black, fontWeight: FontWeight.bold
+                                            fontSize: 17 ,fontWeight: FontWeight.bold
                                         ),
                                       ),
                                       const SizedBox(height: 10),
@@ -163,7 +163,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child: Text(
                                 'Overview',
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,
+                                    fontSize: 18, fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -177,7 +177,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   Text(
                                     'Why take this course',
                                     style: TextStyle(
-                                      fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                                      fontSize: 16,fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ],
@@ -188,7 +188,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child:  Text(
                                 courseDetail.reason ?? "",
                                 style: const TextStyle(
-                                    fontSize: 13, color: Colors.black,
+                                    fontSize: 13,
                                 ),
                               ),
                             ),
@@ -202,7 +202,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   Text(
                                     'What will you be able to do',
                                     style: TextStyle(
-                                        fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                                        fontSize: 16,fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ],
@@ -213,7 +213,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child:  Text(
                                 courseDetail.purpose ?? "",
                                     style: const TextStyle(
-                                  fontSize: 13, color: Colors.black,
+                                  fontSize: 13,
                                 ),
                               ),
                             ),
@@ -222,7 +222,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child: Text(
                                 'Experience Level',
                                 style: TextStyle(
-                                  fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,
+                                  fontSize: 18, fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -236,7 +236,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   Text(
                                     courseLevels[courseDetail.level ?? '0'] ?? "",
                                     style: const TextStyle(
-                                        fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                                        fontSize: 16,fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ],
@@ -247,7 +247,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child: Text(
                                 'Course Length',
                                 style: TextStyle(
-                                  fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,
+                                  fontSize: 18,  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -261,7 +261,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                   Text(
                                     courseDetail.topics == null ? "" : '${courseDetail.topics?.length}  Topics',
                                     style: const TextStyle(
-                                        fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                                        fontSize: 16, fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ],
@@ -272,7 +272,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                             const Text(
                               "",
                               style: TextStyle(
-                                  fontSize: 16, color: Colors.black,fontWeight: FontWeight.w500
+                                  fontSize: 16,fontWeight: FontWeight.w500
                               ),
                             )
                             :
@@ -281,7 +281,7 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                               child: Text(
                                 'List Topics',
                                 style: TextStyle(
-                                  fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold,
+                                  fontSize: 18,  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -321,13 +321,13 @@ class _InformationCourseViewStage extends State<InformationCourseView> {
                                                               Text(
                                                                 '${index +1}',
                                                                 style: const TextStyle(
-                                                                  fontSize: 15, color: Colors.black,
+                                                                  fontSize: 15,
                                                                 ),
                                                               ),
                                                               Text(
                                                                 courseDetail.topics![index].name ?? "",
                                                                 style: const TextStyle(
-                                                                  fontSize: 15, color: Colors.black,
+                                                                  fontSize: 15,
                                                                 ),
                                                               ),
                                                             ],

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../data/language.dart';
 import '../../model/user.dart';
+import '../../providers/activateTheme.dart';
 import '../../routing/routes.dart';
 import '../../services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     language = prefs.getString('setLanguage')?? "en-US";
+    final checkTheme = prefs.getString('theme');
+    print(checkTheme);
+    updateTheme(checkTheme!);
     setState(() {
       language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
     });

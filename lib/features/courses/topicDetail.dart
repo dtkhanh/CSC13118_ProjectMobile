@@ -78,7 +78,7 @@ class _TopicDetailPage extends State<TopicDetail> {
                                   Text(
                                     widget.courseDetail.name ?? "",
                                     style: const TextStyle(
-                                        fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold
+                                        fontSize: 20, fontWeight: FontWeight.bold
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -95,9 +95,10 @@ class _TopicDetailPage extends State<TopicDetail> {
                                   const Text(
                                     'List Topics',
                                     style: TextStyle(
-                                        fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold
+                                        fontSize: 20, fontWeight: FontWeight.bold
                                     ),
                                   ),
+                                  const SizedBox(height: 10,),
 
                                   Column(
                                     children: List<Widget>.generate(
@@ -135,10 +136,8 @@ class _TopicDetailPage extends State<TopicDetail> {
                                 ],
                               )
                           )
-
                         ],
                       ),
-
                     ),
                   ),
                 ),

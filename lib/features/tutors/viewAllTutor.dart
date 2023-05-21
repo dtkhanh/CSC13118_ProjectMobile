@@ -26,7 +26,7 @@ class _TuTorViewStage extends State<TuTorView> {
   static List<String> filter = [];
   final _searchName = TextEditingController();
 
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {
@@ -222,7 +222,7 @@ class _TuTorViewStage extends State<TuTorView> {
                         ),
                       ),
                     ),
-                    child: Text(lag.ResetFilters, style: const TextStyle(fontSize: 16)),
+                    child: Text(lag.ResetFilters, style: TextStyle(fontSize: 16,  color: Colors.grey.shade800,)),
                   ),
                 ),
                 gapH4,
