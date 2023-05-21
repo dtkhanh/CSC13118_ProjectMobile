@@ -21,6 +21,7 @@ class _TuTorViewStage extends State<TuTorView> {
   int chosenFilter = 0;
   List<Tutor> listTutor = [];
   bool checkData = false;
+  String nationality ="";
   static  int _totalPage = 0;
   static String specialties = "";
   static List<String> filter = [];
@@ -150,13 +151,26 @@ class _TuTorViewStage extends State<TuTorView> {
                               child:   DropdownButtonFormField(
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-                                  hintText: lag.selectNatio,
+                                  hintText: nationality == "" ? lag.selectNatio : nationality,
                                   hintStyle: TextStyle(color: Colors.grey[400],  ),
                                   border: const OutlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey,),
                                       borderRadius: BorderRadius.all(Radius.circular(20))),
                                 ),
-                                onChanged: (value) {}, items: const [],
+                                onChanged: (value) {
+                                  setState(() {
+                                    nationality = value!;
+                                  });
+                                }, items: <String>['Foreign Tutor', 'Vietnamese Tutor', 'Native English Tutor'].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child:Text(
+                                    value,
+                                    style: const TextStyle(color: Colors.black, fontSize: 13, ),
+                                  ),
+
+                                );
+                              }).toList(),
                               ),
                             ),
                           ],
@@ -204,6 +218,7 @@ class _TuTorViewStage extends State<TuTorView> {
                         chosenFilter = 0;
                         specialties = filters[0].toLowerCase().replaceAll(' ', '-');
                         _searchName.clear();
+                        nationality ="";
                       });
                       _pagingController.refresh();
                     },

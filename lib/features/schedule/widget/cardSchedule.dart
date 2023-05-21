@@ -25,6 +25,7 @@ class _CardScheduleStage extends State<CardSchedule> {
   String reasonCancel = "";
   String checkTheme ="";
   Language lag = Language(id: "vi-Vn");
+  bool checkBook =true;
 
   @override
   void initState() {
@@ -39,6 +40,14 @@ class _CardScheduleStage extends State<CardSchedule> {
       language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
       checkTheme = _theme!;
     });
+  }
+
+  bool checkBooking(BookingInfo book){
+    int? milliseconds = book.scheduleDetailInfo!.startPeriodTimestamp; // Giá trị thời gian trong milliseconds
+    DateTime currentTime = DateTime.now(); // Giờ hiện tại
+    Duration diff = currentTime.difference(DateTime.fromMillisecondsSinceEpoch(milliseconds!));
+    bool isTimeDifferenceAtLeast2Hours = diff.inHours.abs() < 2;
+    return isTimeDifferenceAtLeast2Hours;
   }
 
   void cancelBooking( String scheduleDetail) async {
@@ -371,7 +380,11 @@ class _CardScheduleStage extends State<CardSchedule> {
                                                     padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                                                     child: Align(
                                                       alignment: Alignment.topRight,
-                                                      child: OutlinedButton.icon(
+                                                      child: checkBooking(widget.bookings[index]) == true
+                                                      ?
+                                                      const Text("")
+                                                      :
+                                                      OutlinedButton.icon(
                                                         style: ButtonStyle(
                                                           side: MaterialStateProperty.all(const BorderSide(
                                                             color: Colors.red,

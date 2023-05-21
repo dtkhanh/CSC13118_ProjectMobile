@@ -15,6 +15,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _email= TextEditingController();
   Map<String, dynamic>? forgot;
   Language lag = Language(id: "vi-Vn");
+  bool check = false;
 
   @override
   void initState() {
@@ -43,7 +44,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email send success!')),
           );
-          Navigator.pop(context);
+          setState(() {
+            check =true;
+          });
+          // Navigator.pop(context);
         });
       }
     } catch (e) {
@@ -75,7 +79,37 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         body: SingleChildScrollView(
           child:  Padding(
             padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-            child: Column(
+            child: check ?
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/lettutor.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      gapH8,
+                      const Text(
+                          ' LET TUTOR ',
+                          style: TextStyle(
+                              color: Colors.blue, fontSize: 24
+                          )),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40,),
+                Text(
+                    lag.getId =="vi-Vn" ? "Kiểm tra hộp thư đến trong email để đặt lại mật khẩu của bạn." : "Check your inbox for a link to reset your password.",
+                  style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )
+            :
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                  Center(

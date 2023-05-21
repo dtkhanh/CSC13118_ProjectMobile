@@ -1,5 +1,7 @@
 import 'package:csc13118_mobile/model/walletInfo.dart';
 
+import 'course.dart';
+
 class User {
   String? id;
   String? email;
@@ -12,7 +14,7 @@ class User {
   String? birthday;
   bool? isActivated;
   WalletInfo? walletInfo;
-  List<String>? courses;
+  List<Course>? courses;
   String? requireNote;
   String? level;
   List<String>? learnTopics;
@@ -57,7 +59,14 @@ class User {
     birthday = json['birthday'];
     isActivated = json['isActivated'];
     walletInfo =   json['walletInfo'] != null ? WalletInfo.fromJson(json['walletInfo']) : null;
-    courses = [];
+    if (json['courses'] != null) {
+      courses = <Course>[];
+      json['courses'].forEach((cour) {
+        courses!.add(Course.fromJson(cour));
+      });
+    }else{
+      courses = <Course>[];
+    }
     requireNote = json['requireNote'];
     level = json['level'];
     learnTopics = [];
@@ -81,7 +90,10 @@ class User {
     data['birthday'] = birthday;
     data['isActivated'] = isActivated;
     data['walletInfo'] = walletInfo != null ? walletInfo!.toJson() : [];
-    data['courses'] = [];
+    courses != null ?
+    data['courses'] = courses!.map((feedBack) => feedBack.toJson()).toList()
+        :
+    data['courses']=[];
     data['requireNote'] = requireNote;
     data['level'] = level;
     data['learnTopics'] = [];

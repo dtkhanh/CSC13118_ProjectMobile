@@ -37,7 +37,6 @@ class _SettingViewState extends State<SettingView> {
   @override
   void initState() {
     super.initState();
-    print(theme);
     _initPrefs();
   }
   Future<void> _initPrefs() async {

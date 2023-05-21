@@ -63,15 +63,6 @@ class UserService {
     );
 
     final jsonDecode = json.decode(response.body);
-    print("update");
-    print( json.encode({
-      'name': name,
-      'country': country,
-      'phone': phone,
-      'birthday': birthday,
-      'level': level
-    }),);
-    print(jsonDecode["user"]);
     if (response.statusCode != 200) {
       throw Exception(jsonDecode(['message']));
     }

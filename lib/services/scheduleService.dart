@@ -9,21 +9,22 @@ class ScheduleService {
   static Future<List<Schedule>> getScheduleByTutorId({
     required String token,
     required String userId,
+    required int timeStart,
   }) async {
-    final response = await post(Uri.parse('$url/schedule'),
+    final response = await get(Uri.parse('$url/schedule/?tutorId=$userId&startTimestamp=$timeStart&endTimestamp=1703869200000'),
     headers: {
       'Authorization': 'Bearer $token',
-    },
-    body:{
-      'tutorId': userId,
     },);
+    // body:{
+    //   'tutorId': userId,
+    // },);
 
 
     final jsonDecode = json.decode(response.body);
     if (response.statusCode != 200) {
       throw Exception(jsonDecode(['message']));
     }
-    List<dynamic> listSchedule = jsonDecode['data'] ;
+    List<dynamic> listSchedule = jsonDecode['scheduleOfTutor'] ;
 
     return listSchedule.map((schedule) => Schedule.fromJson(schedule)).toList();
   }

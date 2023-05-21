@@ -87,6 +87,13 @@ class _HomeViewStage extends State<HomeView> {
     result += minute > 0 ? ' $minute ${minute > 1 ? 'minutes' : 'minute'}' : '';
     return result;
   }
+  bool isTimeToJoin() {
+    final startTimestamp = _upComing?.scheduleDetailInfo?.startPeriodTimestamp ?? 0;
+    final startTime = DateTime.fromMillisecondsSinceEpoch(startTimestamp);
+    final now = DateTime.now();
+    return now.isAfter(startTime) || now.isAtSameMomentAs(startTime);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -153,23 +160,18 @@ class _HomeViewStage extends State<HomeView> {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),),
                         onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          // JitsiMeetingOptions options = JitsiMeetingOptions(roomNameOrUrl:'cb9e7deb-3382-48db-b07c-90acf52f541c-4d54d3d7-d2a9-42e5-97a2-5ed38af5789a', serverUrl: "https://meet.lettutor.com/", token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250ZXh0Ijp7InVzZXIiOnsiZW1haWwiOiJwaGhhaUB5bWFpbC5jb20iLCJuYW1lIjoicGhoYWkifX0sInJvb20iOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMtNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwicm9vbU5hbWUiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMtNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwidXNlckNhbGwiOnsiaWQiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMiLCJlbWFpbCI6InBoaGFpQHltYWlsLmNvbSIsIm5hbWUiOiJwaGhhaSIsImF2YXRhciI6Imh0dHBzOi8vc2FuZGJveC5hcGkubGV0dHV0b3IuY29tL2F2YXRhci9jYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWNhdmF0YXIxNjgzMTA0NDI4MzU1LmpwZyIsImNvdW50cnkiOiJWTiIsInBob25lIjoiODQyNDk5OTk2NTA4IiwibGFuZ3VhZ2UiOm51bGwsImJpcnRoZGF5IjoiMTk5OS0wNi0wMyIsImlzQWN0aXZhdGVkIjp0cnVlLCJyZXF1aXJlTm90ZSI6IktvIHRoaWNoIGhvYyIsImxldmVsIjoiSElHSEVSX0JFR0lOTkVSIiwiaXNQaG9uZUFjdGl2YXRlZCI6dHJ1ZSwidGltZXpvbmUiOjcsInN0dWR5U2NoZWR1bGUiOiJLbyB0aGljaCBob2MiLCJjYW5TZW5kTWVzc2FnZSI6ZmFsc2V9LCJ1c2VyQmVDYWxsZWQiOnsiaWQiOiI0ZDU0ZDNkNy1kMmE5LTQyZTUtOTdhMi01ZWQzOGFmNTc4OWEiLCJlbWFpbCI6InRlYWNoZXJAbGV0dHV0b3IuY29tIiwibmFtZSI6IktlZWdhbiIsImF2YXRhciI6Imh0dHBzOi8vYXBpLmFwcC5sZXR0dXRvci5jb20vYXZhdGFyLzRkNTRkM2Q3LWQyYTktNDJlNS05N2EyLTVlZDM4YWY1Nzg5YWF2YXRhcjE2Mjc5MTMwMTU4NTAuMDAiLCJjb3VudHJ5IjoiVk4iLCJwaG9uZSI6Ijg0MzU2MDMwODc2IiwibGFuZ3VhZ2UiOiJVa3JhaW5pYW4iLCJiaXJ0aGRheSI6IjE5OTktMDYtMDEiLCJpc0FjdGl2YXRlZCI6dHJ1ZSwidHV0b3JJbmZvIjp7ImlkIjoiNmNhNWMwOTItNzZlYS00ZTcyLTljNmUtMDVlMjIzOWFhMzNiIiwidXNlcklkIjoiNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwidmlkZW8iOiJodHRwczovL2FwaS5hcHAubGV0dHV0b3IuY29tL3ZpZGVvLzRkNTRkM2Q3LWQyYTktNDJlNS05N2EyLTVlZDM4YWY1Nzg5YXZpZGVvMTYyNzkxMzAxNTg3MS5tcDQiLCJiaW8iOiJJIGFtIHBhc3Npb25hdGUgYWJvdXQgcnVubmluZyBhbmQgZml0bmVzcywgSSBvZnRlbiBjb21wZXRlIGluIHRyYWlsL21vdW50YWluIHJ1bm5pbmcgZXZlbnRzIGFuZCBJIGxvdmUgcHVzaGluZyBteXNlbGYuIEkgYW0gdHJhaW5pbmcgdG8gb25lIGRheSB0YWtlIHBhcnQgaW4gdWx0cmEtZW5kdXJhbmNlIGV2ZW50cy4gSSBhbHNvIGVuam95IHdhdGNoaW5nIHJ1Z2J5IG9uIHRoZSB3ZWVrZW5kcywgcmVhZGluZyBhbmQgd2F0Y2hpbmcgcG9kY2FzdHMgb24gWW91dHViZS4gTXkgbW9zdCBtZW1vcmFibGUgbGlmZSBleHBlcmllbmNlIHdvdWxkIGJlIGxpdmluZyBpbiBhbmQgdHJhdmVsaW5nIGFyb3VuZCBTb3V0aGVhc3QgQXNpYS4iLCJlZHVjYXRpb24iOiJCQSIsImV4cGVyaWVuY2UiOiJJIGhhdmUgbW9yZSB0aGFuIDEwIHllYXJzIG9mIHRlYWNoaW5nIGVuZ2xpc2ggZXhwZXJpZW5jZSIsInByb2Zlc3Npb24iOiJFbmdsaXNoIHRlYWNoZXIiLCJhY2NlbnQiOm51bGwsInRhcmdldFN0dWRlbnQiOiJBZHZhbmNlZCIsImludGVyZXN0cyI6IiBJIGxvdmVkIHRoZSB3ZWF0aGVyLCB0aGUgc2NlbmVyeSBhbmQgdGhlIGxhaWQtYmFjayBsaWZlc3R5bGUgb2YgdGhlIGxvY2Fscy4iLCJsYW5ndWFnZXMiOiJlbiIsInNwZWNpYWx0aWVzIjoiYnVzaW5lc3MtZW5nbGlzaCxjb252ZXJzYXRpb25hbC1lbmdsaXNoLGVuZ2xpc2gtZm9yLWtpZHMsaWVsdHMsc3RhcnRlcnMsbW92ZXJzLGZseWVycyxrZXQscGV0LHRvZWZsLHRvZWljIiwicmVzdW1lIjpudWxsLCJyYXRpbmciOjQuMjQ3MTkxMDExMjM1OTU1LCJpc0FjdGl2YXRlZCI6dHJ1ZSwiaXNOYXRpdmUiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMDgtMDJUMTQ6MDM6MzYuMzIwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMDUtMDNUMTU6MzU6NTQuMjQyWiJ9LCJyZXF1aXJlTm90ZSI6bnVsbCwibGV2ZWwiOiJISUdIRVJfQkVHSU5ORVIiLCJpc1Bob25lQWN0aXZhdGVkIjpudWxsLCJ0aW1lem9uZSI6Nywic3R1ZHlTY2hlZHVsZSI6IjEyMzQ1NjciLCJjYW5TZW5kTWVzc2FnZSI6ZmFsc2V9LCJpc1R1dG9yIjpmYWxzZSwic3RhcnRUaW1lIjoxNjgzMjEwNjAwMDAwLCJlbmRTZXNzaW9uIjoxNjgzMjEyMTAwMDAwLCJ0aW1lSW5Sb29tIjoxODAwLCJib29raW5nSWQiOiI4OGNiNGFmZS1iMzc2LTQ2OGItOGFkYS1jNzM1MTlmNzJhZmUiLCJpYXQiOjE2ODMyMDk3MDAsImV4cCI6MTY4MzIyNjQ5OSwiYXVkIjoibGl2ZXR1dG9yIiwiaXNzIjoibGl2ZXR1dG9yIiwic3ViIjoiaHR0cHM6Ly9tZWV0LnR1dG9yaW5nLmxldHN0dWR5LmlvIn0.tRavpFrC078S8g5QcYdafg84eoNs_r894MDHcQ-0B1A');
-                          Map<String, dynamic> jwtDecoded = JwtDecoder.decode(_upComing?.studentMeetingLink?.split('token=')[1] ?? '');
-                          Map<FeatureFlag, bool> featureFlags = {
-                            FeatureFlag.isWelcomePageEnabled: false,
-                          };
-
-                          JitsiMeetingOptions options = JitsiMeetingOptions(
-                            roomNameOrUrl:jwtDecoded['room'],
-                            serverUrl: "https://meet.lettutor.com/",
-                            token: _upComing?.studentMeetingLink?.split('token=')[1],
-                            isAudioMuted: true,
-                            isVideoMuted: true,
-                            isAudioOnly: true,
-                            // featureFlags: featureFlags
-                          );
-                          await JitsiMeetWrapper.joinMeeting( options: options);
+                          final String meetingToken = _upComing?.studentMeetingLink?.split('token=')[1] ?? '';
+                          Map<String, dynamic> jwtDecoded = JwtDecoder.decode(meetingToken);
+                          final String room = jwtDecoded['room'];
+                            JitsiMeetingOptions options = JitsiMeetingOptions(
+                              roomNameOrUrl: room,
+                              serverUrl: "https://meet.lettutor.com/",
+                              token: meetingToken,
+                              isAudioMuted: false,
+                              isVideoMuted: false,
+                              isAudioOnly: false,
+                            );
+                            await JitsiMeetWrapper.joinMeeting( options: options);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,

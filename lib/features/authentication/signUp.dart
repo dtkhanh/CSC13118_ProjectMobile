@@ -261,6 +261,7 @@ class _SignUpState extends State<SignUp> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(),
                   onPressed: () {
+                    _handleValidation();
                     registerAccount();
                   },
                   child: Padding(

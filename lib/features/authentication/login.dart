@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
   late User user;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
   String _ErrorInputEmail ="";
   String _ErrorInputPass ="";
   @override
@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     language = prefs.getString('setLanguage')?? "en-US";
     final checkTheme = prefs.getString('theme');
-    print(checkTheme);
     updateTheme(checkTheme!);
     setState(() {
       language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");

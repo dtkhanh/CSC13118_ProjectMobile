@@ -105,7 +105,7 @@ class _ScheduleViewStage extends State<ScheduleView> {
       if (currentGroup.isEmpty || currentStartTime.difference(DateTime.fromMillisecondsSinceEpoch(
           currentGroup.last.scheduleDetailInfo?.endPeriodTimestamp ?? 0)).inMinutes <= 5
           && currentDateTime == DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(
-              currentGroup.last.scheduleDetailInfo!.startPeriodTimestamp ?? 0))) {
+              currentGroup.last.scheduleDetailInfo!.startPeriodTimestamp ?? 0)) && currentItem.userId ==currentGroup.last.userId) {
         currentGroup.add(listBookClass[i]);
       } else {
         groupedItemsNew.add(currentGroup);

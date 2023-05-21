@@ -52,7 +52,6 @@ class _ProflileViewState extends State<ProflileView> {
       });
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
-      print(country);
       final userInfo = await UserService.UpdateInformation(token: check!,
           name: _name.text =="" ? user.name ?? "" : _name.text ,
           country: country =="" ? user.country ?? "" : country,
