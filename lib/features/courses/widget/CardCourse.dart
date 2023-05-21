@@ -17,7 +17,7 @@ class CardCourse extends StatefulWidget {
 
 class _CardCourseStage extends State<CardCourse> {
   int rate = 5;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

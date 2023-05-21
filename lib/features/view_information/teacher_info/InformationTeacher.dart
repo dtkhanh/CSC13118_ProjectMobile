@@ -3,10 +3,11 @@ import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import '../../../constants/appSizes.dart';
+import '../../../data/data.dart';
 import '../../../data/language.dart';
 import '../../../model/course.dart';
 import '../../../model/tutor/feedback.dart';
@@ -37,7 +38,7 @@ class _InforTeacherState extends State<InforTeacher> {
   // late bool checkFavorite ;
   final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
 
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {
@@ -216,16 +217,9 @@ class _InforTeacherState extends State<InforTeacher> {
                                 ),),
                                 Row(
                                   children: [
-                                    SvgPicture.asset(
-                                      "assets/svg/icon.svg",
-                                      semanticsLabel:
-                                      'Logo Icon',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    const SizedBox(
-                                        width: 5),
-                                    const Text("France", style: TextStyle(fontSize: 16)),
+                                    const Icon(Icons.flag_circle_rounded, color: Colors.blue,size: 20,),
+                                    gapW4,
+                                    Text(countryList[infoTutor.user?.country ?? ""] ?? "", style: const TextStyle(fontSize: Sizes.p16)),
                                   ],
                                 ),
                                 Ratting(rating: infoTutor.rating ?? 0,),
@@ -350,18 +344,6 @@ class _InforTeacherState extends State<InforTeacher> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding:const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       backgroundColor : Colors.lightBlue[100] , // set the background color of the button
-                      //     ),
-                      //     child: Text( 'English', style: TextStyle( color:Colors.blue[700] ,
-                      //     ),),
-                      //   ),
-                      // ),
                       const SizedBox(height: 15,),
                       Text(lag.specialties,  style: const TextStyle(
                         fontSize: 16,
@@ -393,24 +375,6 @@ class _InforTeacherState extends State<InforTeacher> {
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),),
-                      // Padding(
-                      //   padding:const EdgeInsets.fromLTRB(5, 20, 0, 0),
-                      //   child: Row(
-                      //     children: const [
-                      //       Text('Basic Conversation Topics:',  style: TextStyle(
-                      //         fontSize: 15,
-                      //         fontWeight: FontWeight.bold,
-                      //         color: Colors.black,
-                      //       ),),
-                      //       Text(' Link',  style: TextStyle(
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.bold,
-                      //         color: Colors.blue,
-                      //       ),),
-                      //
-                      //     ],
-                      //   ),
-                      // ),
                       Wrap(
                         spacing: 8,
                         runSpacing: -4,

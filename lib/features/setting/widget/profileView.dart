@@ -34,10 +34,12 @@ class _ProflileViewState extends State<ProflileView> {
       final userInfo = await UserService.getUserInformation(token: check!);
       setState(() {
         user=userInfo;
-        _birthDay = userInfo.birthday ?? 'yyyy-MM-dd';
+        // _birthDay = userInfo.birthday ?? 'yyyy-MM-dd';
         _studyScheduleController.text = userInfo.studySchedule ?? 'null';
         _isLoading = true;
       });
+      print(_birthDay);
+
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),
@@ -50,6 +52,8 @@ class _ProflileViewState extends State<ProflileView> {
       setState(() {
         _isLoading = false;
       });
+      print("updateInformation");
+      print(_birthDay);
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
       final userInfo = await UserService.UpdateInformation(token: check!,
@@ -60,7 +64,6 @@ class _ProflileViewState extends State<ProflileView> {
           level: level =="" ? user.level ?? "" :  level,
           studySchedule: _studyScheduleController.text == "" ? user.studySchedule.toString() :_studyScheduleController.text ,
       );
-      getInfomation();
       setState(() {
         user=userInfo;
         _isLoading = true;
@@ -216,9 +219,10 @@ class _ProflileViewState extends State<ProflileView> {
                gapH2,
                const SizedBox(height: 4),
                SelectDate(
-                 initialValue: _birthDay,
+                 initialValue: user.birthday ?? "" ,
                  onChanged: (newValue) {
                    setState(() {
+                     print(newValue);
                      _birthDay = newValue;
                    });
                  },

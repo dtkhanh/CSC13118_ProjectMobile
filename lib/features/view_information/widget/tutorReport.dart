@@ -25,7 +25,7 @@ class _TutorReportDialogStage extends State<TutorReport> {
   ];
   final _content = TextEditingController();
   final List<bool> _choices = [false, false, false];
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

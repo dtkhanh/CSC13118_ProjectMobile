@@ -30,7 +30,7 @@ class _HomeViewStage extends State<HomeView> {
   Map<String, dynamic>? _total;
   int _totalCall = 0;
   BookingInfo? _upComing;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

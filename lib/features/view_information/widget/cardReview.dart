@@ -14,7 +14,7 @@ class CardReview extends StatefulWidget {
 }
 
 class _CardReviewStage extends State<CardReview> {
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

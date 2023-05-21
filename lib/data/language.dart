@@ -62,7 +62,7 @@ class Language {
   String get dayAgo => getId =="vi-Vn"? 'ngày trước' : 'days ago';
 
   //Report
-  String get helpUs => getId =="vi-Vn"? 'Bạn đang gặp phải vấn đề gì' : 'Help us understand what is happening';
+  String get helpUs => getId =="vi-Vn"? 'Bạn đang gặp phải vấn đề gì' : 'Help us understand what happening';
   String get tutor1 => getId =="vi-Vn"? 'Gia sư này làm phiền tôi' : 'days ago';
   String get tutor2 => getId =="vi-Vn"? 'Hồ sơ này là giả mạo' : 'days ago';
   String get tutor3 => getId =="vi-Vn"? 'Ảnh hồ sơ không phù hợp' : 'days ago';

@@ -1,12 +1,11 @@
 import 'package:csc13118_mobile/features/tutors/widget/viewRatting.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../../data/data.dart';
 import '../../../data/language.dart';
 import '../../../model/tutor/infoTutor.dart';
 import '../../../model/tutor/tutor.dart';
-import '../../../providers/activateTheme.dart';
 import '../../../services/tutorService.dart';
 import '../../view_information/teacher_info/InformationTeacher.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +23,7 @@ class _CardTutorStage extends State<CardTutor> {
   int chosenFilter = 0;
   final ValueNotifier<bool> checkFavorite = ValueNotifier<bool>(true);
   late InfoTutor infoTutor;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {
@@ -123,14 +122,9 @@ class _CardTutorStage extends State<CardTutor> {
                             ),
                             Row(
                               children: [
-                                SvgPicture.asset(
-                                  "assets/svg/icon.svg",
-                                  semanticsLabel: 'Logo Icon',
-                                  width: 25,
-                                  height: 25,
-                                ),
+                                const Icon(Icons.flag_circle_rounded, color: Colors.blue,size: 25,),
                                 gapW4,
-                                const Text("France", style: TextStyle(fontSize: Sizes.p16)),
+                                Text(countryList[widget.tutor.country ?? ""] ?? "", style: TextStyle(fontSize: Sizes.p16)),
                               ],
                             ),
                             const SizedBox(height: 5),

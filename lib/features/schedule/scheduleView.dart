@@ -23,7 +23,7 @@ class _ScheduleViewStage extends State<ScheduleView> {
   bool render = false;
   static  int _totalPage = 0;
   List<List<BookingInfo>> groupedItems = [];
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
 
   @override

@@ -14,7 +14,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _email= TextEditingController();
   Map<String, dynamic>? forgot;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
   bool check = false;
 
   @override

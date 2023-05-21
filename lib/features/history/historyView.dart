@@ -18,7 +18,7 @@ class _HistoryViewStage extends State<historyView> {
   int chosenFilter = 0;
   List<BookingInfo> listBookClass = [];
   bool checkData = false;
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

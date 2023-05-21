@@ -34,7 +34,7 @@ class _DiscoverCoursesViewStage extends State<DiscoverCourses> {
   static  int _totalPage = 0;
   int listLevel =100;
   List<String> levels = ['Any level', 'Beginner', 'Upper-Beginner', 'Pre-Intermediate','Upper-Intermediate','Pre-advanced','Advanced'];
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

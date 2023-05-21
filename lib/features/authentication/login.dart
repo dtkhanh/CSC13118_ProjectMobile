@@ -165,9 +165,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginPage() async {
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      // _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
-      // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
+      _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
       // userProvider.addUserProvider(user, token);
@@ -319,13 +319,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       onPressed: () {
+                        _handleValidation();
+                        _handleValidationPass();
                         loginPage();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
                           lag.buttonLogin,
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     ),

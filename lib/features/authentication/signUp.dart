@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
   String _ErrorInputEmail ="";
   String _ErrorInputPass ="";
   String _ErrorInputPassConfirm ="";
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
 
   @override
   void initState() {

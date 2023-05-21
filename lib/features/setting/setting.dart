@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/appSizes.dart';
 import '../../../routing/routes.dart';
+import '../../data/language.dart';
 import '../../model/user.dart';
 import '../../providers/activateTheme.dart';
 import '../../services/userService.dart';
@@ -33,6 +34,9 @@ class _SettingViewState extends State<SettingView> {
   bool check = true;
   final theme = activeTheme.state;
 
+  Language lag = Language(id: "en-US");
+
+
 
   @override
   void initState() {
@@ -42,6 +46,9 @@ class _SettingViewState extends State<SettingView> {
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
   }
 
 

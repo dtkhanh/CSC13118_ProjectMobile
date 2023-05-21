@@ -24,7 +24,7 @@ class _CardScheduleStage extends State<CardSchedule> {
   late final _noteText = TextEditingController();
   String reasonCancel = "";
   String checkTheme ="";
-  Language lag = Language(id: "vi-Vn");
+  Language lag = Language(id: "en-US");
   bool checkBook =true;
 
   @override
@@ -136,54 +136,52 @@ class _CardScheduleStage extends State<CardSchedule> {
                       color: Colors.grey[800]),
                 ),
                 gapH8,
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    hintText: reasonCancel.isNotEmpty ? reasonCancel : '',
-                    hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
-                    border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      reasonCancel = value!;
-                    });
-                  }, items: <String>['Reschedule at another time',
-                  'Busy at that time',
-                  'Asked by the tutor',
-                  'Other',].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                    ),
-                  );
-                }).toList(),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: TextField(
-                    controller: _noteText,
-                    minLines: 3,
-                    maxLines: 4,
-                    decoration: const InputDecoration(
-                      hintText: 'Additional Notes',
-                      hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
-                      contentPadding: EdgeInsets.all(12),
-                      border: OutlineInputBorder(
+                Expanded(
+                  child:  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      hintText: reasonCancel.isNotEmpty ? reasonCancel : '',
+                      hintStyle: const TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
+                      border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        reasonCancel = value!;
+                      });
+                    }, items: <String>['Reschedule at another time',
+                    'Busy at that time',
+                    'Asked by the tutor',
+                    'Other',].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                      ),
+                    );
+                  }).toList(),
                   ),
                 ),
+                Expanded(child: TextField(
+                  controller: _noteText,
+                  minLines: 2,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    hintText: 'Additional Notes',
+                    hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey, fontSize: 15),
+                    contentPadding: EdgeInsets.all(12),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                  ),
+                ),)
               ],
             ),
           ),
-          actions: [
+          actions: <Widget>[
             TextButton(
                 onPressed: () {
                   setState(() {
@@ -196,7 +194,7 @@ class _CardScheduleStage extends State<CardSchedule> {
                   'Later',
                   style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 )),
-            reasonCancel.isNotEmpty ?
+            reasonCancel.isEmpty ?
             TextButton(
                 onPressed: () async {
                   cancelBooking(id);
@@ -206,16 +204,15 @@ class _CardScheduleStage extends State<CardSchedule> {
                   Navigator.pop(context);
                 },
                 child: const Text('Submit', style: TextStyle(color: Colors.blue , fontWeight: FontWeight.bold),))
-            :
+                :
             TextButton(
-            onPressed: () async {
-              reasonCancel = "";
-              _noteText.text = "";
-              widget.onPressed;
-            },
-            child: const Text('Submit', style: TextStyle(color: Colors.grey , fontWeight: FontWeight.bold),)),
-
-            ],
+                onPressed: () async {
+                  reasonCancel = "";
+                  _noteText.text = "";
+                  widget.onPressed;
+                },
+                child: const Text('Submit', style: TextStyle(color: Colors.grey , fontWeight: FontWeight.bold),)),
+          ],
         );
       },
     );
