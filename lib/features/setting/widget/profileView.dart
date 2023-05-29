@@ -1,12 +1,11 @@
+import 'package:csc13118_mobile/features/setting/widget/selectDate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/appSizes.dart';
+import '../../../data/data.dart';
 import '../../../model/user.dart';
-import '../../../providers/userProvider.dart';
-import '../../../routing/routes.dart';
 import '../../../services/userService.dart';
 
 class ProflileView extends StatefulWidget {
@@ -21,9 +20,11 @@ class _ProflileViewState extends State<ProflileView> {
   bool _isLoading = false;
   final _name = TextEditingController();
   final _phone = TextEditingController();
-  final _birthDay = TextEditingController();
+  String _birthDay = "";
   String country = "";
   String level = "";
+  final _studyScheduleController = TextEditingController();
+
 
 
   void getInfomation() async {
@@ -33,8 +34,12 @@ class _ProflileViewState extends State<ProflileView> {
       final userInfo = await UserService.getUserInformation(token: check!);
       setState(() {
         user=userInfo;
+        // _birthDay = userInfo.birthday ?? 'yyyy-MM-dd';
+        _studyScheduleController.text = userInfo.studySchedule ?? 'null';
         _isLoading = true;
       });
+      print(_birthDay);
+
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),
@@ -47,20 +52,22 @@ class _ProflileViewState extends State<ProflileView> {
       setState(() {
         _isLoading = false;
       });
+      print("updateInformation");
+      print(_birthDay);
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
       final userInfo = await UserService.UpdateInformation(token: check!,
           name: _name.text =="" ? user.name ?? "" : _name.text ,
           country: country =="" ? user.country ?? "" : country,
           phone: _phone.text =="" ? user.phone ?? "" : _phone.text,
-          birthday: _birthDay.text =="" ? user.birthday ?? "" :  _birthDay.text,
-          level: level =="" ? user.level ?? "" :  level,);
+          birthday: _birthDay =="" ? user.birthday ?? "" :  _birthDay,
+          level: level =="" ? user.level ?? "" :  level,
+          studySchedule: _studyScheduleController.text == "" ? user.studySchedule.toString() :_studyScheduleController.text ,
+      );
       setState(() {
         user=userInfo;
         _isLoading = true;
       });
-      print("updateInformation");
-      print(userInfo);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error Login: ${e.toString()}')),
@@ -210,19 +217,29 @@ class _ProflileViewState extends State<ProflileView> {
                      color: Colors.grey[800]),
                ),
                gapH2,
-               TextField(
-                   style:
-                   TextStyle(fontSize: 15, color: Colors.grey[700]),
-                   controller: _birthDay,
-                   decoration: InputDecoration(
-                       filled: true,
-                       fillColor: Colors.grey.shade100,
-                       border: const OutlineInputBorder(
-                           borderSide: BorderSide.none,
-                           borderRadius:
-                           BorderRadius.all(Radius.circular(10))),
-                       hintText: user.birthday ?? "")
+               const SizedBox(height: 4),
+               SelectDate(
+                 initialValue: user.birthday ?? "" ,
+                 onChanged: (newValue) {
+                   setState(() {
+                     print(newValue);
+                     _birthDay = newValue;
+                   });
+                 },
                ),
+               // TextField(
+               //     style:
+               //     TextStyle(fontSize: 15, color: Colors.grey[700]),
+               //     controller: _birthDay,
+               //     decoration: InputDecoration(
+               //         filled: true,
+               //         fillColor: Colors.grey.shade100,
+               //         border: const OutlineInputBorder(
+               //             borderSide: BorderSide.none,
+               //             borderRadius:
+               //             BorderRadius.all(Radius.circular(10))),
+               //         hintText: user.birthday ?? "")
+               // ),
                gapH8,
                Text(
                  "Country",
@@ -236,7 +253,7 @@ class _ProflileViewState extends State<ProflileView> {
                  decoration: InputDecoration(
                    filled: true,
                    fillColor: Colors.grey.shade100,
-                   hintText: user.country ?? 'Please select your country',
+                   hintText: countryList[user.country] ?? 'Please select your country',
                    hintStyle:TextStyle(fontSize: 15, color: Colors.grey[700]),
                    border: const OutlineInputBorder(
                        borderSide: BorderSide.none,
@@ -244,18 +261,22 @@ class _ProflileViewState extends State<ProflileView> {
                        BorderRadius.all(Radius.circular(10))),
                  ),
                  onChanged: (value) {
+                   final chosenCountry = countryList.keys.firstWhere(
+                         (element) => countryList[element] == value,
+                     orElse: () => 'US',
+                   );
                    setState(() {
-                     country = value!;
+                     country = chosenCountry;
                    });
-                 }, items: <String>['VietNam', 'Albania', 'America', 'Andorra'].map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
-                   value: value,
-                   child: Text(
-                     value,
-                     style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                   ),
-                 );
-               }).toList(),
+                 }, items: countryList.values.map((e) =>
+                   DropdownMenuItem(
+                     value: e,
+                     child: Text(
+                       e,
+                       style: TextStyle(fontSize: 11, color: Colors.grey[700]),
+                     ),
+                   ))
+                   .toList(),
                ),
                gapH8,
                Text(
@@ -270,7 +291,7 @@ class _ProflileViewState extends State<ProflileView> {
                  decoration: InputDecoration(
                    filled: true,
                    fillColor: Colors.grey.shade100,
-                   hintText: user.level ??'Please select your level',
+                   hintText: userLevels[user.level] ??'Please select your level',
                    hintStyle:TextStyle(fontSize: 15, color: Colors.grey[700]),
                    border: const OutlineInputBorder(
                        borderSide: BorderSide.none,
@@ -278,18 +299,46 @@ class _ProflileViewState extends State<ProflileView> {
                        BorderRadius.all(Radius.circular(10))),
                  ),
                  onChanged: (value) {
+                   final chosenLevel = userLevels.keys.firstWhere(
+                         (element) => userLevels[element] == value,
+                     orElse: () => 'BEGINNER',
+                   );
                    setState(() {
-                     level = value!;
+                     level = chosenLevel;
                    });
-                 }, items: <String>['BEGINNER','HIGHER_BEGINNER', 'INTERMEDIATE', 'ADVANCED','PROFICIENCY'].map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
-                   value: value,
-                   child: Text(
-                     value,
-                     style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                 },
+                 items: userLevels.values
+                     .map((e) => DropdownMenuItem(
+                   value: e,
+                   child: Text(e, overflow: TextOverflow.ellipsis),
+                 )).toList(),
+               ),
+               gapH16,
+               Text(
+                 'Study Schedule:',
+                 style: TextStyle(
+                     fontSize: 20,
+                     fontWeight: FontWeight.bold,
+                     color: Colors.grey[800]),
+               ),
+               const SizedBox(height: 4),
+               TextField(
+                 controller: _studyScheduleController,
+                 autocorrect: false,
+                 decoration: InputDecoration(
+                   filled: true,
+                   fillColor: Colors.grey.shade100,
+                   hintText: user.studySchedule ??'',
+                   hintStyle:TextStyle(fontSize: 15, color: Colors.grey[700]),
+                   contentPadding: const EdgeInsets.symmetric(
+                     vertical: 4,
+                     horizontal: 8,
                    ),
-                 );
-               }).toList(),
+                   border:  const OutlineInputBorder(
+                       borderSide: BorderSide.none,
+                       borderRadius:
+                       BorderRadius.all(Radius.circular(10))),
+                 ),
                ),
                gapH16,
                SizedBox(

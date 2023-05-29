@@ -1,12 +1,8 @@
 import 'package:csc13118_mobile/constants/appSizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../routing/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/language.dart';
 import '../../services/authentication.dart';
-import 'login.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -18,6 +14,21 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _email= TextEditingController();
   Map<String, dynamic>? forgot;
+  Language lag = Language(id: "en-US");
+  bool check = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
 
   void sendForgotPassword() async {
@@ -33,7 +44,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Email send success!')),
           );
-          Navigator.pop(context);
+          setState(() {
+            check =true;
+          });
+          // Navigator.pop(context);
         });
       }
     } catch (e) {
@@ -54,7 +68,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             color: Colors.blue[600],
           ),
           title: Text(
-            'Forgot password',
+            lag.forgotPass,
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w700,
@@ -65,7 +79,37 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         body: SingleChildScrollView(
           child:  Padding(
             padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-            child: Column(
+            child: check ?
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/lettutor.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      gapH8,
+                      const Text(
+                          ' LET TUTOR ',
+                          style: TextStyle(
+                              color: Colors.blue, fontSize: 24
+                          )),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40,),
+                Text(
+                    lag.getId =="vi-Vn" ? "Kiểm tra hộp thư đến trong email để đặt lại mật khẩu của bạn." : "Check your inbox for a link to reset your password.",
+                  style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )
+            :
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                  Center(
@@ -87,7 +131,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                  ),
                 const SizedBox(height: 40,),
                 Text(
-                  'Enter your email address and we will send you a link to reset your password',
+                  lag.stringForgot,
                   style: TextStyle(fontSize: 18, color: Colors.grey[700]),
                   textAlign: TextAlign.center,
                 ),
@@ -105,7 +149,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               borderSide: BorderSide.none,
                               borderRadius:
                               BorderRadius.all(Radius.circular(10))),
-                          hintText: "Enter your email")),
+                          hintText:lag.getId =="vi-Vn" ? "Nhập email" : "Enter your email")),
                 ),
                 const SizedBox(height: 60,),
                 SizedBox(
@@ -115,11 +159,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     onPressed: () {
                       sendForgotPassword();
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
                       child: Text(
-                        "Send",
-                        style: TextStyle(fontSize: 20),
+                        lag.buttonForgotPass,
+                        style: const TextStyle(fontSize: 20),
                       ),
                     ),
                   ),

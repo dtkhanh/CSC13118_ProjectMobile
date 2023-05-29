@@ -1,5 +1,5 @@
+import 'package:csc13118_mobile/features/homepage/widgets/viewCountDownTimer.dart';
 import 'package:csc13118_mobile/features/tutors/widget/cardTutor.dart';
-import 'package:csc13118_mobile/features/homepage/widgets/viewJoin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,12 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/appSizes.dart';
+import '../../data/language.dart';
 import '../../model/schedule/bookingInfo.dart';
 import '../../model/tutor/tutor.dart';
 import '../../routing/routes.dart';
 import '../../services/tutorService.dart';
 import '../../services/userService.dart';
-import '../call_video/teamView.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -29,30 +30,34 @@ class _HomeViewStage extends State<HomeView> {
   Map<String, dynamic>? _total;
   int _totalCall = 0;
   BookingInfo? _upComing;
+  Language lag = Language(id: "en-US");
 
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
 
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? check =  prefs.getString('accessToken');
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
     getListTutor(check!);
   }
   void getTotalCall() async {
-    try{
-      final prefs = await SharedPreferences.getInstance();
-      String? check =  prefs.getString('accessToken');
-      _total = await UserService.getTotalCall(token: check!);
-      final upComing = await UserService.getUpcomingLesson(token: check);
-      if (mounted) {
-        setState(() {
-          checkData = true;
-          _totalCall = int.parse(_total!["total"].toString());
-          _upComing = upComing;
-        });
-      }
-    }catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Login: ${e.toString()}')),
-      );
+    final prefs = await SharedPreferences.getInstance();
+    String? check =  prefs.getString('accessToken');
+    _total = await UserService.getTotalCall(token: check!);
+    final upComing = await UserService.getUpcomingLesson(token: check);
+    if (mounted) {
+      setState(() {
+        checkData = true;
+        _totalCall = int.parse(_total!["total"].toString());
+        _upComing = upComing;
+      });
     }
   }
 
@@ -73,15 +78,22 @@ class _HomeViewStage extends State<HomeView> {
   }
   String _convertTotalLessonTime() {
     if (_totalCall == 0) {
-      return 'You have not attended any class';
+      return lag.youHaveNotAttended;
     }
-    String result = 'Total Lesson Time:';
+    String result = lag.Totallessontime;
     final int hour = _totalCall ~/ 60;
     final int minute = _totalCall - hour * 60;
     result += hour > 0 ? ' $hour ${hour > 1 ? 'hours' : 'hour'}' : '';
     result += minute > 0 ? ' $minute ${minute > 1 ? 'minutes' : 'minute'}' : '';
     return result;
   }
+  bool isTimeToJoin() {
+    final startTimestamp = _upComing?.scheduleDetailInfo?.startPeriodTimestamp ?? 0;
+    final startTime = DateTime.fromMillisecondsSinceEpoch(startTimestamp);
+    final now = DateTime.now();
+    return now.isAfter(startTime) || now.isAtSameMomentAs(startTime);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,38 +109,45 @@ class _HomeViewStage extends State<HomeView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  _upComing == null?
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      'Upcoming Lesson',
+                      'You have no upcoming lesson',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: Sizes.p20, color: Colors.white),
                     ),
+                  )
+                  :
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      lag.Upcoming,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: Sizes.p20, color: Colors.white),
+                    ),
                   ),
+
                   _upComing == null?
                   const Text(
                     '',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: Sizes.p20, color: Colors.white),
                   )
                       :
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      Text(
-                        '${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} ',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: Sizes.p16, color: Colors.white),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${DateFormat.yMMMEd().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} ',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: Sizes.p16, color: Colors.white),
+                          ),
+                          gapW4,
+                          CountdownTimer(startTime: _upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0),
+                          gapW4,
+                        ],
                       ),
-                      Text(
-                          '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.startPeriodTimestamp ?? 0))} - ',
-                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
-                      ),
-                      Text(
-                        DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(_upComing?.scheduleDetailInfo!.endPeriodTimestamp ?? 0)),
-                        style: const TextStyle(fontStyle: FontStyle.normal, fontSize: Sizes.p12, color: Colors.yellow),
-                      ),
-                      gapW4,
                       TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -141,12 +160,18 @@ class _HomeViewStage extends State<HomeView> {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),),
                         onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          String? userId =  prefs.getString('userId');
-                          JitsiMeetingOptions options = JitsiMeetingOptions(roomNameOrUrl:'cb9e7deb-3382-48db-b07c-90acf52f541c-4d54d3d7-d2a9-42e5-97a2-5ed38af5789a', serverUrl: "https://meet.lettutor.com/", token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250ZXh0Ijp7InVzZXIiOnsiZW1haWwiOiJwaGhhaUB5bWFpbC5jb20iLCJuYW1lIjoicGhoYWkifX0sInJvb20iOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMtNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwicm9vbU5hbWUiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMtNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwidXNlckNhbGwiOnsiaWQiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMiLCJlbWFpbCI6InBoaGFpQHltYWlsLmNvbSIsIm5hbWUiOiJwaGhhaSIsImF2YXRhciI6Imh0dHBzOi8vc2FuZGJveC5hcGkubGV0dHV0b3IuY29tL2F2YXRhci9jYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWNhdmF0YXIxNjgzMTA0NDI4MzU1LmpwZyIsImNvdW50cnkiOiJWTiIsInBob25lIjoiODQyNDk5OTk2NTA4IiwibGFuZ3VhZ2UiOm51bGwsImJpcnRoZGF5IjoiMTk5OS0wNi0wMyIsImlzQWN0aXZhdGVkIjp0cnVlLCJyZXF1aXJlTm90ZSI6IktvIHRoaWNoIGhvYyIsImxldmVsIjoiSElHSEVSX0JFR0lOTkVSIiwiaXNQaG9uZUFjdGl2YXRlZCI6dHJ1ZSwidGltZXpvbmUiOjcsInN0dWR5U2NoZWR1bGUiOiJLbyB0aGljaCBob2MiLCJjYW5TZW5kTWVzc2FnZSI6ZmFsc2V9LCJ1c2VyQmVDYWxsZWQiOnsiaWQiOiI0ZDU0ZDNkNy1kMmE5LTQyZTUtOTdhMi01ZWQzOGFmNTc4OWEiLCJlbWFpbCI6InRlYWNoZXJAbGV0dHV0b3IuY29tIiwibmFtZSI6IktlZWdhbiIsImF2YXRhciI6Imh0dHBzOi8vYXBpLmFwcC5sZXR0dXRvci5jb20vYXZhdGFyLzRkNTRkM2Q3LWQyYTktNDJlNS05N2EyLTVlZDM4YWY1Nzg5YWF2YXRhcjE2Mjc5MTMwMTU4NTAuMDAiLCJjb3VudHJ5IjoiVk4iLCJwaG9uZSI6Ijg0MzU2MDMwODc2IiwibGFuZ3VhZ2UiOiJVa3JhaW5pYW4iLCJiaXJ0aGRheSI6IjE5OTktMDYtMDEiLCJpc0FjdGl2YXRlZCI6dHJ1ZSwidHV0b3JJbmZvIjp7ImlkIjoiNmNhNWMwOTItNzZlYS00ZTcyLTljNmUtMDVlMjIzOWFhMzNiIiwidXNlcklkIjoiNGQ1NGQzZDctZDJhOS00MmU1LTk3YTItNWVkMzhhZjU3ODlhIiwidmlkZW8iOiJodHRwczovL2FwaS5hcHAubGV0dHV0b3IuY29tL3ZpZGVvLzRkNTRkM2Q3LWQyYTktNDJlNS05N2EyLTVlZDM4YWY1Nzg5YXZpZGVvMTYyNzkxMzAxNTg3MS5tcDQiLCJiaW8iOiJJIGFtIHBhc3Npb25hdGUgYWJvdXQgcnVubmluZyBhbmQgZml0bmVzcywgSSBvZnRlbiBjb21wZXRlIGluIHRyYWlsL21vdW50YWluIHJ1bm5pbmcgZXZlbnRzIGFuZCBJIGxvdmUgcHVzaGluZyBteXNlbGYuIEkgYW0gdHJhaW5pbmcgdG8gb25lIGRheSB0YWtlIHBhcnQgaW4gdWx0cmEtZW5kdXJhbmNlIGV2ZW50cy4gSSBhbHNvIGVuam95IHdhdGNoaW5nIHJ1Z2J5IG9uIHRoZSB3ZWVrZW5kcywgcmVhZGluZyBhbmQgd2F0Y2hpbmcgcG9kY2FzdHMgb24gWW91dHViZS4gTXkgbW9zdCBtZW1vcmFibGUgbGlmZSBleHBlcmllbmNlIHdvdWxkIGJlIGxpdmluZyBpbiBhbmQgdHJhdmVsaW5nIGFyb3VuZCBTb3V0aGVhc3QgQXNpYS4iLCJlZHVjYXRpb24iOiJCQSIsImV4cGVyaWVuY2UiOiJJIGhhdmUgbW9yZSB0aGFuIDEwIHllYXJzIG9mIHRlYWNoaW5nIGVuZ2xpc2ggZXhwZXJpZW5jZSIsInByb2Zlc3Npb24iOiJFbmdsaXNoIHRlYWNoZXIiLCJhY2NlbnQiOm51bGwsInRhcmdldFN0dWRlbnQiOiJBZHZhbmNlZCIsImludGVyZXN0cyI6IiBJIGxvdmVkIHRoZSB3ZWF0aGVyLCB0aGUgc2NlbmVyeSBhbmQgdGhlIGxhaWQtYmFjayBsaWZlc3R5bGUgb2YgdGhlIGxvY2Fscy4iLCJsYW5ndWFnZXMiOiJlbiIsInNwZWNpYWx0aWVzIjoiYnVzaW5lc3MtZW5nbGlzaCxjb252ZXJzYXRpb25hbC1lbmdsaXNoLGVuZ2xpc2gtZm9yLWtpZHMsaWVsdHMsc3RhcnRlcnMsbW92ZXJzLGZseWVycyxrZXQscGV0LHRvZWZsLHRvZWljIiwicmVzdW1lIjpudWxsLCJyYXRpbmciOjQuMjQ3MTkxMDExMjM1OTU1LCJpc0FjdGl2YXRlZCI6dHJ1ZSwiaXNOYXRpdmUiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjEtMDgtMDJUMTQ6MDM6MzYuMzIwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMDUtMDNUMTU6MzU6NTQuMjQyWiJ9LCJyZXF1aXJlTm90ZSI6bnVsbCwibGV2ZWwiOiJISUdIRVJfQkVHSU5ORVIiLCJpc1Bob25lQWN0aXZhdGVkIjpudWxsLCJ0aW1lem9uZSI6Nywic3R1ZHlTY2hlZHVsZSI6IjEyMzQ1NjciLCJjYW5TZW5kTWVzc2FnZSI6ZmFsc2V9LCJpc1R1dG9yIjpmYWxzZSwic3RhcnRUaW1lIjoxNjgzMjEwNjAwMDAwLCJlbmRTZXNzaW9uIjoxNjgzMjEyMTAwMDAwLCJ0aW1lSW5Sb29tIjoxODAwLCJib29raW5nSWQiOiI4OGNiNGFmZS1iMzc2LTQ2OGItOGFkYS1jNzM1MTlmNzJhZmUiLCJpYXQiOjE2ODMyMDk3MDAsImV4cCI6MTY4MzIyNjQ5OSwiYXVkIjoibGl2ZXR1dG9yIiwiaXNzIjoibGl2ZXR1dG9yIiwic3ViIjoiaHR0cHM6Ly9tZWV0LnR1dG9yaW5nLmxldHN0dWR5LmlvIn0.tRavpFrC078S8g5QcYdafg84eoNs_r894MDHcQ-0B1A');
-
-                          // JitsiMeetingOptions options = JitsiMeetingOptions(roomNameOrUrl:'$userId-${_upComing?.scheduleDetailInfo!.scheduleInfo!.tutorInfo!.userId}', serverUrl: "https://meet.lettutor.com/", token: _upComing?.studentMeetingLink?.split('token=')[1]);
-                          await JitsiMeetWrapper.joinMeeting( options: options);
+                          final String meetingToken = _upComing?.studentMeetingLink?.split('token=')[1] ?? '';
+                          Map<String, dynamic> jwtDecoded = JwtDecoder.decode(meetingToken);
+                          final String room = jwtDecoded['room'];
+                            JitsiMeetingOptions options = JitsiMeetingOptions(
+                              roomNameOrUrl: room,
+                              serverUrl: "https://meet.lettutor.com/",
+                              token: meetingToken,
+                              isAudioMuted: false,
+                              isVideoMuted: false,
+                              isAudioOnly: false,
+                            );
+                            await JitsiMeetWrapper.joinMeeting( options: options);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -154,21 +179,21 @@ class _HomeViewStage extends State<HomeView> {
                             SvgPicture.asset(
                               "assets/svg/join.svg",
                               semanticsLabel: 'Logo join',
-                              width: 10,
-                              height: 10,
+                              width: 20,
+                              height: 20,
                             ),
-                            gapW2,
-                            const Text('Join', style: TextStyle(fontSize: Sizes.p16))],),
+                            gapW8,
+                            Text(lag.join, style: const TextStyle(fontSize: Sizes.p16))],),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4, bottom: 24),
+                    padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child:
                     Text(
                       _convertTotalLessonTime(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: Sizes.p12, color: Colors.white),
+                      style: const TextStyle(fontSize: Sizes.p12, color: Colors.white),
                     ),
                   ),
                 ],
@@ -215,9 +240,9 @@ class _HomeViewStage extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Recommended Tutors',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
+                  Text(
+                    lag.recommendedTutors,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal),
                   ),
                   InkWell(
                     onTap: () {
@@ -227,9 +252,9 @@ class _HomeViewStage extends State<HomeView> {
                             (route) => false,
                       );
                     },
-                      child: const Text(
-                        'See all',
-                        style: TextStyle(fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blueAccent),
+                      child: Text(
+                        lag.seeAll,
+                        style: const TextStyle(fontSize: 18, fontStyle: FontStyle.normal, color: Colors.blueAccent),
                       ),
                   ),
                 ],
@@ -253,10 +278,10 @@ class _HomeViewStage extends State<HomeView> {
             Center(
               child:  !checkData
                   ?
-              const Text(
-                'LOADING...',
+              Text(
+                lag.loading,
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
               )
                   :
               Padding(

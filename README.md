@@ -1,4 +1,10 @@
 # CSC13118_ProjectMobile
 
 Tên: Đinh Trọng Khánh - 19127437
-link youtube Demo app: https://youtu.be/2oycOWSE_1k
+link video:
+-https://youtu.be/ujIv34KbicA
+-https://youtu.be/ZXQ52BjxWf0
+-https://youtu.be/HuZg6l0zIPs
+
+link drive:
+https://drive.google.com/drive/folders/1NZu_xJ1dlpE-GhCcySudhpjNbsVosqmZ?usp=share_link

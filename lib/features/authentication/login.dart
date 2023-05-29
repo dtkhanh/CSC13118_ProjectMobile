@@ -4,17 +4,15 @@ import 'package:csc13118_mobile/features/authentication/signUp.dart';
 import 'package:csc13118_mobile/model/tokensUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:csc13118_mobile/page/navigationPage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
-import '../../model/token.dart';
+import '../../data/language.dart';
 import '../../model/user.dart';
-import '../../providers/userProvider.dart';
+import '../../providers/activateTheme.dart';
 import '../../routing/routes.dart';
 import '../../services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../services/userService.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,11 +22,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _googleSignIn = GoogleSignIn();
+  String language = "";
   final _email = TextEditingController();
   final _password = TextEditingController();
   Map<String, dynamic>? _loginResponse;
   late User user;
-
+  Language lag = Language(id: "en-US");
+  String _ErrorInputEmail ="";
+  String _ErrorInputPass ="";
   @override
   void initState() {
     super.initState();
@@ -36,21 +38,111 @@ class _LoginPageState extends State<LoginPage> {
   }
   Future<void> _initPrefs() async {
     final prefs = await SharedPreferences.getInstance();
+    language = prefs.getString('setLanguage')?? "en-US";
+    final checkTheme = prefs.getString('theme');
+    updateTheme(checkTheme!);
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
     String? check =  prefs.getString('accessToken');
     // final userInfo = await UserService.getUserInformation(token: check!);
     // final userProvider = UserProvider();
     // TokensUser? tkUser = userProvider.token;
     // userProvider.addUserProvider(userInfo, tkUser!);
     if(check!.length != 0){
-      // Future.delayed(const Duration(seconds: 1), () {
-      //   Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     Routes.main,
-      //         (route) => false,
-      //   );
-      // });
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
     }
   }
+  void _handleValidation() {
+    final emailRegex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (_email.text.isEmpty) {
+      _ErrorInputEmail ="Please input your Email!";
+    } else if (!emailRegex.hasMatch(_email.text)) {
+      _ErrorInputEmail ="The input is not valid E-mail!";
+    } else {
+      _ErrorInputEmail ="";
+    }
+
+    if (_password.text.isEmpty) {
+      _ErrorInputPass ="Please input your Password!";
+    } else {
+      _ErrorInputPass ="";
+    }
+    setState(() {});
+  }
+  void _handleValidationPass() {
+    if (_password.text.isEmpty) {
+      _ErrorInputPass ="Please input your Password!";
+    } else {
+      _ErrorInputPass ="";
+    }
+    setState(() {});
+  }
+
+
+  Future<void> _handleAuthorizeGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final String? accessToken = googleAuth?.accessToken;
+      _loginResponse = await AuthenticationService().loginWithGoogle(accessToken: accessToken ?? "");
+      final user = User.fromJson(_loginResponse!['user']);
+      final token = TokensUser.fromJson(_loginResponse!['tokens']);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('accessToken', token.access!.token!,);
+      await prefs.setString('refreshToken', token.refresh!.token!,);
+      await prefs.setString('userId', user.id!,);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.main,
+              (route) => false,
+        );
+      });
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error Login')),
+      );
+    }
+
+  }
+  void _handleAuthorizeFacebook() async {
+    final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      try {
+        final accessToken = result.accessToken!.token;
+        _loginResponse = await AuthenticationService().loginWithFaceBook(accessToken: accessToken ?? "");
+        final user = User.fromJson(_loginResponse!['user']);
+        final token = TokensUser.fromJson(_loginResponse!['tokens']);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('accessToken', token.access!.token!,);
+        await prefs.setString('refreshToken', token.refresh!.token!,);
+        await prefs.setString('userId', user.id!,);
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.main,
+                (route) => false,
+          );
+        });
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error Login')),
+        );
+      }
+    } else {
+
+    }
+  }
+
+
 
 
   void getInfomation(String tokenUser) async {
@@ -73,10 +165,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void loginPage() async {
     try{
-      _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
+      // _loginResponse = await AuthenticationService().loginAccount(email:"trongkhanh2k1@gmail.com", password: "123456" );
       // _loginResponse = await AuthenticationService().loginAccount(email:"phhai@ymail.com", password: "123456" );
-
-      // _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
+      _loginResponse = await AuthenticationService().loginAccount(email: _email.text, password: _password.text );
       final user = User.fromJson(_loginResponse!['user']);
       final token = TokensUser.fromJson(_loginResponse!['tokens']);
       // userProvider.addUserProvider(user, token);
@@ -86,7 +177,6 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('accessToken', token.access!.token!,);
       await prefs.setString('refreshToken', token.refresh!.token!,);
       await prefs.setString('userId', user.id!,);
-
       //
       // print("loginPage");
       // print( userProvider.token!.refresh!.token!,);
@@ -132,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: Text(
-                          "Email",
+                          lag.email ?? "",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -141,16 +231,25 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       TextField(
                           controller: _email,
+                          onChanged: (value) {
+                            _handleValidation();
+                          },
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
                           decoration: InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey.shade100,
+                              fillColor: _ErrorInputEmail.isEmpty ? Colors.grey.shade100 : Colors.red.shade100,
                               border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                               hintText: "abc@gmail.com")),
+                      Text(
+                        _ErrorInputEmail,
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.red),
+                      ),
                     ],
                   ),
                 ),
@@ -162,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: Text(
-                          "Password",
+                          lag.password?? "",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -172,16 +271,25 @@ class _LoginPageState extends State<LoginPage> {
                       TextField(
                           controller: _password,
                           obscureText: true,
+                          onChanged: (value) {
+                            _handleValidationPass();
+                          },
                           style:
                           TextStyle(fontSize: 15, color: Colors.grey[700]),
                           decoration: InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey.shade100,
+                              fillColor: _ErrorInputPass.isEmpty ? Colors.grey.shade100 : Colors.red.shade100,
                               border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                               hintText: "****************")),
+                      Text(
+                        _ErrorInputPass,
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.red),
+                      ),
                     ],
                   ),
                 ),
@@ -197,8 +305,8 @@ class _LoginPageState extends State<LoginPage> {
                                 MaterialPageRoute(builder: (context) => const ForgotPassword()),
                               );
                             },
-                            child:  const Text("Forgot password?",
-                                style: TextStyle(
+                            child:  Text(lag.forgotPassword ?? "",
+                                style: const TextStyle(
                                   color: Colors.blue,
                                 ))
                         ),
@@ -211,13 +319,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       onPressed: () {
+                        _handleValidation();
+                        _handleValidationPass();
                         loginPage();
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
-                          "Login in",
-                          style: TextStyle(fontSize: 20),
+                          lag.buttonLogin,
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
@@ -225,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Text("Or continue with")],
+                  children:  [Text(lag.orContinue)],
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 15),
@@ -233,7 +343,9 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleAuthorizeFacebook();
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(
                               side: BorderSide(
@@ -248,7 +360,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleAuthorizeGoogle();
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(
                               side: BorderSide(
@@ -286,7 +400,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:  <Widget>[
-                        const Text("Not a member yet? "),
+                        Text(lag.registerQuestion),
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -294,8 +408,8 @@ class _LoginPageState extends State<LoginPage> {
                               MaterialPageRoute(builder: (context) => const SignUp()),
                             );
                           },
-                          child:  const Text("Sign up",
-                              style: TextStyle(
+                          child: Text(lag.register,
+                              style: const TextStyle(
                                 color: Colors.blue,
                               ))
                         ),

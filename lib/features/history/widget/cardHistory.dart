@@ -268,12 +268,12 @@ class _CardHistoryStage extends State<CardHistory> {
                               widget.booking.scheduleDetailInfo!.startPeriodTimestamp ?? 0)),
                           style: const TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         const Text(
                           '6 hours ago ',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 10, color: Colors.black
                           ),
                         ),
                       ],
@@ -325,7 +325,7 @@ class _CardHistoryStage extends State<CardHistory> {
                                       fontSize: 18,
                                       fontWeight:
                                       FontWeight
-                                          .bold),
+                                          .bold,color: Colors.black),
                                 ),
                                 const SizedBox(
                                     height: 3),
@@ -343,7 +343,7 @@ class _CardHistoryStage extends State<CardHistory> {
                                     const Text("France",
                                         style: TextStyle(
                                             fontSize:
-                                            14)),
+                                            14,color: Colors.black)),
                                   ],
                                 ),
                                 const SizedBox(
@@ -385,7 +385,7 @@ class _CardHistoryStage extends State<CardHistory> {
                                       ,
                                     style: const TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w600,color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -403,7 +403,7 @@ class _CardHistoryStage extends State<CardHistory> {
                                     'No request for lesion',
                                     style: TextStyle(
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w600,color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -421,7 +421,7 @@ class _CardHistoryStage extends State<CardHistory> {
                                     'Tutor have not reviewed yet',
                                     style: TextStyle(
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w600,color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -502,7 +502,7 @@ class _CardHistoryStage extends State<CardHistory> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, // set the background color of the button
                         ),
-                        child: Text('Go to meeting', style: TextStyle( color: Colors.white,
+                        child: const Text('Go to meeting', style: TextStyle( color: Colors.white,
                         ),),
                       ),
                     ),

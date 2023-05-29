@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../model/schedule/schedule.dart';
-import '../../../model/tutor/feedback.dart';
 import '../../../services/scheduleService.dart';
-import '../../tutors/widget/viewRatting.dart';
+import '../../../services/userService.dart';
 
 class ViewCalender extends StatefulWidget {
   final String idTutors;
@@ -19,18 +18,13 @@ class _ViewCalenderStage extends State<ViewCalender> {
   List<Schedule>? listSchedule;
   bool checkData = false;
   final _noteText = TextEditingController();
-
-
+  String blance ="";
 
   List<Appointment> getAppointments() {
     List<Appointment> meetings = <Appointment>[];
     final DateTime today = DateTime.now();
     DateTime(today.year, today.month, today.day, 9, 0, 0);
-    // final DateTime endTime = startTime.add(const Duration(hours: 2));
-    DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
-    DateTime endTime = DateTime(today.year, today.month, today.day, 12, 0, 0);
     for( int i =0 ;i< listSchedule!.length ; i++){
-      print(DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),);
       meetings.add(
           Appointment(
               startTime: DateTime.fromMillisecondsSinceEpoch(listSchedule![i].startTimestamp ?? 0),
@@ -49,13 +43,19 @@ class _ViewCalenderStage extends State<ViewCalender> {
     try{
       final prefs = await SharedPreferences.getInstance();
       String? check =  prefs.getString('accessToken');
-      listSchedule = await ScheduleService.getScheduleByTutorId( token: check!, userId: id);
+      final userInfo = await UserService.getUserInformation(token: check!);
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      DateTime todayStart = DateTime(today.year, today.month, today.day, 0, 0, 0);
+      int milliseconds = todayStart.millisecondsSinceEpoch;
+      listSchedule = await ScheduleService.getScheduleByTutorId( token: check, userId: id, timeStart: milliseconds);
       listSchedule = listSchedule?.where((schedule) {
         if (schedule.startTimestamp == null) return false;
         final start = DateTime.fromMillisecondsSinceEpoch(schedule.startTimestamp!);
         return start.isAfter(DateTime.now());
       }).toList();
       setState(() {
+        blance=userInfo.walletInfo?.amount?.substring(0, 4) ?? "";
         checkData = true;
       });
     }catch (e) {
@@ -64,7 +64,33 @@ class _ViewCalenderStage extends State<ViewCalender> {
       );
     }
   }
-
+  Future<void> _dialogSuccess() {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: const [
+                Center(
+                  child:Icon(Icons.check_circle, color: Colors.green, size: 100,),
+                )
+              ],
+            ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> _dialogBuilder(String startTime, String endTime, String id) {
     return showDialog<void>(
       context: context,
@@ -72,7 +98,7 @@ class _ViewCalenderStage extends State<ViewCalender> {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(0),
           backgroundColor: Colors.grey.shade200,
-          title: const Text('Booking details' ,  style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text('Booking details' ,  style: TextStyle(fontWeight: FontWeight.bold)),
           content: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
             child: Column(
@@ -86,6 +112,16 @@ class _ViewCalenderStage extends State<ViewCalender> {
                 const SizedBox(height: 8),
                 Text(
                   '$startTime - $endTime',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Blance',
+                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 20 ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'You have $blance lesson left',
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 8),
@@ -128,7 +164,7 @@ class _ViewCalenderStage extends State<ViewCalender> {
                     final prefs = await SharedPreferences.getInstance();
                     String? check =  prefs.getString('accessToken');
                     await ScheduleService.booking(
-                      scheduleDetailIds: [id ?? ''],
+                      scheduleDetailIds: [id],
                       note: _noteText.text,
                       token: check!,
                     );
@@ -136,6 +172,8 @@ class _ViewCalenderStage extends State<ViewCalender> {
                       checkData = true;
                     });
                     Navigator.pop(context);
+                    _dialogSuccess();
+
 
                   }catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -151,7 +189,6 @@ class _ViewCalenderStage extends State<ViewCalender> {
   }
   Future<void> BookCalender(String schedule) async {
       final list = schedule.split('|').toList();
-      print(schedule);
       if(list[0] == "false"){
         _dialogBuilder(list[2],list[3],list[1], );
       }
@@ -159,7 +196,7 @@ class _ViewCalenderStage extends State<ViewCalender> {
 
   @override
   Widget build(BuildContext context) {
-    _fetchTutorSchedule(widget.idTutors.toString() ?? "");
+    _fetchTutorSchedule(widget.idTutors.toString());
     return Expanded(
       child: !checkData
           ?

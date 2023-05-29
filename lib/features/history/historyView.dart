@@ -1,10 +1,8 @@
-import 'package:csc13118_mobile/data/data.dart';
 import 'package:csc13118_mobile/features/history/widget/cardHistory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/language.dart';
 import '../../model/schedule/bookingInfo.dart';
 import '../../services/scheduleService.dart';
 
@@ -20,6 +18,20 @@ class _HistoryViewStage extends State<historyView> {
   int chosenFilter = 0;
   List<BookingInfo> listBookClass = [];
   bool checkData = false;
+  Language lag = Language(id: "en-US");
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
 
   void getListHistory() async {
@@ -30,7 +42,6 @@ class _HistoryViewStage extends State<historyView> {
       setState(() {
         checkData = true;
       });
-      print(listBookClass.length);
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error : ${e.toString()}')),
@@ -63,9 +74,9 @@ class _HistoryViewStage extends State<historyView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'History',
-                          style: TextStyle(
+                        Text(
+                          lag.history,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             // fontSize: MediaQuery.of(context).size.width //
                             fontSize: 20,
@@ -74,13 +85,13 @@ class _HistoryViewStage extends State<historyView> {
                         const SizedBox(height: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                                "The following is a list of lessons you have attended",
-                                style: TextStyle(fontSize: 13, height: 1.3)),
+                                lag.contentHistory1,
+                                style: const TextStyle(fontSize: 13, height: 1.3)),
                             Text(
-                                "You can review the details of the lesons you have attended",
-                                style: TextStyle(fontSize: 13, height: 1.3)),
+                                lag.contentHistory2,
+                                style: const TextStyle(fontSize: 13, height: 1.3)),
                           ],
                         ),
                       ],
@@ -92,11 +103,11 @@ class _HistoryViewStage extends State<historyView> {
                 padding: const EdgeInsets.fromLTRB(0, 12, 12, 0),
                 child:   !checkData
                     ?
-                const Center(
+                Center(
                   child: Text(
-                    'NO DATA',
+                    lag.loading,
                     textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.normal, color: Colors.blue),
                   ),
                 )
                     :

@@ -1,5 +1,4 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'package:flutter/material.dart';
 
 class AIHandler {
   final _openAI = OpenAI.instance.build(
@@ -8,7 +7,6 @@ class AIHandler {
 
   Future<String?> getResponse(String message) async {
     try {
-      print("getResponse");
       final request = ChatCompleteText(messages: [
         Map.of({"role": "user", "content": message})
       ], maxToken: 3500, model:ChatModel.gptTurbo);

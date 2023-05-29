@@ -51,6 +51,10 @@ dependencies:
   chat_gpt_sdk: ^2.0.6
   material: ^1.0.0+2
   jitsi_meet_wrapper: ^0.0.6
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.11
+  jwt_decoder: ^2.0.1
+  syncfusion_flutter_pdfviewer: ^20.4.54
 
 
 dev_dependencies:
@@ -102,6 +106,8 @@ flutter:
     - assets/svg/icon_camera.svg
     - assets/svg/Beginner.svg
     - assets/svg/chatgpt-icon.svg
+    - assets/svg/Vietnam.svg
+    - assets/svg/england.svg
 
     # To add assets to your application, add an assets section, like this:
 

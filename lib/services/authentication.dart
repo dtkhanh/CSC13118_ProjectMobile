@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+
 class AuthenticationService {
 
   static const url =  'https://sandbox.api.lettutor.com';
@@ -57,5 +58,36 @@ class AuthenticationService {
       return jsonDecode;
     }
   }
+
+  Future<Map<String, dynamic>> loginWithGoogle({required String accessToken}) async {
+    final response = await post(
+        Uri.parse('$url/auth/google'),
+      body: {
+        'access_token': accessToken,
+      },
+    );
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return  jsonDecode;
+    } else {
+      throw Exception(jsonDecode!['message']);
+    }
+  }
+
+  Future<Map<String, dynamic>> loginWithFaceBook({required String accessToken}) async {
+    final response = await post(
+      Uri.parse('$url/auth/facebook'),
+      body: {
+        'access_token': accessToken,
+      },
+    );
+    final jsonDecode = json.decode(response.body);
+    if (response.statusCode == 200) {
+      return  jsonDecode;
+    } else {
+      throw Exception(jsonDecode!['message']);
+    }
+  }
+
 
 }

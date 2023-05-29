@@ -1,12 +1,7 @@
 
 import 'dart:convert';
-
-import 'package:csc13118_mobile/model/tutor/infoTutor.dart';
 import 'package:http/http.dart';
-
 import '../model/schedule/bookingInfo.dart';
-import '../model/schedule/schedule.dart';
-import '../model/tutor/tutor.dart';
 import '../model/user.dart';
 class UserService {
   static const url = 'https://sandbox.api.lettutor.com';
@@ -50,9 +45,11 @@ class UserService {
     required String phone,
     required String birthday,
     required String level,
+    required String studySchedule,
   }) async {
     final response = await put(Uri.parse('$url/user/info'),
       headers: {
+        'Content-Type': 'application/json;encoding=utf-8',
         'Authorization': 'Bearer $token',
       },
       body: json.encode({
@@ -60,7 +57,8 @@ class UserService {
         'country': country,
         'phone': phone,
         'birthday': birthday,
-         'level': level
+        'level': level,
+        'studySchedule': studySchedule,
       }),
     );
 
@@ -68,14 +66,6 @@ class UserService {
     if (response.statusCode != 200) {
       throw Exception(jsonDecode(['message']));
     }
-    print("updateInformation");
-    print(json.encode({
-      'name': name,
-      'country': country,
-      'phone': phone,
-      'birthday': birthday,
-      'level': level
-    }),);
     return User.fromJson(jsonDecode["user"]);
   }
 
@@ -100,20 +90,27 @@ class UserService {
     List<BookingInfo> lessons = data.map((schedule) => BookingInfo.fromJson(schedule)).toList();
 
     lessons.sort((a, b) {
-      if (a.scheduleDetailInfo == null || b.scheduleDetailInfo == null || a.scheduleDetailInfo!.startPeriodTimestamp == null || b.scheduleDetailInfo!.startPeriodTimestamp == null) return 0;
-      return a.scheduleDetailInfo!.startPeriodTimestamp!.compareTo(b.scheduleDetailInfo!.startPeriodTimestamp!);
+      if (a.scheduleDetailInfo == null || b.scheduleDetailInfo == null) return 0;
+      if (a.scheduleDetailInfo!.startPeriodTimestamp == null ||
+          b.scheduleDetailInfo!.startPeriodTimestamp == null) return 0;
+      final int timestamp1 = a.scheduleDetailInfo!.startPeriodTimestamp!;
+      final int timestamp2 = b.scheduleDetailInfo!.startPeriodTimestamp!;
+      return timestamp1.compareTo(timestamp2);
     });
 
     lessons = lessons.where((element) {
-      if (element.scheduleDetailInfo == null || element.scheduleDetailInfo!.startPeriodTimestamp == null) return false;
-      return element.scheduleDetailInfo!.startPeriodTimestamp! > now;
+      if (element.scheduleDetailInfo == null) return false;
+      if (element.scheduleDetailInfo!.startPeriodTimestamp == null) return false;
+      final int startTimestamp = element.scheduleDetailInfo!.startPeriodTimestamp!;
+      return startTimestamp > now;
     }).toList();
 
-    if (lessons.isNotEmpty) {
-      return lessons.first;
-    } else {
-      throw Exception('Error: Cannot get lesson Upcoming');
-    }
+    return lessons.first;
+    // if (lessons.isNotEmpty) {
+    //   return lessons.first;
+    // } else {
+    //   throw Exception('Error: Cannot get lesson Upcoming');
+    // }
   }
 
 

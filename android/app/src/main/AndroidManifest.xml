@@ -1,9 +1,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.csc13118_mobile">
+    <uses-permission android:name="android.permission.INTERNET"/>
+<!--    <uses-sdk tools:overrideLibrary="dev.saibotma.jitsi_meet_wrapper, org.jitsi.meet.sdk, co.apptailor.googlesignin, com.calendarevents, com.reactnativecommunity.asyncstorage, com.reactnativecommunity.netinfo, com.rnimmersive, com.corbt.keepawake, com.BV.LinearGradient, com.horcrux.svg, com.oney.WebRTCModule, com.ocetnik.timer, com.kevinresol.react_native_default_preference, com.learnium.RNDeviceInfo, com.amplitude.reactnative, com.reactnativegooglesignin, com.reactnativecommunity.clipboard, com.swmansion.gesturehandler.react, org.linusu, org.reactnative.maskedview, com.reactnativepagerview, com.oblador.performance, com.swmansion.reanimated, com.th3rdwave.safeareacontext, com.swmansion.rnscreens, com.reactnativecommunity.slider, org.devio.rn.splashscreen, com.brentvatne.react, com.reactnativecommunity.webview"/>-->
+
+
+    <queries>
+        <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> <!-- allows app to access Facebook app features -->
+        <provider android:authorities="com.facebook.orca.provider.PlatformProvider" /> <!-- allows sharing to Messenger app -->
+    </queries>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
    <application
+        tools:replace="android:label"
         android:label="csc13118_mobile"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       >
+       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+       <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+       <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_notification" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -23,6 +41,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="your-jitsi-meet-server.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

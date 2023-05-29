@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../constants/appSizes.dart';
-import '../../call_video/teamView.dart';
 
 
 class ViewJoin extends StatefulWidget {
@@ -53,10 +51,12 @@ class _ViewJoinStage extends State<ViewJoin> {
                     fontSize: Sizes.p16,
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),),
-                onPressed: () {  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TeamView()),
-                ); },
+                onPressed: () {
+                //   Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => TeamView()),
+                // );
+                  },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

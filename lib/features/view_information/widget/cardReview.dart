@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/language.dart';
 import '../../../model/tutor/feedback.dart';
 import '../../tutors/widget/viewRatting.dart';
 
@@ -12,6 +14,21 @@ class CardReview extends StatefulWidget {
 }
 
 class _CardReviewStage extends State<CardReview> {
+  Language lag = Language(id: "en-US");
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+
+  Future<void> _initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final language = prefs.getString('setLanguage')?? "en-US";
+    setState(() {
+      language =="en-US" ? lag = Language(id: "en-US"): lag = Language(id: "vi-Vn");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +73,7 @@ class _CardReviewStage extends State<CardReview> {
                       ),),
                       const SizedBox(width: 8),
                       Expanded(child: Text(
-                        '${DateTime.now().difference(DateTime.parse(widget.feedBacksTutor.createdAt!)).inDays} days ago',
+                        '${DateTime.now().difference(DateTime.parse(widget.feedBacksTutor.createdAt!)).inDays} ${lag.dayAgo}',
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
                       ),),
